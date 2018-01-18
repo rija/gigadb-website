@@ -31,10 +31,15 @@ $this->breadcrumbs=array(
 				<?= $form->checkBox($model,'rememberMe') ?>
 				<?= $form->label($model,'rememberMe') ?>
 			</div>
+		<div class="control-group">
+			<div class="controls">
+				<?= MyHtml::submitButton(Yii::t('app' ,'Login'), array('class'=>'btn-green pull-right')) ?>
+			</div>
+		</div>
+
 		</div><!--form-->
 
 		<p class="pull-left"><?= MyHtml::link(Yii::t('app' , "Lost Password"), array('user/reset', 'username'=>$model->username)) ?></p>
-		<?= MyHtml::submitButton(Yii::t('app' ,'Login'), array('class'=>'btn-green pull-right')) ?>
 
 		<? $this->endWidget() ?>
 	</div>
