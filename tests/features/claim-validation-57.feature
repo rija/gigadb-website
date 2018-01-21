@@ -13,7 +13,7 @@ Scenario: a dataset submitter to validate a claim to reconcile a dataset author 
 
 Scenario: a dataset submitter to invalidate a claim to reconcile a dataset author to a gigadb account
 	Given I am a submitter of dataset "/dataset/100002"
-	And I have received an email asking to confirm reconciliation of author "Zhang, G" with user "user@gigadb.org"
+	And I have received an email asking to validate the reconciliation of author "Zhang, G" with user "user@gigadb.org"
 	When I click on the invalidation link
 	Then then an email is sent to the curators notifying them that the claim is invalid
 	And an email is sent to the claimant notifying of invalidation of the claim

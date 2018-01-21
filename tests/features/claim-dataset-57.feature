@@ -1,6 +1,6 @@
 Feature: a user can claim his/her datasets
 	As a gigadb user,
-	I want to mark as my own datasets that I've authored
+	I want to claim datasets that I've authored
 	So I can manage them
 
 Scenario: Give users a button to claim a dataset they have authored
@@ -16,7 +16,7 @@ Scenario: Non logged-in visitors should not see the button
 
 
 
-Scenario: a user can access function to claim his/her dataset by reconcilling his/her author identity to his/her account
+Scenario: a user can claim his/her dataset by reconcilling his/her author identity to his/her account
 	Given I am logged in as "user@gigadb.org"
 	And I am on "/dataset/100002"
 	When I press "Are you an author of this dataset? claim your dataset"
