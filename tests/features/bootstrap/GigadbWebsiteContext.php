@@ -15,14 +15,14 @@ use Behat\YiiExtension\Context\YiiAwareContextInterface;
  */
 class GigadbWebsiteContext extends Behat\MinkExtension\Context\MinkContext implements Behat\YiiExtension\Context\YiiAwareContextInterface
 {
-    private $login = null;
-    private $password = null ;
+    private $admin_login = null;
+    private $admin_password = null ;
 
 	public function __construct(array $parameters)
     {
 
-        $this->login = $_ENV["GIGADB_tester_email"];
-        $this->password = $_ENV["GIGADB_tester_password"] ;
+        $this->admin_login = $_ENV["GIGADB_admin_tester_email"];
+        $this->admin_password = $_ENV["GIGADB_admin_tester_password"] ;
 
         $this->useContext('issue56', new UserAuthorLinkContext($parameters));
         $this->useContext('issue57', new ClaimDatasetContext($parameters));
@@ -75,8 +75,8 @@ class GigadbWebsiteContext extends Behat\MinkExtension\Context\MinkContext imple
     public function iSignInAsAnAdmin()
     {
          $this->visit("/site/login");
-         $this->fillField("LoginForm_username", $this->login);
-         $this->fillField("LoginForm_password", $this->password);
+         $this->fillField("LoginForm_username", $this->admin_login);
+         $this->fillField("LoginForm_password", $this->admin_password);
          $this->pressButton("Login"); 
     }
 
