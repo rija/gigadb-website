@@ -1,4 +1,4 @@
-Feature: a submitter receives an email about an author claim
+Feature: Upon receiving email with dataset claim, a submitter to validate the claim
 	As a submitter of dataset "/dataset/100002"
 	I want to receive an notification when another gigadb user claim authorship on that dataset
 	So that I can validate or invalidate the claim
