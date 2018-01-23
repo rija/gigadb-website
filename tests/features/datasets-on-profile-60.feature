@@ -3,6 +3,10 @@ Feature: shows datasets authored by a user on his/her profile
 	I want to see on my profile the datasets that I have authored
 	So that I can manage them conveniently from one place
 
+Background:
+	Given the Gigadb database is loaded with data from  "gigadb_testdata.sql"
+	And the credentials for "default" test users are loaded
+
 
 Scenario: user is associated to an author of existing dataset
 	Given I am logged in as "user@gigadb.org"

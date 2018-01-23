@@ -15,15 +15,14 @@ use Behat\YiiExtension\Context\YiiAwareContextInterface;
  */
 class GigadbWebsiteContext extends Behat\MinkExtension\Context\MinkContext implements Behat\YiiExtension\Context\YiiAwareContextInterface
 {
+    private $login = null;
+    private $password = null ;
     private $admin_login = null;
     private $admin_password = null ;
+    private $role = null;
 
 	public function __construct(array $parameters)
     {
-
-        $this->admin_login = $_ENV["GIGADB_admin_tester_email"];
-        $this->admin_password = $_ENV["GIGADB_admin_tester_password"] ;
-
         $this->useContext('issue56', new UserAuthorLinkContext($parameters));
         $this->useContext('issue57', new ClaimDatasetContext($parameters));
         $this->useContext('issue60', new DatasetsOnProfileContext($parameters));
@@ -46,6 +45,15 @@ class GigadbWebsiteContext extends Behat\MinkExtension\Context\MinkContext imple
         return $this->yii ;
     }
 
+    /**
+     * @BeforeSuite
+     */
+    public static function initialize_databaes()
+    {
+        print_r("Recreating the database... ");
+        exec("vagrant ssh -c \"sudo -Hiu postgres /usr/bin/psql < /vagrant/sql/kill_drop_recreate.sql\"",$kill_output);
+        // var_dump($kill_output);
+    }
 
     /**
      * @AfterStep
@@ -69,6 +77,31 @@ class GigadbWebsiteContext extends Behat\MinkExtension\Context\MinkContext imple
         }
     }
 
+
+    /**
+     * @Given /^the Gigadb database is loaded with data from  "([^"]*)"$/
+     */
+    public function theGigadbDatabaseIsLoadedWithDataFrom($arg1)
+    {
+        print_r("Loading test data... ");
+        exec("vagrant ssh -c \"sudo -Hiu postgres /usr/bin/psql gigadb < /vagrant/sql/$arg1\"",$load_output);
+    }
+
+    /**
+     * @Given /^the credentials for "([^"]*)" test users are loaded$/
+     */
+    public function theCredentialsForTestUsersAreLoaded($arg1)
+    {
+        if ("default" == $arg1) {
+            $this->admin_login = "admin@gigadb.org";
+            $this->admin_password = "gigadb" ;
+            $this->login = "user@gigadb.org";
+            $this->password = "gigadb" ;
+        }
+    }
+
+
+
      /**
      * @Given /^I sign in as an admin$/
      */
@@ -77,7 +110,8 @@ class GigadbWebsiteContext extends Behat\MinkExtension\Context\MinkContext imple
          $this->visit("/site/login");
          $this->fillField("LoginForm_username", $this->admin_login);
          $this->fillField("LoginForm_password", $this->admin_password);
-         $this->pressButton("Login"); 
+         $this->pressButton("Login");
+         $this->assertResponseContains('Administration');
     }
 
 

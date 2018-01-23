@@ -3,6 +3,9 @@ Feature: admin to manage claims from users to datasets
 	I want to manage claims from gigadb users on dataset authors
 	So that legitimate authors can access and manage their datasets on gigadb
 
+Background:
+	Given the Gigadb database is loaded with data from  "gigadb_testdata.sql"
+	And the credentials for "default" test users are loaded
 
 Scenario: admins to approve a claim to reconcile a dataset author to a gigadb account
 	Given I sign in as an admin

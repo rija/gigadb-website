@@ -2,7 +2,10 @@ Feature: a user can claim his/her datasets
 	As a gigadb user,
 	I want to claim datasets that I've authored
 	So I can manage them
-
+Background:
+	Given the Gigadb database is loaded with data from  "gigadb_testdata.sql"
+	And the credentials for "default" test users are loaded
+	
 Scenario: Give users a button to claim a dataset they have authored
 	Given I am logged in as "user@gigadb.org"
 	When I am on "/dataset/100002"

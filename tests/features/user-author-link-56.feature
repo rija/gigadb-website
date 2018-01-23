@@ -3,6 +3,10 @@ Feature: a curator can fill in user id in an author record
 	I want to connect a user identity to an author record
 	So that I can enable gigadb users direct access to the dataset they have authored
 
+Background:
+	Given the Gigadb database is loaded with data from  "gigadb_testdata.sql"
+	And the credentials for "default" test users are loaded
+
 
 Scenario: make the connection on the author' form using user's identifier
 	Given I sign in as an admin
