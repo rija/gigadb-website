@@ -2,7 +2,7 @@
 
 ## Acceptance tests
 
-#### Preparing
+#### Preparation
 
 Install Behat and PHPUnit with composer
 
