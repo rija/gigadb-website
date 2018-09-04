@@ -26,6 +26,7 @@ else
 	bin/behat --tags "@ok&&~@affiliate-login" -v --stop-on-failure -c tests/behat.yml --format=html --out=/var/www/protected/runtime/features.html
 fi
 
+
 ./tests/unit_tests
 
 echo "...all automated tests have run"
