@@ -22,25 +22,6 @@ class UserTest extends \CDbTestCase
 		$this->assertEquals("John Smith", $user->getFullName(),"Retrieve full name of a user");
 	}
 
-	function testEncryptPassword() {
-		$user = new \User();
-		$password = "correct horse battery staple" ;
-		$user->newsletter=false;
-    	$user->email="foo@bar";
-        $user->terms=true;
-        $user->password=$password;
-
-		$user->encryptPassword();
-        $this->assertTrue(sodium_crypto_pwhash_str_verify($user->password,$password));
-	}
-
-	function testGeneratePassword() {
-		$user = new \User() ;
-		$password = $user->generatePassword();
-		$this->assertTrue(strlen($password)>=8);
-		$this->assertRegExp('/^[a-z0-9]+$/', $password);
-	}
-
 
 
 }
