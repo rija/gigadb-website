@@ -39,7 +39,6 @@ $ cd gigadb-website                         # your cloned git repository for Gig
 $ git checkout develop                      # the branch with the latest code base
 $ cp ops/configuration/variables/env-sample .env    # make sure GITLAB_PRIVATE_TOKEN is set to your personal access token
 $ docker-compose run --rm config            # generate the configuration using variables in .env, GitLab, then exit
-$ docker-compose run --rm less				# generate site.css
 ```
 
 >**Note 1**: A `.secrets` file will be created automatically and populated using 
@@ -53,20 +52,15 @@ you will have to provide your own values for the necessary variables using
 >$ vi .secrets
 >```
 
-**(2)** To start the web application, run the following commands:
-
+**(2)** To start the web application, run the following command:
 ```
-$ docker-compose run --rm gigadb                    # Run composer update, then spin up the web application's services, then exit
-$ docker-compose up -d web 							# Start the web server
+$ docker-compose run --rm webapp            # run composer update, then spin up the web application's services, then exit
 ```
 
-The **gigadb** container will run composer update using the `composer.json` 
-generated in the previous step, and will launch two containers named
+The **webapp** container will run composer update using the `composer.json` 
+generated in the previous step, and will launch three containers named **web**, 
 **application** and **database**, then it will exit. It's ok to run the command 
 repeatedly.
-
-Starting the web container will first enable site configuration connecting nginx to gigadb PHP application server before starting the web server as a deamon.
-
 
 **(3)** Upon success, three services will be started in detached mode.
 
@@ -93,43 +87,24 @@ database schema, you will need to run Yii migration as below:
 ```
 $ docker-compose run --rm  application ./protected/yiic migrate --interactive=0
 ```
-## Testing GigaDB webapp
+## Testing
 
-To run the unit tests:
+To run the tests:
 ```
-$ docker-compose run --rm test ./bin/phpunit --testsuite unit --bootstrap protected/tests/unit_bootstrap.php --verbose --configuration protected/tests/phpunit.xml --no-coverage
-```
-
-To run the functional tests:
-
-```
-$ docker-compose run --rm test ./bin/phpunit --testsuite functional --bootstrap protected/tests/functional_custom_bootstrap.php --verbose --configuration protected/tests/phpunit.xml --no-coverage
+$ docker-compose run --rm test
 ```
 
-There is a bash shortcut available to run both unit tests and functional tests for GigaDB:
-```
-$ ./tests/unit_functional
-```
-
-To run the acceptance tests:
-
-```
-$ docker-compose up -d phantomjs
-$ docker-compose run --rm test bin/behat --profile local -v --stop-on-failure
-```
-
-
+This will run all the tests and generate a test coverage report. An headless 
 Selenium web browser (currently PhantomJS) will be automatically spun-off into 
 its own container. If an acceptance test fails, it will leave a screenshot under 
 the `./tmp` directory.
 
-To run test coverage:
-
+To only run unit tests, use the command:
 ```
-$ docker-compose run --rm test ./bin/phpunit /var/www/protected/tests --testsuite all --bootstrap protected/tests/functional_custom_bootstrap.php --verbose --configuration protected/tests/phpunit.xml
+$ docker-compose run --rm test ./tests/unit_functional
 ```
 
-## Troubleshooting (for GigaDB)
+## Troubleshooting
 
 To access the services logs, use the command below:
 ```
@@ -255,29 +230,6 @@ $ docker-compose pull
 
 ## Generating the documentation
 
-Install mkdocs. On mac you can use brew:
-
-```
-$ brew install mkdocs
-```
-
-Otherwise you can use Python pip:
-
-```
-pip install mkdocs
-```
-
-To start the server, from this project root directory, run the command:
-
-```
-$ mkdocs serve
-```
-
-the documentation will be available at: (http://127.0.0.1:8000)
-
-
-### PHPDocs
-
 To update the browsable API Docs (PHPDoc), run the command below and then commit 
 the changes:
 ```
@@ -287,3 +239,5 @@ $ docker-compose run --rm test ./docs/make_phpdoc
 ## Licensing
 
 Please see the file called [LICENSE](./LICENSE).
+=======
+# tus-uppy-proto
