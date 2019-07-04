@@ -1,5 +1,5 @@
 ARG PHP_VERSION=7.1
-FROM php:${PHP_VERSION}-fpm-stretch
+FROM php:${PHP_VERSION}-fpm
 
 
 # basic dependencies
@@ -34,7 +34,7 @@ RUN docker-php-ext-install gd && \
     docker-php-ext-configure gd \
         --enable-gd-native-ttf \
         --with-jpeg-dir=/usr/lib \
-        --with-freetype-dir && \
+        --with-freetype-dir=/usr/include/freetype2 && \
     docker-php-ext-install gd
 
 # Set Environment Variables
@@ -108,7 +108,7 @@ RUN if [ ${INSTALL_NETCAT_JQ} = true ]; then \
     mkdir -p /usr/share/man/man7 && \
     # Install netcat-openbsd and jq
     apt-get update -yq && \
-    apt-get install -y netcat-openbsd inetutils-ping jq \
+    apt-get install -y netcat-openbsd jq \
 ;fi
 
 ARG INSTALL_GRAPHVIZ=false
