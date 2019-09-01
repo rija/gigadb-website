@@ -17,18 +17,26 @@ $ docker-compose up -d phantomjs
 
 Configure URLs:
 ```
-$ docker-compose exec bash
-# cd /app
-# ./yii prototype/setup --protoUrl http://gigadb.gigasciencejournal.com:9170/proto/ --apiUrl http://fuw-admin-api/filedrop-accounts --tusUrl http://gigadb.gigasciencejournal.com:9170/files/
+$ docker-compose exec console bash -c "cd /app;./yii prototype/setup --appUrl http://gigadb.gigasciencejournal.com:9170"
 ```
-Start the prototype:
+To Start the prototype after having started the GigaDB and File Upload Wizard as above:
 
 ```
 $ docker-compose up -d fuw-proto
+$ docker-compose exec web ash -c 'rm /etc/nginx/sites-enabled/gigadb.dev.http.conf'
+$ docker-compose exec web /usr/local/bin/enable_sites gigadb-proto.dev.http
+```
+
+To stop and disable the prototype after it has been started as above:
+
+```
+$ docker-compose exec web ash -c 'rm /etc/nginx/sites-enabled/gigadb-proto.dev.http.conf'
+$ docker-compose exec web /usr/local/bin/enable_sites gigadb.dev.http
+$ docker-compose stop fuw-proto
 ```
 
 The protototype will be availabe at:
-(http://fuw-proto-dev.pommetab.com:9170/)
+(http://gigadb.gigasciencejournal.com:9170/proto/)
 
 ## Start and accessing the documentation server
 
