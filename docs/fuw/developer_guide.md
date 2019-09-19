@@ -1,12 +1,18 @@
 # Developer Guide for File Upload Wizard
 
+## urls
+
+http://fuw-admin-dev.pommetab.com:7070
+https://fuw-admin-dev.pommetab.com:7443
+
+The ``ca.pem`` file need to be added to the web browser in order to be recognised.
 
 ## Running tests
 
 ### running all (unit and fonctional) tests for all tiers (backend and frontend)
 
 ```
-$ docker-compose exec console bash
+$ docker exec console bash
 # cd /app
 # php yii_test migrate
 # vendor/bin/codecept build
@@ -16,7 +22,7 @@ $ docker-compose exec console bash
 and with coverage:
 
 ```
-$ docker-compose exec console bash
+$ docker exec console bash
 # cd /app
 # vendor/bin/codecept run --coverage --coverage-xml --coverage-html
 ```
@@ -30,7 +36,7 @@ $ docker-compose exec console /app/vendor/bin/codecept run -c /app --coverage
 ### running all tests for specific tier
 
 ```
-$ docker-compose exec console bash
+$ docker exec console bash
 # cd /app/backend
 # ../vendor/bin/codecept build
 # ../vendor/bin/codecept run
@@ -39,7 +45,7 @@ $ docker-compose exec console bash
 ### running specific test suites
 
 ```
-$ docker-compose exec console bash
+$ docker exec console bash
 # cd /app/backend
 # ../vendor/bin/codecept run unit
 ```
@@ -48,25 +54,16 @@ $ docker-compose exec console bash
 
 
 ```
-$ docker-compose exec console bash
+$ docker exec console bash
 # cd /app/backend
 # ../vendor/bin/codecept run --coverage --coverage-xml --coverage-html
 ```
 
-### running all tests for GigaDB and File Upload Wizard
-
-If GigaDB and File Upload wizard webapps are all running, you can run test suite across them all:
-
-```
-$ ./tests/unit_runner
-$ ./tests/functional_runner
-$ ./tests/all_and_coverage
-```
 
 ## Create a new model (replace backend with common or frontend if needed)
 
 ```
-$ docker-compose exec console bash
+$ docker exec console bash
 # cd /app
 # php yii gii/model --tableName filedrop_account --modelClass FiledropAccount --ns 'backend\models'
 ```
@@ -87,7 +84,7 @@ $ docker-compose exec console bash
 ## Create a new controller (for the backend app) with three actions
 
 ```
-$ docker-compose exec console bash
+$ docker exec console bash
 # cd /app
 # php yii gii/controller --controllerClass="backend\controllers\FiledropAccountController" --actions=create,close,index --viewPath="backend/views/filedrop-account"
 ```
@@ -135,7 +132,7 @@ For security, do not mount directly the Docker unix socket in any container. TCP
 Use Yii2 migrations to describe new changes to the database schema.
 
 ```
-$ docker-compose exec console bash
+$ docker exec console bash
 # cd /app
 # ./yii migrate/create create_upload_table
 ```
