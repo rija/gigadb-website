@@ -67,3 +67,6 @@ vault
 docs/apidocs/phpdoc-cache-*
 docs/cache
 site/
+
+# config
+params-local.php
