@@ -166,8 +166,9 @@ run_all_tests:
     - docker-compose up -d gigadb fuw
     - sleep 5
     - docker-compose up -d web
+    - docker-compose exec web /usr/local/bin/enable_sites gigadb.dev.http fuw-backend.dev.http
     # starting the headless browser for acceptance testing
-    # - docker-compose up -d phantomjs
+    - docker-compose up -d phantomjs
     # - docker-compose top
     # - docker network inspect rija-gigadb-website_web-tier
     # - docker network inspect rija-gigadb-website_db-tier
