@@ -28,40 +28,6 @@ class CuratorSteps #extends \common\tests\AcceptanceTester
      	$fs->deleteDir("private/$arg1");
      }
 
-	/**
-     * @Given there is a user :firstname :lastname
-     */
-   	public function thereIsAUser($firstname, $lastname)
-     {
-        $this->I->haveInDatabase('gigadb_user', [
-			  'email' => "${firstname}_${lastname}@gigadb.org",
-			  'password' => 'foobar',
-			  'first_name' => "$firstname",
-			  'last_name' => "$lastname",
-			  'role' => 'user',
-			  'is_activated' => true,
-			  'newsletter' => false,
-			  'previous_newsletter_state' => false,
-			  'username' => "${firstname}_${lastname}",
-			]);
-    }
-    /**
-     * @Given a dataset with DOI :doi owned by user :firstname :lastname has status :status
-     */
-    public function aDatasetWithDOIOwnedByUserHasStatus($doi, $firstname, $lastname, $status)
-    {
-    	$submitter_id = $this->I->grabFromDatabase('gigadb_user', 'id', array('username' => "${firstname}_${lastname}"));
-         $this->I->haveInDatabase('dataset', [
-			  'submitter_id' => $submitter_id,
-			  'identifier' => "$doi",
-			  'title' => "Dataset Fantastic",
-			  'description' => "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo",
-			  'dataset_size' => 3453534634,
-			  'ftp_site' => 'ftp://data.org',
-			  'upload_status' => "$status",
-			]);
-    }
-
 
 	/**
 	 * @Given I sign in as an admin

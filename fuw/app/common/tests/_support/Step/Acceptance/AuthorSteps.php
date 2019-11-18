@@ -4,7 +4,6 @@ namespace common\tests\Step\Acceptance;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local;
 use \backend\models\FiledropAccount;
-use \Facebook\WebDriver\WebDriverElement;
 
 class AuthorSteps #extends \common\tests\AcceptanceTester
 {
@@ -40,20 +39,28 @@ class AuthorSteps #extends \common\tests\AcceptanceTester
      */
      public function iSignInAsTheUser($firstname, $lastname)
 	{
-		$this->I->amOnUrl('http://gigadb.test');
+		$this->I->amOnUrl('http://gigadb.dev');
 		$this->I->amOnPage('/site/login');
-		$this->I->fillField(['name' => 'LoginForm[username]'], strtolower("${firstname}_${lastname}@gigadb.org"));
-		$this->I->fillField(['name' => 'LoginForm[password]'], 'gigadb');
+		$this->I->fillField(['name' => 'LoginForm[username]'], "${firstname}_${lastname}@gigadb.org");
+		$this->I->fillField(['name' => 'LoginForm[password]'], 'foobar');
 		$this->I->click('Login');
 	}
 
- 	/**
-     * @Then the :arg1 tab is active
-     */
-     public function theTabIsActive($arg1)
-     {
-        $this->I->seeInSource('<a href="#submitted" aria-controls="submitted" role="tab" data-toggle="tab" aria-expanded="true">Your Uploaded Datasets</a>');
-     }
+	/**
+	 * @Given a dataset has been uploaded with temporary DOI :arg1 by user :arg2
+	 */
+	public function aDatasetHasBeenUploadedWithTemporaryDOIByUser($arg1, $arg2)
+	{
+	   throw new \Codeception\Exception\Incomplete("Step `a dataset has been uploaded with temporary DOI :arg1 by user :arg2` is not defined");
+	}
+
+	/**
+	 * @Given the uploaded dataset has status :arg1
+	 */
+	public function theUploadedDatasetHasStatus($arg1)
+	{
+	   throw new \Codeception\Exception\Incomplete("Step `the uploaded dataset has status :arg1` is not defined");
+	}
 
 	/**
 	 * @Given I go to :arg1
@@ -119,16 +126,6 @@ class AuthorSteps #extends \common\tests\AcceptanceTester
          $this->I->wait($arg1);
      }
 
-	 /**
-     * @When I attach the file :arg in the file drop panel
-     */
-     public function iAttachTheFileInTheFileDropPanel($arg1)
-     {
-        $this->I->waitForElementClickable('/html/body/div[3]/div[1]/div/div[2]/div/div[2]/input', 30);
-        $this->I->resizeWindow(1440,900);
-        $this->I->attachFile('/html/body/div[3]/div[1]/div/div[2]/div/div[2]/input',$arg1);
-     }
-
      /**
      * @When I fill in :arg1 text area with :arg2
      */
@@ -158,7 +155,7 @@ class AuthorSteps #extends \common\tests\AcceptanceTester
      */
      public function iAmOn($arg1)
      {
-        $this->I->amOnUrl("http://gigadb.test".$arg1);
+        $this->I->amOnUrl("http://gigadb.dev".$arg1);
      }
 
 }
