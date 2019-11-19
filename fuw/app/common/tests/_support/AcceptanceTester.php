@@ -30,15 +30,16 @@ class AcceptanceTester extends \Codeception\Actor
    	public function thereIsAUser($firstname, $lastname)
      {
         $this->haveInDatabase('gigadb_user', [
-			  'email' => "${firstname}_${lastname}@gigadb.org",
-			  'password' => 'foobar',
+			  'email' => strtolower("${firstname}_${lastname}@gigadb.org"),
+			  'password' => '5a4f75053077a32e681f81daa8792f95',
 			  'first_name' => "$firstname",
 			  'last_name' => "$lastname",
 			  'role' => 'user',
+			  'affiliation' => 'BGI',
 			  'is_activated' => true,
 			  'newsletter' => false,
-			  'previous_newsletter_state' => false,
-			  'username' => "${firstname}_${lastname}",
+			  'previous_newsletter_state' => true,
+			  'username' => strtolower("${firstname}_${lastname}"),
 			]);
     }
 
@@ -47,7 +48,7 @@ class AcceptanceTester extends \Codeception\Actor
      */
     public function aDatasetWithDOIOwnedByUserHasStatus($doi, $firstname, $lastname, $status)
     {
-    	$submitter_id = $this->grabFromDatabase('gigadb_user', 'id', array('username' => "${firstname}_${lastname}"));
+    	$submitter_id = $this->grabFromDatabase('gigadb_user', 'id', array('username' => strtolower("${firstname}_${lastname}")));
          $this->haveInDatabase('dataset', [
 			  'submitter_id' => $submitter_id,
 			  'identifier' => "$doi",
