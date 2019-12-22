@@ -16,15 +16,15 @@ class RSSFeedTest extends FunctionalTesting
     public function testItShouldShowAnRssFeed()
     {
     	// this is the order we expect the news  to be in
-    	$expectations = ["2016-05-11", "2016-05-11", "2016-05-09", "2011-11-12"];
-    	$actual = [];
+    	// $expectations = ["2016-05-11", "2016-05-11", "2016-05-09", "2011-11-12"];
+    	// $actual = [];
 
         $url = "http://gigadb.dev/site/feed/" ;
 
         // Go to a page and getting xml content
         $feed = $this->getXMLWithSessionAndUrl($url);
-
-        $this->assertEquals("10.5072/100004", $feed->channel->item[0]->guid);
+        //only test for the position of the last two as the first one having hte same publiching date, the order is non deterministic
+        $this->assertEquals("10.5072/100002", $feed->channel->item[2]->guid);
         $this->assertEquals("10.5072/100003", $feed->channel->item[3]->guid);
 
 
