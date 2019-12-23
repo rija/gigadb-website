@@ -3,8 +3,10 @@
 set -e
 set -u
 
+docker-compose run --rm test ./bin/phpunit --testsuite unit --bootstrap protected/tests/unit_bootstrap.php --coverage-php protected/runtime/unit.cov  --configuration protected/tests/phpunit.xml
+docker-compose run --rm test ./bin/phpunit --testsuite functional --bootstrap protected/tests/functional_custom_bootstrap.php  --coverage-php protected/runtime/functional.cov  --configuration protected/tests/phpunit.xml
+docker-compose run --rm test ./bin/phpcov merge protected/runtime --html protected/runtime/coverage --clover protected/runtime/clover.xml --text  protected/runtime/phpunit-coverage.txt | head -16 > protected/runtime/phpunit-coverage.txt
 
-docker-compose run --rm test ./bin/phpunit /var/www/protected/tests --testsuite all --bootstrap protected/tests/functional_custom_bootstrap.php --verbose --configuration protected/tests/phpunit.xml
 gigadb_test_status=$?
 set +e
 docker-compose ps | grep console
