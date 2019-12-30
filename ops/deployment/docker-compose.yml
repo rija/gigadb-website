@@ -211,6 +211,15 @@ services:
       - "fuw-admin-api:172.16.238.10"
     command: bash -c "./tests/all_and_coverage"
 
+  js:
+    build:
+      context: .
+      dockerfile: ../packaging/VueDev-Dockerfile
+    volumes:
+      - ${APPLICATION}/:/var/www
+    shm_size: '1gb' # to avoid a known issue
+    command: bash -c "npm test ; npm run build ; npm run deploy"
+
   phantomjs:
     image: wernight/phantomjs:2.1.1
     command: phantomjs --webdriver=8910
