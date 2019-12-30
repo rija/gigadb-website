@@ -62,6 +62,7 @@ terraform.tfstate*
 output
 *.retry
 vault
+js/fuw-*
 
 # docs
 docs/apidocs/phpdoc-cache-*
