@@ -257,5 +257,41 @@ class FiledropService extends yii\base\Component
 		return null;
 	}
 
+	/**
+	 * Make HTTP GET to File Upload Wizard to retrieve files uploads
+	 *
+	 * @param string $doi DOI of the files to return
+	 *
+	 * @return array||null return an array of uploads or null if not found
+	 */
+	public function getUploads(string $doi): ?array
+	{
+		$api_endpoint = "http://fuw-public-api/uploads";
+
+		// reuse token to avoid "You must unsign before making changes" error
+		// when multiple API calls in same session
+		$this->token = $this->token ?? $this->tokenSrv->generateTokenForUser($this->requester->email);
+
+		try {
+			$response = $this->webClient->request('GET', $api_endpoint, [
+								    'headers' => [
+								        'Authorization' => "Bearer ".$this->token,
+								    ],
+								    'query' => [ 'filter[doi]' => $doi ],
+								    'connect_timeout' => 5,
+								]);
+			if (200 === $response->getStatusCode() ) {
+				return json_decode($response->getBody(), true);
+			}
+		}
+		catch(RequestException $e) {
+			Yii::log( Psr7\str($e->getRequest()) , "error");
+		    if ($e->hasResponse()) {
+		        Yii::log( Psr7\str($e->getResponse()), "error");
+		    }
+		}
+		return null;
+	}
+
 }
 ?>
