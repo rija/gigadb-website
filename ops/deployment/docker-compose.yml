@@ -80,6 +80,7 @@ services:
       - "9000"
     extra_hosts:
       - "fuw-admin-api:172.16.238.10"
+      - "fuw-public-api:172.16.238.10"
     networks:
       - web-tier
       - db-tier
@@ -214,6 +215,7 @@ services:
       - "gigadb.dev:172.16.238.10"
       - "gigadb.test:172.16.238.10"
       - "fuw-admin-api:172.16.238.10"
+      - "fuw-public-api:172.16.238.10"
     command: bash -c "./tests/all_and_coverage"
 
   js:
