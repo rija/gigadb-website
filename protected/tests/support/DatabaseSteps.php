@@ -153,6 +153,7 @@ values(681,'$email','5a4f75053077a32e681f81daa8792f95','$firstname','$lastname',
 	            $deleteUploadsStatement->bindValue(":id", $fileId);
 	            $deleteUploadsStatement->execute();
 	        }
+	        $deleteUploadsStatement = null;
 		}
 		else {
 			$sql = "delete from upload";
@@ -177,6 +178,7 @@ values(681,'$email','5a4f75053077a32e681f81daa8792f95','$firstname','$lastname',
         $insertAccountStatement = $dbh->prepare($insertAccountQuery);
         $insertAccountStatement->execute();
         $account = $insertAccountStatement->fetch(PDO::FETCH_OBJ);
+        $insertAccountStatement = null;
         return $account->id;
 	}
 
@@ -208,6 +210,7 @@ values(681,'$email','5a4f75053077a32e681f81daa8792f95','$firstname','$lastname',
             $result = $insertFilesStatement->fetch(PDO::FETCH_OBJ);
             $uploads[] = $result->id;
         }
+        $insertFilesStatement = null;
         return $uploads;
 	}
 }
