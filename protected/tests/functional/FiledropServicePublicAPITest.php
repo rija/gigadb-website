@@ -35,32 +35,42 @@ class FiledropServicePublicAPITest extends FunctionalTesting
     public function setUp()
     {
         parent::setUp();
-
-        //admin user is logged to gigadb
-        $this->loginToWebSiteWithSessionAndCredentialsThenAssert("admin@gigadb.org","gigadb","Admin");
-
-        //test filedrop account doesn't exist in db
-        $filedrop_id = 435342;
-        $db_name = getenv("FUW_DB_NAME");
-        $db_user = getenv("FUW_DB_USER");
-        $db_password = getenv("FUW_DB_PASSWORD");
-        $this->dbhf=new CDbConnection("pgsql:host=database;dbname=$db_name",$db_user,$db_password);
+        $dbName = getenv("FUW_DB_NAME");
+        $dbUser = getenv("FUW_DB_USER");
+        $dbPassword = getenv("FUW_DB_PASSWORD");
+        $dbHost = getenv("FUW_DB_HOST");
+        $this->dbhf=new CDbConnection(
+            "pgsql:host=$dbHost;dbname=$dbName",
+            $dbUser,$dbPassword
+        );
         $this->dbhf->active=true;
-        $delete_account = $this->dbhf->createCommand("delete from filedrop_account where id=$filedrop_id");
-        $delete_account->execute();
+
+        // create file uploads associated with that account
+        $files =  [
+                ["doi" => "$doi", "name" =>"somefile.txt", "size" => 325352, "status"=> 0, "location" => "ftp://foobar", "description" => "", "extension" => "TEXT", "datatype"=>"Text"],
+                ["doi" => "$doi", "name" =>"anotherfile.png", "size" => 5463434, "status"=> 0, "location" => "ftp://barfoo", "description" => "", "extension" => "PNG", "datatype"=>"Image"],
+            ];
+        $this->uploads = $this->setUpFileUploads(
+            $this->dbhf->getPdoInstance(), $files
+        );
 
     }
 
     public function tearDown()
     {
-        $datasetDAO = new DatasetDAO(["identifier" => '100004']) ;
-        $this->tearDownUserIdentity(
-            $this->dbhf->pdoInstance,
-            $datasetDAO->getSubmitter()->email
+        // remove the account and the files from database
+        $this->tearDownFiledropAccount(
+            $this->dbhf->getPdoInstance(),
+            $this->account
         );
+
+        $this->tearDownFileUploads(
+            $this->dbhf->getPdoInstance(),
+            $this->uploads
+        );
+
         $this->dbhf->active=false;
         $this->dbhf = null;
-        $datasetDAO = null;
         parent::tearDown();
     }
 
@@ -78,14 +88,6 @@ class FiledropServicePublicAPITest extends FunctionalTesting
             $this->dbhf->getPdoInstance(), $doi
         );
 
-        // create file uploads associated with that account
-        $files =  [
-                ["doi" => "$doi", "name" =>"somefile.txt", "size" => 325352, "status"=> 0, "location" => "ftp://foobar", "description" => "", "extension" => "TEXT", "datatype"=>"Text"],
-                ["doi" => "$doi", "name" =>"anotherfile.png", "size" => 5463434, "status"=> 0, "location" => "ftp://barfoo", "description" => "", "extension" => "PNG", "datatype"=>"Image"],
-            ];
-        $this->uploads = $this->setUpFileUploads(
-            $this->dbhf->getPdoInstance(), $files
-        );
 
         // Prepare the http client to be traceable for testing
 
@@ -125,17 +127,6 @@ class FiledropServicePublicAPITest extends FunctionalTesting
 
         // and that it's an array of files
         // $this->assertEquals(2, count($response));
-
-        // remove the account and the files from database
-        $this->tearDownFiledropAccount(
-            $this->dbhf->getPdoInstance(),
-            $this->account
-        );
-
-        $this->tearDownFileUploads(
-            $this->dbhf->getPdoInstance(),
-            $this->uploads
-        );
 
     }
 
