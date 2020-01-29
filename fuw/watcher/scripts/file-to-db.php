@@ -4,22 +4,23 @@
 
 const FLAG_PATH = "/var/tmp/processing_flag" ;
 const DATA_TYPES = array(
-					"txt" => "Read Me",
-					"sh" => "Script",
-					"jpg" => "Photography",
-					"png" => "Infographics",
-					"zip" => "Mixed Archive",
-					"pdf" => "Instructions",
+					"txt" => "Text",
+					"csv" => "Text",
+					"jpg" => "Image",
+					"png" => "Image",
+					"fa" => "Genome Sequence",
+					"pdf" => "Rich Text",
+					"doc" => "Rich Text",
 				);
 
 const FILE_FORMATS = array(
 					"txt" => "TEXT",
-					"doc" => "TEXT",
-					"md" => "TEXT",
-					"text" => "TEXT",
-					"readme" => "TEXT",
+					"csv" => "TEXT",
+					"jpg" => "JPEG",
+					"png" => "PNG",
 					"fa" => "FASTA",
 					"pdf" => "PDF",
+					"doc" => "MSDOC",
 );
 
 /**
@@ -261,7 +262,7 @@ function updateFileTable(object $dbh, string $dataset_doi, array $uploadedFilesM
 	$result = 0;
 
 	$delete = "delete from upload where doi= ? and status = 0";
-	$insert = "insert into upload(doi,name,size,status,location,description, extension) values(:d , :n , :z , 0, :l, :s, :e)";
+	$insert = "insert into upload(doi,name,size,status,location,description, extension, datatype) values(:d , :n , :z , 0, :l, :s, :e, :t)";
 
 	$delete_statement = $dbh->prepare($delete);
 	$delete_statement->bindParam(1, $dataset_doi);
@@ -272,17 +273,15 @@ function updateFileTable(object $dbh, string $dataset_doi, array $uploadedFilesM
 	$insert_statement->bindParam(':n', $name);
 	$insert_statement->bindParam(':z', $size);
 	$insert_statement->bindParam(':l', $location);
-	// $insert_statement->bindParam(':f', $format);
-	// $insert_statement->bindParam(':t', $data_type);
 	$insert_statement->bindParam(':e', $extension);
+	$insert_statement->bindParam(':t', $data_type);
 	$insert_statement->bindParam(':s', $summary);
 	foreach ($uploadedFilesMetadata as $file) {
 		$name = $file["file_name"] ;
 		$size = $file["size"] ;
 		$location = $file["link"] ;
-		// $format = $file["format"] ;
-		// $data_type = $file["data_type"] ;
 		$extension = $file["extension"] ;
+		$data_type = $file["data_type"] ;
 		$summary = $file["description"] ;
 		$result += $insert_statement->execute();
 	}
