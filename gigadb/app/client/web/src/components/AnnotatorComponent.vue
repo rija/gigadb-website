@@ -1,5 +1,4 @@
 <template>
-    <form v-bind:id="'metadata-form-' + identifier">
         <table class="table table-striped table-bordered">
             <thead>
                 <tr>
@@ -16,7 +15,7 @@
                     <td>{{ upload.name }}</td>
                     <td>
                         <div class="form-group">
-                            <select v-model="upload.datatype" name="datatype" v-bind:id="'upload-'+(index+1)+'-datatype'" v-on:change="fieldHasChanged(index, $event)">
+                            <select v-model="upload.datatype" v-bind:name="'Upload['+ upload.id +'][datatype]'" v-bind:id="'upload-'+(index+1)+'-datatype'" v-on:change="fieldHasChanged(index, $event)">
                                 <option v-for="datatype in dataTypes">{{datatype}}</option>
                             </select>
                         </div>
@@ -26,7 +25,7 @@
                     <td>
                         <div class="form-group required">
                             <label class='control-label'>
-                                <input v-model="upload.description" type="text" name="description" v-bind:id="'upload-'+(index+1)+'-description'" v-on:input="fieldHasChanged(index, $event)" required>
+                                <input v-model="upload.description" type="text" v-bind:name="'Upload['+ upload.id +'][description]'" v-bind:id="'upload-'+(index+1)+'-description'" v-on:input="fieldHasChanged(index, $event)" required>
                             </label>
                         </div>
                     </td>
@@ -34,7 +33,6 @@
                 </tr>
             </tbody>
         </table>
-    </form>
 </template>
 <style>
 .form-group.required .control-label:after {

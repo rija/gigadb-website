@@ -8,13 +8,20 @@ $this->pageTitle = 'GigaDB - My GigaDB Page';
             </div>
         </font>
         <? } ?>
-            <? if (Yii::app()->user->hasFlash('error')) { ?>
-                <font color="red">
-                    <div>
-                        <?= Yii::app()->user->getFlash('error'); ?>
-                    </div>
-                </font>
-                <? } ?>
+    <? if (Yii::app()->user->hasFlash('error')) { ?>
+        <font color="red">
+            <div>
+                <?= Yii::app()->user->getFlash('error'); ?>
+            </div>
+        </font>
+        <? } ?>
+    <? if (Yii::app()->user->hasFlash('fileUpload')) { ?>
+        <font color="red">
+            <div>
+                <?= Yii::app()->user->getFlash('fileUpload'); ?>
+            </div>
+        </font>
+        <? } ?>
                     <div class="content">
                         <div class="container">
                             <section class="page-title-section">

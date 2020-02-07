@@ -220,7 +220,6 @@ function fileMetadata(string $file_name, string $dataset): array
 					"link" => null,
 					"md5" => null,
 					"extension" => pathinfo($file_path, PATHINFO_EXTENSION) ?? "",
-					"description" => $file_name
 				);
 
 	$metadata["format"] = getFileFormatFromFile($file_name);
