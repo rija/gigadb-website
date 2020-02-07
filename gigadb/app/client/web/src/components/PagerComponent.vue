@@ -4,7 +4,7 @@
             <a v-bind:href="annotationUrl" class="btn">Next</a>
         </div>
         <div v-if="stage === 'annotating' && metadataComplete === true">
-            <a href="#" class="btn btn-success complete">Complete and return to Your Uploaded Datasets page</a>
+            <button class="btn btn-success complete" type="submit">Complete and return to Your Uploaded Datasets page</button>
         </div>
 <!--         <div v-else>
         	stage: {{ stage }}

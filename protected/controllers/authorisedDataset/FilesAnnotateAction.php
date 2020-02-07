@@ -35,7 +35,24 @@ class FilesAnnotateAction extends CAction
         // Fetch list of uploaded files
         $uploadedFiles = $filedropSrv->getUploads($id);
         // Yii::log("uploadedFiles count: ".count($uploadedFiles),'info');
-        // Yii::log(var_export($uploadedFiles, true),'info');
+
+        $completeSuccess = true;
+        if(isset($_POST['Upload']))
+        {
+            foreach($uploadedFiles as $upload)
+            {
+                if(isset($_POST['Upload'][$upload['id']])) {
+                    $completeSuccess = $completeSuccess && $filedropSrv->updateUpload($upload['id'], $_POST['Upload'][$upload['id']] );
+                }
+            }
+            if ($completeSuccess) {
+                Yii::app()->user->setFlash('fileUpload','File uploading complete');
+            }
+            else {
+                Yii::app()->user->setFlash('error','Error with some files');
+            }
+            $this->getController()->redirect("/user/view_profile#submitted");
+        }
         $this->getController()->render("filesAnnotate", array("identifier" => $id, "uploads" => $uploadedFiles));
     }
 }
