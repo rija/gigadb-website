@@ -188,6 +188,69 @@ class FiledropServicePublicAPITest extends FunctionalTesting
         $this->assertTrue($response);
 
     }
+
+    /**
+     * Test setting up email notification on FUW API
+     *
+     */
+    public function testEmailSend()
+    {
+        // create a filedrop acccount
+        $doi = "100004";
+        $this->account = $this->setUpFiledropAccount(
+            $this->dbhf->getPdoInstance(), $doi
+        );
+
+
+        // Prepare the http client to be traceable for testing
+
+        $container = [];
+        $history = Middleware::history($container);
+
+        $stack = HandlerStack::create();
+        // Add the history middleware to the handler stack.
+        $stack->push($history);
+
+        $webClient = new Client(['handler' => $stack]);
+
+        // Instantiate FiledropService
+        $fileUploadSrv = new FileUploadService([
+            "tokenSrv" => new TokenService([
+                                  'jwtTTL' => 31104000,
+                                  'jwtBuilder' => Yii::$app->jwt->getBuilder(),
+                                  'jwtSigner' => new \Lcobucci\JWT\Signer\Hmac\Sha256(),
+                                  'users' => new UserDAO(),
+                                  'dt' => new DateTime(),
+                                ]),
+            "webClient" => $webClient,
+            "requester" => \User::model()->findByPk(344), //admin user
+            "identifier"=> $doi,
+            "dataset" => new DatasetDAO(["identifier" => $this->doi]),
+            "dryRunMode"=> false,
+            ]);
+
+        // Setup post data
+        $postData = [ 
+            'sender' => "me@gigadb.test",
+            'recipient' => "someone@example.test",
+            'subject' => "functional test for message notification",
+            'content' => "Lorem ipsum foo bar hellow world something",
+        ];
+        // invoke the Filedrop Service
+        // $response = $fileUploadSrv->emailSend(array_values($postData));
+        $response = $fileUploadSrv->emailSend(
+            $postData["sender"], 
+            $postData["recipient"],
+            $postData["subject"],
+            $postData["content"]
+        );
+
+        // test the response from the API is successful
+        $this->assertEquals(200, $container[0]['response']->getStatusCode());
+        // test that getUploads return a value
+        $this->assertTrue($response);
+
+    }
 }
 
 ?>
