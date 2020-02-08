@@ -46,7 +46,7 @@ Scenario: Making changes to metadata
 	| CC0_pixel.jpg | Image 	| hello world 		|
 	Then I should see a "Complete and return to Your Uploaded Datasets page" button
 
-@ok
+@wip
 Scenario: Saving metadata
 	Given I sign in as the user "Artie" "Dodger"
 	And The user "Artie" "Dodger" is registered as authorised user in the API
