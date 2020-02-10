@@ -1,4 +1,5 @@
 <template>
+    <div>
         <table class="table table-striped table-bordered">
             <thead>
                 <tr>
@@ -29,10 +30,21 @@
                             </label>
                         </div>
                     </td>
-                    <td><a href="" v-bind:id="'upload-'+(index+1)+'-tag'" class="btn btn-info btn-small">Tag</a><a href="" v-bind:id="'upload-'+(index+1)+'-delete'" class="btn btn-danger btn-small">Del.</a></td>
+                    <td>
+                        <el-button v-bind:id="'upload-'+(index+1)+'-tag'" v-on:click="drawer = true" type="primary" class="btn btn-info btn-small">
+                            Attributes
+                        </el-button>
+                        <a href="" v-bind:id="'upload-'+(index+1)+'-delete'" class="btn btn-danger btn-small">Delete</a>
+                    </td>
                 </tr>
             </tbody>
         </table>
+        <el-drawer title="Add attributes" :visible.sync="drawer" :with-header="true">
+            <span>
+                <specifier id="attributes-form"/>
+            </span>
+        </el-drawer>
+    </div>
 </template>
 <style>
 .form-group.required .control-label:after {
@@ -41,56 +53,59 @@
 }
 </style>
 <script>
-import {eventBus} from '../index.js'
+import { eventBus } from '../index.js'
+import SpecifierComponent from './SpecifierComponent.vue'
 
 export default {
-        props: ['identifier', 'token', 'uploads'],
-        data: function() {
-            return {
-                uploadedFiles: this.uploads || [],
-                metaComplete: [],
-                dataTypes: [
-                    "Text",
-                    "Image",
-                    "Rich Text",
-                    "Genome Sequence",
-                ],
-            }
-        },
-        methods: {
-            fieldHasChanged(uploadIndex, event) {
-                if (this.uploadedFiles[uploadIndex].datatype != undefined && this.uploadedFiles[uploadIndex].datatype.length > 0 && this.uploadedFiles[uploadIndex].description != undefined && this.uploadedFiles[uploadIndex].description.length > 0) {
-                    this.metaComplete[uploadIndex] = true
-                }
-                else {
-                    this.metaComplete = this.metaComplete.filter( 
-                        (x,i) => i !== uploadIndex 
-                    )
-                    eventBus.$emit('metadata-ready-status', false)
-                }
-
-                if ( this.isMetadataComplete() ) {
-                    eventBus.$emit('metadata-ready-status', true)
-                }
-                else {
-                    eventBus.$emit('metadata-ready-status', false)
-                }
-            },
-            isMetadataComplete() {
-                return this.metaComplete.length === this.uploadedFiles.length
-            }
-        },
-        beforeDestroy: function () {
-            console.log("before destroy")
-            delete this.uploadedfiles
-        },
-        destroyed: function () {
-            console.log("after destroy")
-        },
-        mounted: function () {
-            this.$nextTick(function () {
-                eventBus.$emit("stage-changed","annotating")
-            })
+    props: ['identifier', 'token', 'uploads'],
+    data: function() {
+        return {
+            uploadedFiles: this.uploads || [],
+            metaComplete: [],
+            dataTypes: [
+                "Text",
+                "Image",
+                "Rich Text",
+                "Genome Sequence",
+            ],
+            drawer: false,
         }
+    },
+    methods: {
+        fieldHasChanged(uploadIndex, event) {
+            if (this.uploadedFiles[uploadIndex].datatype != undefined && this.uploadedFiles[uploadIndex].datatype.length > 0 && this.uploadedFiles[uploadIndex].description != undefined && this.uploadedFiles[uploadIndex].description.length > 0) {
+                this.metaComplete[uploadIndex] = true
+            } else {
+                this.metaComplete = this.metaComplete.filter(
+                    (x, i) => i !== uploadIndex
+                )
+                eventBus.$emit('metadata-ready-status', false)
+            }
+
+            if (this.isMetadataComplete()) {
+                eventBus.$emit('metadata-ready-status', true)
+            } else {
+                eventBus.$emit('metadata-ready-status', false)
+            }
+        },
+        isMetadataComplete() {
+            return this.metaComplete.length === this.uploadedFiles.length
+        }
+    },
+    beforeDestroy: function() {
+        console.log("before destroy")
+        delete this.uploadedfiles
+    },
+    destroyed: function() {
+        console.log("after destroy")
+    },
+    mounted: function() {
+        this.$nextTick(function() {
+            eventBus.$emit("stage-changed", "annotating")
+        })
+    },
+    components: {
+        "specifier": SpecifierComponent,
     }
+}
 </script>
