@@ -48,7 +48,7 @@ variables:
   GITLAB_UPSTREAM_PROJECT_ID: "7041674"
 
 services:
-  - docker:dind
+  - docker:19.03.5-dind
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
