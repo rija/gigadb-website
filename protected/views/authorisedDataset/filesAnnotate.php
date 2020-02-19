@@ -14,7 +14,10 @@
                     </div>
                 </header>
                 <section>
-                    <annotator identifier="<?php echo $identifier; ?>" v-bind:uploads='<?php echo json_encode($uploads); ?>' />
+                    <annotator identifier="<?php echo $identifier; ?>" 
+                                v-bind:uploads='<?php echo json_encode($uploads); ?>' 
+                                v-bind:attributes='<?php echo json_encode($attributes); ?>' 
+                    />
                 </section>
                 <footer>
                     <pager identifier="<?php echo $identifier; ?>" />
