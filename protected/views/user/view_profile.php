@@ -22,6 +22,13 @@ $this->pageTitle = 'GigaDB - My GigaDB Page';
             </div>
         </font>
         <? } ?>
+    <? if (Yii::app()->user->hasFlash('uploadDeleted')) { ?>
+        <font color="red">
+            <div>
+                <?= Yii::app()->user->getFlash('uploadDeleted'); ?>
+            </div>
+        </font>
+        <? } ?>
                     <div class="content">
                         <div class="container">
                             <section class="page-title-section">
