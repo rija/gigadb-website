@@ -23,4 +23,5 @@ return [
             'path' => '/var',
         ],
     ],
+    'params' => $params,
 ];
