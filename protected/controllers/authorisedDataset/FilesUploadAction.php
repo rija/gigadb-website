@@ -14,7 +14,10 @@ class FilesUploadAction extends CAction
     public function run($id)
     {
         $this->getController()->layout='uploader_layout';
-        $this->getController()->render("filesUpload", array("identifier" => $id));
+        $this->getController()->render("filesUpload", array(
+        	"identifier" => $id, 
+        	"tusd_path" => Yii::$app->params['dataset_filedrop']['tusd_path']
+        ));
     }
 }
 
