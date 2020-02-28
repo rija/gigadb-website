@@ -67,6 +67,10 @@ class UploadController extends ActiveController
             'searchModel' => 'common\models\UploadSearch'
         ];
         $actions['update']['class'] = 'frontend\actions\UploadController\UpdateAction';
+        $actions['updateMultiple'] = [
+            'class' => 'frontend\actions\UploadController\UpdateMultipleAction',
+            'modelClass' => $this->modelClass,
+        ];
     return $actions;
 
     }
