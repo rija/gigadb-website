@@ -280,6 +280,8 @@ services:
       START_XVFB: "false"
 
   fuw-admin:
+    environment:
+      YII_ENV_DEV: ${YII_ENV_DEV}
     build:
       context: ../../fuw/app
       dockerfile: common/Dockerfile
@@ -320,6 +322,8 @@ services:
       - db-tier
 
   fuw-public:
+    environment:
+      YII_ENV_DEV: ${YII_ENV_DEV}
     build:
       context: ../../fuw/app
       dockerfile: common/Dockerfile
