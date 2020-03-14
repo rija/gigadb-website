@@ -68,19 +68,14 @@ import { eventBus } from '../index.js'
 import SpecifierComponent from './SpecifierComponent.vue'
 
 export default {
-    props: ['identifier', 'token', 'uploads', 'attributes'],
+    props: ['identifier', 'token', 'uploads', 'attributes', 'filetypes'],
     data: function() {
         return {
             uploadedFiles: this.uploads || [],
             fileAttributes: this.attributes || [],
             filesToDelete: [],
             metaComplete: [],
-            dataTypes: [
-                "Text",
-                "Image",
-                "Rich Text",
-                "Genome Sequence",
-            ],
+            dataTypes: Object.keys(this.filetypes),
             drawer: false,
             drawerIndex: 0,
             selectedUpload: -1,

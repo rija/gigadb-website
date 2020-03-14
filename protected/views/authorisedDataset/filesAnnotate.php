@@ -10,7 +10,7 @@
                     </div>
                 <? } ?>
                 <?php if (Yii::app()->user->hasFlash('filesAnnotateErrors')) { ?>
-                    <div class="alert alert-error" role="alert">
+                    <div class="alert alert-danger" role="alert">
                         <?php echo Yii::app()->user->getFlash('filesAnnotateErrors'); ?>
                     </div>
                 <? } ?>
@@ -28,6 +28,7 @@
                 <section>
                     <annotator identifier="<?php echo $identifier ?>" 
                                 v-bind:uploads='<?php echo json_encode($uploads) ?>' 
+                                v-bind:filetypes='<?php echo $filetypes ?>'
                                 v-bind:attributes='<?php echo json_encode($attributes, JSON_HEX_APOS|JSON_HEX_QUOT) ?>' 
                     />
                 </section>

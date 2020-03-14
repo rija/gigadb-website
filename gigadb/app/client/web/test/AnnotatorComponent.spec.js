@@ -26,7 +26,8 @@ describe('Annotator component', function() {
             attachToDocument: true,
 			propsData: {
 				identifier: '000000',
-				uploads: JSON.parse(JSON.stringify( uploads )) //we need a copy, not reference
+				uploads: JSON.parse(JSON.stringify( uploads )), //we need a copy, not reference
+                filetypes: JSON.parse('{"Readme":112,"Sequence assembly":113,"Annotation":114,"Protein sequence":115,"Repeat sequence":116,"Coding sequence":117,"Script":118,"Mixed archive":119}')
 			}
         })
 	})
@@ -53,8 +54,8 @@ describe('Annotator component', function() {
         const wrapper = this.renderedComponent
         return Vue.nextTick().then(function() {
 	        expect(wrapper.html()).toContain('Data Type')
-	        expect(wrapper.html()).toContain('Text')
-	        expect(wrapper.html()).toContain('Image')
+	        expect(wrapper.html()).toContain('Repeat sequence')
+	        expect(wrapper.html()).toContain('Annotation')
         })
     })
    it('should show format of all upload files', function() {
@@ -80,14 +81,14 @@ describe('Annotator component', function() {
     it('should update the metadata for the first upload', function () {
         // Update two fields on the first of the two uploaded files
         const selectField = this.renderedComponent.find('select[id="upload-1-datatype"]')
-        selectField.setValue('Rich Text')
+        selectField.setValue('Script')
 
         const inputField = this.renderedComponent.find('input[id="upload-1-description"]')
         inputField.setValue('Some description here')
 
         const wrapper = this.renderedComponent
         return Vue.nextTick().then(function() {
-            expect(wrapper.vm.uploadedFiles[0].datatype).toBe('Rich Text')
+            expect(wrapper.vm.uploadedFiles[0].datatype).toBe('Script')
             expect(wrapper.vm.uploadedFiles[0].description).toBe('Some description here')
             // the other fields remained unchanged
             expect(wrapper.vm.uploadedFiles[0].doi).toBe('000000')
@@ -104,11 +105,11 @@ describe('Annotator component', function() {
             $emitted = status
         })
         // do stuff here (update fields on both files)
-        this.renderedComponent.find('select[id="upload-1-datatype"]').setValue('Rich Text')
+        this.renderedComponent.find('select[id="upload-1-datatype"]').setValue('Script')
 
         this.renderedComponent.find('input[id="upload-1-description"]').setValue('Some description here')
 
-        this.renderedComponent.find('select[id="upload-2-datatype"]').setValue('Image')
+        this.renderedComponent.find('select[id="upload-2-datatype"]').setValue('Readme')
 
         expect($emitted).toBeFalse()
         expect(this.renderedComponent.vm.isMetadataComplete()).toBeFalse()
@@ -120,11 +121,11 @@ describe('Annotator component', function() {
             $emitted = status //event bus would catch our component's 'complete' event
         })
         // do stuff here (update fields on both files)
-        this.renderedComponent.find('select[id="upload-1-datatype"]').setValue('Rich Text')
+        this.renderedComponent.find('select[id="upload-1-datatype"]').setValue('Script')
 
         this.renderedComponent.find('input[id="upload-1-description"]').setValue('Some description here')
 
-        this.renderedComponent.find('select[id="upload-2-datatype"]').setValue('Image')
+        this.renderedComponent.find('select[id="upload-2-datatype"]').setValue('Readme')
 
         this.renderedComponent.find('input[id="upload-2-description"]').setValue('Further details about the thing')
 
@@ -161,7 +162,8 @@ describe("Annotator component's Attributes button", function () {
             attachToDocument: true,
             propsData: {
                 identifier: '000000',
-                uploads: JSON.parse(JSON.stringify( uploads )) //we need a copy, not reference
+                uploads: JSON.parse(JSON.stringify( uploads )), //we need a copy, not reference
+                filetypes: JSON.parse('{"Readme":112,"Sequence assembly":113,"Annotation":114,"Protein sequence":115,"Repeat sequence":116,"Coding sequence":117,"Script":118,"Mixed archive":119}')
             }
         })
     })
@@ -213,7 +215,8 @@ describe("Annotator component's bulk upload form and instructions", function () 
             attachToDocument: true,
             propsData: {
                 identifier: '000000',
-                uploads: JSON.parse(JSON.stringify( uploads )) //we need a copy, not reference
+                uploads: JSON.parse(JSON.stringify( uploads )), //we need a copy, not reference
+                filetypes: JSON.parse('{"Readme":112,"Sequence assembly":113,"Annotation":114,"Protein sequence":115,"Repeat sequence":116,"Coding sequence":117,"Script":118,"Mixed archive":119}')
             }
         })
     })
