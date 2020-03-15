@@ -134,8 +134,8 @@ Scenario: Unknown Data Type (all spreadsheet entries have error)
 	And I wait "3" seconds
 	Then I should be on "/authorisedDataset/annotateFiles/id/000007"
 	And I should not see "Metadata loaded"
-    And I should see "(TheProof.csv) Cannot load file, incorrect Data type: Text"
-    And I should see "(CC0_pixel.jpg) Cannot load file, incorrect Data type: Image"
+    And I should see "(TheProof.csv) Cannot load file, incorrect Data type: Rich Text"
+    And I should see "(CC0_pixel.jpg) Cannot load file, incorrect Data type: Photo"
 
 @ok
 Scenario: Unknown Data Type (one spreadsheet entry in error)
@@ -162,6 +162,31 @@ Scenario: Unknown Data Type (one spreadsheet entry in error)
     | CC0_pixel.jpg | last row | Annotation |
     And I should see "Metadata loaded"
     And I should see "(lorem.txt) Cannot load file, incorrect Data type: Reafme"
+
+@ok
+Scenario: Unknown file format (one spreadsheet entry in error)
+	Given I sign in as the user "Artie" "Dodger"
+	And The user "Artie" "Dodger" is registered as authorised user in the API
+	And I am on "/user/view_profile#submitted"
+	And the "Your Uploaded Datasets" tab is active
+	And I press "Upload Dataset Files"
+	And I attach the file "TheProof.csv" in the file drop panel
+	And I press "Add more"
+	And I attach the file "CC0_pixel.jpg" in the file drop panel
+	And I press "Add more"
+	And I attach the file "lorem.txt" in the file drop panel	
+	And I press "Upload 3 files"
+	And I wait "30" seconds
+	And I press "Next"
+	When I attach the file "sample5_unknown_format.csv"
+	And I press "Upload spreadsheet"
+	And I wait "3" seconds
+	Then I should be on "/authorisedDataset/annotateFiles/id/000007"
+	And I should see metadata
+	| name         | description | datatype |
+    | TheProof.csv | first row | Script |
+    And I should see "Metadata loaded"
+    And I should see "(CC0_pixel.jpg) Cannot load file, incorrect File format: ZZZ"
 
 # Scenario: Well-formated spreadsheet with metadata populated for some or all files with no prior metadata filled in
 # 	Given I sign in as a user
