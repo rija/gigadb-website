@@ -55,6 +55,7 @@ class Upload extends \yii\db\ActiveRecord
             [['location'], 'string', 'max' => 200],
             [['datatype'], 'string', 'max' => 32],
             [['extension'], 'string', 'max' => 32],
+            [['name', 'description', 'datatype', 'initial_md5', 'extension'],'trim'],
         ];
     }
 
