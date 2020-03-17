@@ -54,6 +54,7 @@ class Upload extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 128],
             [['location'], 'string', 'max' => 200],
             [['datatype'], 'string', 'max' => 32],
+            ['datatype', 'validateDataType'],
             [['extension'], 'string', 'max' => 32],
             [['name', 'description', 'datatype', 'initial_md5', 'extension'],'trim'],
         ];
@@ -87,5 +88,18 @@ class Upload extends \yii\db\ActiveRecord
     public function getUploadAttributes()
     {
         return $this->hasMany(Attribute::className(), ['upload_id' => 'id']);
+    }
+
+    /**
+     * @param string $attribute the attribute currently being validated
+     * @param mixed $params the value of the "params" given in the rule
+     * @param \yii\validators\InlineValidator $validator related InlineValidator instance.
+     * This parameter is available since version 2.0.11.
+    */
+    public function validateDataType($attribute, $params, $validator)
+    {
+        if (!in_array($this->$attribute, array_keys(json_decode(file_get_contents('/var/www/files/data/filetypes.json'),true)))) {
+            $validator->addError($this, $attribute, 'Data type is not recognized: {value}');
+        }
     }
 }
