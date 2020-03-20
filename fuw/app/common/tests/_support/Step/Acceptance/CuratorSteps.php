@@ -3,6 +3,7 @@ namespace common\tests\Step\Acceptance;
 
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local;
+use \FileUploadServicer;
 
 class CuratorSteps #extends \common\tests\AcceptanceTester
 {
@@ -152,5 +153,44 @@ class CuratorSteps #extends \common\tests\AcceptanceTester
      {
         $this->I->amOnUrl("http://gigadb.test".$arg1);
      }
+
+    /**
+     * @Given the status of the dataset with DOI :arg1 has changed to :arg2
+     */
+     public function theStatusOfTheDatasetWithDOIHasChangedTo($doi, $status)
+     {
+     	$webClient = new \GuzzleHttp\Client();
+        $fileUploadSrv = new \FileUploadService([
+            "tokenSrv" => new \TokenService([
+                                  'jwtTTL' => 3600,
+                                  'jwtBuilder' => Yii::$app->jwt->getBuilder(),
+                                  'jwtSigner' => new \Lcobucci\JWT\Signer\Hmac\Sha256(),
+                                  'users' => new \UserDAO(),
+                                  'dt' => new \DateTime(),
+                                ]),
+            "webClient" => $webClient,
+            "requester" => \User::model()->findByAttribute(["email"=>"joy_fox@gigadb.org"]),
+            "identifier"=> $doi,
+            "dataset" => new \DatasetDAO(["identifier" => $doi]),
+            "dryRunMode"=>false,
+            ]);
+
+        $datasetUpload = new \DatasetUpload(
+            $fileUploadSrv->dataset, 
+            $fileUploadSrv, 
+            Yii::$app->params['dataset_upload']
+        );
+        $datasetUpload->setStatusToDataAvailableForReview("changed from test scenario");
+     }
+
+	/**
+     * @When I press :arg1 for dataset :arg2
+     */
+     public function iPressForDataset($arg1, $arg2)
+     {
+        $this->I->click("(//a[@title='Update Dataset'])[5]");
+     }
+
+
 
 }

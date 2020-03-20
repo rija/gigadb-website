@@ -57,6 +57,7 @@ class AcceptanceTester extends \Codeception\Actor
 			  'dataset_size' => 3453534634,
 			  'ftp_site' => 'ftp://data.org',
 			  'upload_status' => "$status",
+              'image_id' => 225,
 			]);
     }
 
