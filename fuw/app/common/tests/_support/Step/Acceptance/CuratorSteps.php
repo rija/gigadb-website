@@ -4,6 +4,7 @@ namespace common\tests\Step\Acceptance;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local;
 use \FileUploadServicer;
+use \Email\Parse;
 
 class CuratorSteps #extends \common\tests\AcceptanceTester
 {
@@ -191,6 +192,36 @@ class CuratorSteps #extends \common\tests\AcceptanceTester
         $this->I->click("(//a[@title='Update Dataset'])[5]");
      }
 
+	/**
+     * @When change the status to :arg1
+     */
+    public function changeTheStatusTo($status)
+    {
+    	/* //*[@id="Dataset_upload_status"] */
+        $this->I->selectOption('//*[@id="Dataset_upload_status"]', $status);
+        $this->I->click("Save");
+    }
 
+	/**
+     * @Then An email is sent to :arg1
+     */
+     public function anEmailIsSentTo($email)
+     {
+     	exec("ls -1rt /app/frontend/runtime/mail", $output, $error);
+     	if(count($output) > 0 ) {
+     		$lastEmail = array_pop($output);
+     		$parser = new \Phemail\MessageParser();
+			$message = $parser->parse("/app/frontend/runtime/mail/$lastEmail");
+			$emailDate = $message->getHeaderValue('date');
+			$emailTimestamp = strtotime($emailDate);
+			$currentDate = new \DateTime('NOW');
+			$currentTimestamp = $currentDate->format('U');
+			//test that email was received within the last 10 secs
+			$this->I->assertTrue(abs($emailTimestamp-$currentTimestamp)<10);
+			$addresses = Parse::getInstance()->parse($message->getHeaderValue('to'));
+			$this->I->assertEquals($email, $addresses["email_addresses"][0]["address"]);
+     	}
+
+     }
 
 }
