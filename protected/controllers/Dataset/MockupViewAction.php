@@ -18,9 +18,10 @@ class MockupViewAction extends CAction
         if (null === $tokenData) {
             throw new CHttpException(404, "Unknown mockup UUID");
         }
+        $srv->requesterEmail = $tokenData["reviewerEmail"];//setDatasetfiles needs this for auth token
         $model = Dataset::model()->findByAttributes(["identifier" => $tokenData["DOI"]]);
         $datasetPageSettings = new DatasetPageSettings($model);
-        $assembly = DatasetPageAssembly::assemble($model, Yii::app());
+        $assembly = DatasetPageAssembly::assemble($model, Yii::app(), $srv);
 
         if( "mockup" !== $datasetPageSettings->getPageType() ) {
             Yii::log("Incorrect page type is not 'mockup', instead got '".$datasetPageSettings->getPageType()."'", "error");
