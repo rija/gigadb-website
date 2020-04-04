@@ -49,7 +49,7 @@ class AcceptanceTester extends \Codeception\Actor
     public function aDatasetWithDOIOwnedByUserHasStatus($doi, $firstname, $lastname, $status)
     {
     	$submitter_id = $this->grabFromDatabase('gigadb_user', 'id', array('username' => strtolower("${firstname}_${lastname}")));
-         $this->haveInDatabase('dataset', [
+         $dataset_id = $this->haveInDatabase('dataset', [
 			  'submitter_id' => $submitter_id,
 			  'identifier' => "$doi",
 			  'title' => "Dataset Fantastic",
@@ -59,6 +59,11 @@ class AcceptanceTester extends \Codeception\Actor
 			  'upload_status' => "$status",
               'image_id' => 225,
 			]);
+
+         $this->haveInDatabase('dataset_type', [
+              'dataset_id' => $dataset_id,
+              'type_id' => 19,
+            ]);
     }
 
      /**
