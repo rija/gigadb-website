@@ -8,6 +8,8 @@
  * @property \TokenService $tokenSrv we need the service of JWT token generation
  * @property \GuzzleHttp\Client $webClient the web agent for making REST call
  * @property string $requesterEmail the email of the user for which to create an auth token
+ * @property string $requesterFullName the name of the user for which to create an auth token
+ * @property string $requesterRole the role of the user for which to create an auth token
  * @property string $identifier DOI of the dataset for which to create a filedrop account
  * @property string $instructions text to sent authors for uploading data
  * @property DatasetDAO $dataset Instance of DatasetDAO for working with dataset resultsets
@@ -35,6 +37,14 @@ class FileUploadService extends yii\base\Component
  	 * {@inheritdoc}
    	 */
 	public $requesterEmail;
+	/**
+ 	 * {@inheritdoc}
+   	 */
+	public $requesterFullName;
+	/**
+ 	 * {@inheritdoc}
+   	 */
+	public $requesterRole;
 	/**
  	 * {@inheritdoc}
    	 */
@@ -123,7 +133,11 @@ class FileUploadService extends yii\base\Component
 
 		// reuse token to avoid "You must unsign before making changes" error
 		// when multiple API calls in same session
-		$this->token = $this->token ?? $this->tokenSrv->generateTokenForUser($this->requesterEmail);
+		$this->token = $this->token ?? $this->tokenSrv->generateTokenForUser(
+			$this->requesterEmail,
+			$this->requesterFullName,
+			$this->requesterRole
+		);
 
 		try {
 			$response = $this->webClient->request('GET', $api_endpoint, [

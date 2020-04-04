@@ -44,9 +44,15 @@ $config =  [
             'showScriptName' => false,
             'rules' => [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'filedrop-account'],
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'user'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'mockup-url'],
                 'site/login' => 'site/login',
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'user',
+                    'extraPatterns' => [
+                        'POST lookup' => 'lookup',
+                    ],
+                ],                
             ],
         ],
 
