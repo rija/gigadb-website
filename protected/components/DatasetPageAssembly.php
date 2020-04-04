@@ -232,14 +232,12 @@ class DatasetPageAssembly extends yii\base\Component
 	{
 		switch($source) {
 			case "resourced":
-				// TODO (needs a way to make auth tokem out of reviewerEmail first)
-				// TODO (needs for ResourcedDatasetFiles to fully implements DatasetFilesInterface)
-				// $datasetFiles = new ResourcedDatasetFiles(
-    //                                 $this->_dataset->id,
-    //                                 $this->_app->db,
-    //                                 $this->_fileUploadService
-    //                             );
-				// break;
+				$datasetFiles = new ResourcedDatasetFiles(
+                                    $this->_dataset->id,
+                                    $this->_app->db,
+                                    $this->_fileUploadService
+                                );
+				break;
 			case "stored":
 				$datasetFiles = new StoredDatasetFiles(
                                     $this->_dataset->id,
