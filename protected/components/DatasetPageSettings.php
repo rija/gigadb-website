@@ -11,6 +11,10 @@
  */
 class DatasetPageSettings extends yii\base\BaseObject
 {
+
+	const VIEW_COLUMNS = ['name','size', 'type_id', 'format_id', 'location', 'date_stamp','sample_id'] ;
+	const MOCKUP_COLUMNS = ['name','size', 'type_id', 'format_id', 'location', 'date_stamp','sample_id','attribute'] ;
+
 	/** @var DatasetDAO $_dataset The dao class for getting dataset info*/
 	private $_dao;
 
@@ -59,11 +63,11 @@ class DatasetPageSettings extends yii\base\BaseObject
 	 * @param CMap $cookies collection of HTTP cookies (CCookieCollection is subclass of CMap)
 	 * @return array columns and pageSize settings as associative array
 	 */
-	public function getFileSettings(CMap $cookies = null): array
+	public function getFileSettings(CMap $cookies = null, $defaultColumns = self::VIEW_COLUMNS): array
 	{
 		// default values
 		$fileSettings = [
-			"setting" => array('name','size', 'type_id', 'format_id', 'location', 'date_stamp','sample_id','attribute'),
+			"setting" => $defaultColumns,
 			"page" => 10,
 		];
 
