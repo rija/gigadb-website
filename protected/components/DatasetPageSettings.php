@@ -63,7 +63,7 @@ class DatasetPageSettings extends yii\base\BaseObject
 	{
 		// default values
 		$fileSettings = [
-			"setting" => array('name','size', 'type_id', 'format_id', 'location', 'date_stamp','sample_id'),
+			"setting" => array('name','size', 'type_id', 'format_id', 'location', 'date_stamp','sample_id','attribute'),
 			"page" => 10,
 		];
 
