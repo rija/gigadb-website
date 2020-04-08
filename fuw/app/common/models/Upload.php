@@ -19,7 +19,7 @@ use Yii;
  * @property string $extension
  * @property string $created_at
  * @property string $updated_at
- * @property int $sample_id
+ * @property string $sample_ids
  *
  * @author Rija Menage <rija+git@cinecinetique.com>
  * @license GPL-3.0
@@ -46,18 +46,19 @@ class Upload extends \yii\db\ActiveRecord
         return [
             [['doi', 'name', 'size'], 'required'],
             [['size'], 'default', 'value' => null],
-            [['size','sample_id'], 'integer'],
-            [['description', 'initial_md5'], 'string'],
+            [['size'], 'integer'],
+            [['description', 'initial_md5','sample_ids'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['doi'], 'string', 'max' => 100],
             ['status', 'in', 'range' => [self::STATUS_UPLOADING, self::STATUS_UPLOADED, self::STATUS_ARCHIVED]],
             [['name'], 'string', 'max' => 128],
             [['location'], 'string', 'max' => 200],
             [['datatype'], 'string', 'max' => 32],
+            [['sample_ids'], 'string', 'max' => 512],
             ['datatype', 'validateDataType'],
             ['extension', 'validateFileFormat'],
             [['extension'], 'string', 'max' => 32],
-            [['name', 'description', 'datatype', 'initial_md5', 'extension'],'trim'],
+            [['name', 'description', 'datatype', 'initial_md5', 'extension','sample_ids'],'trim'],
         ];
     }
 
@@ -79,7 +80,7 @@ class Upload extends \yii\db\ActiveRecord
             'extension' => 'Extension',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-            'sample_id' => 'Sample ID',
+            'sample_ids' => 'Sample IDs',
         ];
     }
 
