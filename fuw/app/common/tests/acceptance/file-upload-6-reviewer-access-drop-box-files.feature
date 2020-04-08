@@ -56,11 +56,12 @@ Scenario: The page at the unique and time-limed url show uploaded files with sam
 	| seq1.fa | Sample A, Sample Z | Sequence assembly | FASTA | 23.43 MiB |
 	| Specimen.pdf | Sample E | Annotation | PDF | 19.11 KiB |
 
-# Scenario: I can download the drop box file locations from the private mockup dataset page
-# 	Given I have a received a link "/dataset/mockup/6ba41e9f81baf4ba2bb6d5ecc3e858b0"
-# 	And a set of files has been uploaded to the drop box
-# 	And user has filled in metadata for all the files
-# 	And the uploaded dataset has status "Submitted"
-# 	And I am on "/dataset/mockup/6ba41e9f81baf4ba2bb6d5ecc3e858b0"
-# 	When I follow "file1.txt"
-# 	Then The "file1.txt" file should be downloaded
+@ok
+Scenario: I can download the drop box file locations from the private mockup dataset page
+	Given file uploads have been uploaded for DOI "000007"
+	And a mockup url has been created for reviewer "artie_dodger@foobar.com" and dataset with DOI "000007"
+	When I browse to the mockup url
+	Then there is a download link for each file associated with DOI "000007"
+	| File Name |
+	| seq1.fa | 
+	| Specimen.pdf | 
