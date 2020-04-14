@@ -9,6 +9,8 @@ use Yii;
 
 class FiledropAccountCest
 {
+    private $doi;
+
 	/**
      * Load fixtures before db transaction begin
      * Called in _before()
@@ -26,9 +28,24 @@ class FiledropAccountCest
         ];
     }
 
+    /**
+     * run before each test, it generates a random DOI to be used during the test
+     */
     public function _before(FunctionalTester $I)
     {
-    	// make sure the ftpd container is reset
+    	$this->doi = Yii::$app->security->generateRandomString(6);
+
+    }
+
+    /**
+     * run after each test, it deletes the DOI-keyed directories created during the test
+     */
+    public function _after(FunctionalTester $I)
+    {
+        Yii::$app->fs->deleteDir("incoming/ftp/".$this->doi);
+        Yii::$app->fs->deleteDir("private/".$this->doi);
+        Yii::$app->fs->deleteDir("repo/".$this->doi);
+        Yii::$app->fs->deleteDir("tmp/processing_flag/".$this->doi);
     }
 
 	/**
@@ -39,12 +56,11 @@ class FiledropAccountCest
     {
     	$filedrop = new FiledropAccount();
     	$dockerManager = new DockerManager();
-    	$doi = Yii::$app->security->generateRandomString(6);
+    	$doi = $this->doi;
 
     	$I->assertTrue($filedrop->prepareAccountSetFields($doi));
 
-        // clean up directories created by the test
-        $filedrop->removeDirectories("$doi");
+
     }
 
 
@@ -56,7 +72,7 @@ class FiledropAccountCest
     {
         $filedrop = new FiledropAccount();
         $dockerManager = new DockerManager();
-        $doi = Yii::$app->security->generateRandomString(6);
+        $doi = $this->doi;
         $ftpServer = "ftpd";
 
 
@@ -75,7 +91,7 @@ class FiledropAccountCest
     {
     	$filedrop = new FiledropAccount();
     	$dockerManager = new DockerManager();
-    	$doi = Yii::$app->security->generateRandomString(6);
+    	$doi = $this->doi;
     	$ftpServer = "ftpd";
 
     	// create directories
@@ -100,9 +116,6 @@ class FiledropAccountCest
         // $status = $filedrop->checkFTPAccount( $dockerManager, $doi );
         // $I->assertTrue($status, "account created for $doi, returned $status");
 
-
-        // clean up directories created by the test
-        $filedrop->removeDirectories("$doi");
         $filedrop->removeFTPAccount( $dockerManager, $doi );
 
     }
@@ -118,7 +131,7 @@ class FiledropAccountCest
 
     	$filedrop = new FiledropAccount();
     	$dockerManager = new DockerManager();
-    	$doi = Yii::$app->security->generateRandomString(6);
+    	$doi = $this->doi;
     	$ftpServer = "ftpd";
 
     	$uploadLogin = "uploader-$doi";
@@ -134,8 +147,6 @@ class FiledropAccountCest
     	$I->assertCount(1, $accounts);
     	$I->assertEquals($uploadLogin, $accounts[0]->upload_login);
 
-        // clean up directories created by the test
-        $filedrop->removeDirectories("$doi");
         $filedrop->removeFTPAccount( $dockerManager, $doi );
     }
 
@@ -160,7 +171,7 @@ class FiledropAccountCest
 		//   "nbf" : "1561730823",
 		//   "exp" : "2729513220"
 		// }
-    	$doi = Yii::$app->security->generateRandomString(6);
+    	$doi = $this->doi;
     	$I->amBearerAuthenticated("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBUEkgQWNjZXNzIHJlcXVlc3QgZnJvbSBjbGllbnQiLCJpc3MiOiJ3d3cuZ2lnYWRiLm9yZyIsImF1ZCI6ImZ1dy5naWdhZGIub3JnIiwiZW1haWwiOiJzZnJpZXNlbkBqZW5raW5zLmluZm8iLCJuYW1lIjoiSm9obiBTbWl0aCIsImFkbWluX3N0YXR1cyI6InRydWUiLCJyb2xlIjoiY3JlYXRlIiwiaWF0IjoiMTU2MTczMDgyMyIsIm5iZiI6IjE1NjE3MzA4MjMiLCJleHAiOiIyNzI5NTEzMjIwIn0.uTZpDB1eCGt3c_23wLaVxpFUw_WFH2Jep_vpzky2o18");
     	$I->sendPOST("/filedrop-accounts",['doi' =>"$doi"]);
     	$I->seeResponseCodeIs(201);
@@ -176,7 +187,6 @@ class FiledropAccountCest
         $dockerManager = new DockerManager();
         $filedrop->setDOI($doi);
         $filedrop->setDockerManager($dockerManager);
-        $filedrop->removeDirectories("$doi");
         $filedrop->removeFTPAccount( $dockerManager, $doi );
     }
 
@@ -187,7 +197,7 @@ class FiledropAccountCest
      */
     public function sendRestHttpDeleteToDeleteAccount(FunctionalTester $I)
     {
-    	$doi = Yii::$app->security->generateRandomString(6);
+    	$doi = $this->doi;
 
     	$filedrop = new FiledropAccount();
     	$dockerManager = new DockerManager();
@@ -215,7 +225,7 @@ class FiledropAccountCest
     public function sendRestHttpPutToUpdateFiledropAccountAndSendEmail(FunctionalTester $I)
     {
 
-        $doi = Yii::$app->security->generateRandomString(6);
+        $doi = $this->doi;
         $subject = Yii::$app->security->generateRandomString(32);
         $content = Yii::$app->security->generateRandomString(128);
         $recipient = "user_gigadb3@mailinator.com";

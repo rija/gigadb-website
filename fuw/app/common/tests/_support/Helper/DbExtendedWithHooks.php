@@ -39,20 +39,11 @@ class DbExtendedWithHooks extends \Codeception\Module\Db
     {
     	$this->amConnectedToDatabase('fuwdb');
     	$userCriteria = ['username' => 'joyfox'] ;
-    	try {
-            $this->_getDriver()->deleteQueryByCriteria('public.user', $userCriteria);
-        } catch (\Exception $e) {
-            $this->debug("Couldn't delete record " . json_encode($userCriteria) ." from public.user");
-        }
+        $this->_getDriver()->deleteQueryByCriteria('public.user', $userCriteria);
 
-        $uploadCriteria = ['doi' => '000007', 'name' => 'TheProof.csv'];
-        $uploadCriteria2 = ['doi' => '000007', 'name' => 'TheProof2.csv'];
-        try {
-            $this->_getDriver()->deleteQueryByCriteria('public.upload', $uploadCriteria);
-            $this->_getDriver()->deleteQueryByCriteria('public.upload', $uploadCriteria2);
-        } catch (\Exception $e) {
-            $this->debug("Couldn't delete a record from public.upload");
-        }
+        $uploadCriteria = ['doi' => '000007'];
+
+        $this->_getDriver()->deleteQueryByCriteria('public.upload', $uploadCriteria);
 
         $this->_getDriver()->deleteQueryByCriteria('public.user', ["email" => "artie_dodger@gigadb.org"]);
 
