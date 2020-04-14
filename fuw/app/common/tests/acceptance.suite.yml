@@ -37,7 +37,6 @@ modules:
                 "goog:chromeOptions":
                     args: ['--headless']
                     w3c: false
-        - Filesystem
         - common\tests\Helper\FilesystemCleanupHook
         - Yii2:
             part: init
