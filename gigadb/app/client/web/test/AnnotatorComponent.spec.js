@@ -147,10 +147,13 @@ describe('Annotator component', function() {
         const wrapper = this.renderedComponent
         wrapper.findAll(".el-button--danger").at(0).trigger("click")
         return Vue.nextTick().then(function() {
-            expect(wrapper.findAll('input[type="hidden"]').length).toBe(1)
+            expect( wrapper.find('input[name="DeleteList[0]"]') ).toBeDefined()
             wrapper.findAll(".el-button--danger").at(0).trigger("click")
             return Vue.nextTick().then(function() {
-                expect(wrapper.findAll('input[type="hidden"]').length).toBe(2)
+                // console.log(wrapper.vm.filesToDelete)
+                // console.log(wrapper.html())
+                expect( wrapper.find('input[name="DeleteList[0]"]') ).toBeDefined()
+                expect( wrapper.find('input[name="DeleteList[1]"]') ).toBeDefined()
             })
         })        
     })
@@ -176,15 +179,15 @@ describe("Annotator component's Attributes button", function () {
         const wrapper = this.renderedComponent
         return Vue.nextTick().then(function() {
             // console.log(wrapper.html())
-            expect(wrapper.findAll(".btn.btn-info.btn-small").length).toBe(2)
-            expect(wrapper.findAll(".btn.btn-info.btn-small").at(0).text()).toContain("Attributes")
-            expect(wrapper.findAll(".btn.btn-info.btn-small").at(1).text()).toContain("Attributes")
+            expect(wrapper.findAll(".attribute-button").length).toBe(2)
+            expect(wrapper.findAll(".attribute-button").at(0).text()).toContain("Attributes")
+            expect(wrapper.findAll(".attribute-button").at(1).text()).toContain("Attributes")
         })
     })
 
     it('should open the drawer for adding attributes', function() {
         const wrapper = this.renderedComponent
-        wrapper.findAll(".btn.btn-info.btn-small").at(0).trigger("click")
+        wrapper.findAll(".attribute-button").at(0).trigger("click")
         return Vue.nextTick().then(function() {
             expect(wrapper.find("#attributes-form").exists()).toBe(true)
         })
@@ -192,20 +195,100 @@ describe("Annotator component's Attributes button", function () {
 
     it('should pass the name of the clicked upload to the open drawer', function() {
         const wrapper = this.renderedComponent
-        wrapper.findAll(".btn.btn-info.btn-small").at(0).trigger("click")
+        wrapper.findAll(".attribute-button").at(0).trigger("click")
         return Vue.nextTick().then(function() {
-            expect(wrapper.vm.$refs.drawer.title).toBe("Add attributes to file: TheProof.csv")
+            expect(wrapper.vm.$refs.attrPanel.title).toBe("Add attributes to file: TheProof.csv")
         })        
     })
 
     it('should set cursor to clicked upload index and upload Id', function() {
         const wrapper = this.renderedComponent
-        wrapper.findAll(".btn.btn-info.btn-small").at(0).trigger("click")
+        wrapper.findAll(".attribute-button").at(0).trigger("click")
         return Vue.nextTick().then(function() {
             expect(wrapper.vm.drawerIndex).toBe(0)// first upload -> 0
             expect(wrapper.vm.selectedUpload).toBe(1)//first upload has upload.id = 1 in fixtures
         })
     })
+})
+
+describe("Annotator component's Samples button", function () {
+    beforeEach(function () {
+        this.renderedComponent = factory({
+            attachToDocument: true,
+            propsData: {
+                identifier: '000000',
+                uploads: JSON.parse(JSON.stringify( uploads )), //we need a copy, not reference
+                filetypes: JSON.parse('{"Readme":112,"Sequence assembly":113,"Annotation":114,"Protein sequence":115,"Repeat sequence":116,"Coding sequence":117,"Script":118,"Mixed archive":119}')
+            }
+        })
+    })
+
+    afterEach(function () {
+        eventBus.$off()
+    })
+
+    it('should exist', function () {
+        const wrapper = this.renderedComponent
+        return Vue.nextTick().then(function() {
+            // console.log(wrapper.html())
+            expect(wrapper.findAll(".sample-button").length).toBe(2)
+            expect(wrapper.findAll(".sample-button").at(0).text()).toContain("Sample IDs")
+            expect(wrapper.findAll(".sample-button").at(1).text()).toContain("Sample IDs")
+        })
+    })
+
+    it('should open the drawer for adding samples', function() {
+        const wrapper = this.renderedComponent
+        wrapper.findAll(".sample-button").at(0).trigger("click")
+        return Vue.nextTick().then(function() {
+            expect(wrapper.find("#samples-form").exists()).toBe(true)
+        })
+    })
+
+    it('should close the drawer when clicking save in the sampler', function() {
+        const wrapper = this.renderedComponent
+        expect(wrapper.find("#samples-form").exists()).toBe(false)
+        wrapper.findAll(".sample-button").at(0).trigger("click")
+        return Vue.nextTick()
+        .then(function () {
+            // console.log(wrapper.html())
+            wrapper.find("#save-samples").trigger("click")
+            // wrapper.setData({samplePanel: false})
+        })
+        .then(function() {
+            // console.log(wrapper.html())
+            // expect(wrapper.find("#samples-form").exists()).toBe(false)
+            expect(wrapper.vm.samplePanel).toBe(false)
+        })
+    })
+
+    it('should pass the name of the clicked upload to the open drawer', function() {
+        const wrapper = this.renderedComponent
+        wrapper.findAll(".sample-button").at(0).trigger("click")
+        return Vue.nextTick().then(function() {
+            expect(wrapper.vm.$refs.samplesPanel.title).toBe("Add samples to file: TheProof.csv")
+        })        
+    })
+
+    it('should set cursor to clicked upload index and upload Id', function() {
+        const wrapper = this.renderedComponent
+        wrapper.findAll(".sample-button").at(0).trigger("click")
+        return Vue.nextTick().then(function() {
+            expect(wrapper.vm.drawerIndex).toBe(0)// first upload -> 0
+            expect(wrapper.vm.selectedUpload).toBe(1)//first upload has upload.id = 1 in fixtures
+        })
+    })
+
+    it("should update the upload's sample_ids field in a hidden text input", function () {
+        const wrapper = this.renderedComponent
+        wrapper.findAll(".sample-button").at(0).trigger("click")
+        wrapper.vm.samplesArray[wrapper.vm.selectedUpload] = ["Sample 1", "Sample 2", "Sample 3"]
+        wrapper.vm.setSampleIds(wrapper.vm.selectedUpload)
+        return Vue.nextTick().then(function() {
+            expect(wrapper.vm.uploadedFiles[wrapper.vm.selectedUpload].sample_ids).toBe("Sample 1,Sample 2,Sample 3")
+        })
+    })
+
 })
 
 describe("Annotator component's bulk upload form and instructions", function () {
