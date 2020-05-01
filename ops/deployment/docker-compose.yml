@@ -545,6 +545,18 @@ services:
       - NET_ADMIN
       - SYS_ADMIN
 
+  beanstalkd:
+    build:
+      context: .
+      dockerfile: ../packaging/Beanstalkd-Dockerfile
+    volumes:
+      - ${APPLICATION}/:/var/www
+    networks:
+      - web-tier
+      - db-tier
+    expose:
+      - "3000"
+
   local-cert:
     build:
       context: ..
