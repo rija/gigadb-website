@@ -24,7 +24,11 @@ class FiledropAccountCest
             'user' => [
                 'class' => UserFixture::className(),
                 'dataFile' => codecept_data_dir() . 'login_data.php'
-            ]
+            ],
+            'upload' => [
+                'class' => UserFixture::className(),
+                'dataFile' => codecept_data_dir() . 'upload.php'
+            ],        
         ];
     }
 
@@ -46,6 +50,11 @@ class FiledropAccountCest
         Yii::$app->fs->deleteDir("private/".$this->doi);
         Yii::$app->fs->deleteDir("repo/".$this->doi);
         Yii::$app->fs->deleteDir("tmp/processing_flag/".$this->doi);
+
+        Yii::$app->fs->deleteDir("incoming/ftp/200001");
+        Yii::$app->fs->deleteDir("private/200001");
+        Yii::$app->fs->deleteDir("repo/200001");
+        Yii::$app->fs->deleteDir("tmp/processing_flag/200001");
     }
 
 	/**
@@ -250,5 +259,33 @@ class FiledropAccountCest
         $I->assertEquals($doi,$updated->doi);
         $I->assertEquals($content,$updated->instructions);
         $I->seeEmailIsSent();
+    }
+
+    /**
+     * Testing MoveFilesAction create a worker job and post it to the message queue
+     *
+     */
+    public function moveFiles(FunctionalTester $I)
+    {
+
+        $doi = "200001"; //we use the DOI from uploads fixture data
+
+        $filedrop = new FiledropAccount();
+        $dockerManager = new DockerManager();
+        $filedrop->setDOI($doi);
+        $filedrop->setDockerManager($dockerManager);
+        $filedrop->status = FiledropAccount::STATUS_ACTIVE;
+        $filedrop->save();
+
+        $I->amBearerAuthenticated("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBUEkgQWNjZXNzIHJlcXVlc3QgZnJvbSBjbGllbnQiLCJpc3MiOiJ3d3cuZ2lnYWRiLm9yZyIsImF1ZCI6ImZ1dy5naWdhZGIub3JnIiwiZW1haWwiOiJzZnJpZXNlbkBqZW5raW5zLmluZm8iLCJuYW1lIjoiSm9obiBTbWl0aCIsImFkbWluX3N0YXR1cyI6InRydWUiLCJyb2xlIjoiY3JlYXRlIiwiaWF0IjoiMTU2MTczMDgyMyIsIm5iZiI6IjE1NjE3MzA4MjMiLCJleHAiOiIyNzI5NTEzMjIwIn0.uTZpDB1eCGt3c_23wLaVxpFUw_WFH2Jep_vpzky2o18");
+        $I->sendPOST("/filedrop-accounts/move/{$filedrop->id}");
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->canSeeResponseContains("jobId");
+        $I->seeResponseContainsJson(array('doi' => "$doi"));
+        $I->canSeeResponseJsonMatchesJsonPath("$.jobs[0].file");
+        $I->canSeeResponseJsonMatchesJsonPath("$.jobs[0].jobId");
+        $I->canSeeResponseJsonMatchesJsonPath("$.jobs[1].file");
+        $I->canSeeResponseJsonMatchesJsonPath("$.jobs[1].jobId");
     }
 }

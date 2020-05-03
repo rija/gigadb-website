@@ -93,6 +93,14 @@ class Upload extends \yii\db\ActiveRecord
     }
 
     /**
+     * return the filedrop account this upload is associated to
+     */
+    public function getFiledropAccount()
+    {
+        return $this->hasOne(FiledropAccount::className(), ['doi' => 'doi']);
+    }
+
+    /**
      * Validate that the data type is in the GigaDB list of data types
      *
      * @param string $attribute the attribute currently being validated
