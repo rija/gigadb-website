@@ -553,7 +553,6 @@ services:
     volumes:
       - ${APPLICATION}/:/var/www
     networks:
-      - web-tier
       - db-tier
     expose:
       - "11300"
