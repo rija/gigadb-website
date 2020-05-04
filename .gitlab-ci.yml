@@ -192,7 +192,7 @@ run_all_tests:
     # - docker-compose build web
     # starting two webapps: gigadb website and File Upload Wizard Admin, then the web server
     - docker-compose up -d gigadb fuw
-    - sleep 5
+    - sleep 8
     - docker-compose up -d web
     - docker-compose exec -T web /usr/local/bin/enable_sites gigadb.dev.http fuw-backend.dev.http
     # - docker-compose exec -T application ./protected/yiic generatefiletypes
