@@ -30,6 +30,7 @@ class Upload extends \yii\db\ActiveRecord
     const STATUS_UPLOADING = 0;
     const STATUS_UPLOADED = 1;
     const STATUS_ARCHIVED = 2;
+    const STATUS_SYNCHRONIZED = 3;
     /**
      * {@inheritdoc}
      */
@@ -50,7 +51,7 @@ class Upload extends \yii\db\ActiveRecord
             [['description', 'initial_md5','sample_ids'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['doi'], 'string', 'max' => 100],
-            ['status', 'in', 'range' => [self::STATUS_UPLOADING, self::STATUS_UPLOADED, self::STATUS_ARCHIVED]],
+            ['status', 'in', 'range' => [self::STATUS_UPLOADING, self::STATUS_UPLOADED, self::STATUS_ARCHIVED, self::STATUS_SYNCHRONIZED]],
             [['name'], 'string', 'max' => 128],
             [['location'], 'string', 'max' => 200],
             [['datatype'], 'string', 'max' => 32],
