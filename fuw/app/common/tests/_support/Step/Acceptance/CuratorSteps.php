@@ -69,6 +69,27 @@ class CuratorSteps #extends \common\tests\AcceptanceTester
 	   $this->I->amOnPage($arg1);
 	}
 
+
+/**
+     * @Given reference data for Attribute for Unit is created for
+     */
+     public function referenceDataForAttributeForUnitIsCreatedFor(TableNode $files)
+     {
+        foreach ($files->getRows() as $index => $row) {
+            if ($index === 0) { // first row to define fields
+                $keys = $row;
+                continue;
+            }
+            if("attribute" === $row[0]) {
+                $this->I->haveInDatabase("public.{$row[0]}",["attribute_name" => $row[1] ] );
+            }
+            else {
+                $this->I->haveInDatabase("public.{$row[0]}",["id" => $row[1], "name" => $row[1] ] );
+            }
+        }
+     }
+
+
 	/**
 	 * @When I press :arg1
 	 */

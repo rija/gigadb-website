@@ -438,6 +438,52 @@ services:
     tmpfs: /run
     command: "/lib/systemd/systemd"
 
+  gigadb-worker:
+    environment:
+      YII_ENV_DEV: ${YII_ENV_DEV}
+    build:
+      context: ../../gigadb/app/worker/file-worker
+      args:
+        - PHP_BASE_IMAGE_VERSION=7.2-cli
+        - INSTALL_OPCACHE=true
+        - INSTALL_INTL=true
+        - INSTALL_COMPOSER=true
+        - INSTALL_TIDEWAYS_XHPROF=false
+        - INSTALL_LIBSODIUM=false
+        - INSTALL_APCU=true
+        - INSTALL_DOCKER_API_ACCESS=true
+    volumes:
+      # Re-use local composer cache via host-volume
+      - ~/.composer/cache:/root/.composer/cache:delegated
+      # Mount source-code for development
+      - ../../fuw/app:/app
+      - ../../gigadb/app:/gigadb-apps        
+      # php config
+      - ../../fuw/app/php-conf/fuw.ini:/usr/local/etc/php/conf.d/fuw.ini
+      - ../../fuw/app/php-conf/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ../../fuw/app/php-conf/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
+      # directories used for filedrop files
+      - ${DATA_SAVE_PATH}/fuw/incoming:/var/incoming
+      - ${DATA_SAVE_PATH}/fuw/incoming/ftp:/var/incoming/ftp
+      - ${DATA_SAVE_PATH}/fuw/repo:/var/repo
+      - ${DATA_SAVE_PATH}/fuw/credentials:/var/private
+      # to support systemd running in a container
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      # volume mount the location of public ftp directory
+      - /tmp:/var/ftp/public
+      # access to files and reference data
+      - ../../files:/var/www/files      
+    depends_on:
+      - database
+      - beanstalkd
+    networks:
+      - web-tier
+      - db-tier
+    stop_signal: SIGRTMIN+3
+    tmpfs: /run
+    command: "/lib/systemd/systemd"
+
+
   console:
     build:
       context: ../../fuw/app
