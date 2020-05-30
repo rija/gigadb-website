@@ -72,7 +72,14 @@ class MoveJob extends \yii\base\Component implements \yii\queue\JobInterface
             }
             $upload->status = Upload::STATUS_SYNCHRONIZED;
 
-
+            $isSaved = $upload->save();
+            if(!$isSaved) {
+                Yii::error($upload->errors);
+                foreach ($upload->errors as $error) {
+                    throw new \Exception(implode("\n",$error));
+                }
+                throw new \Exception($error);
+            }
             return $upload->save() && $this->_gigaDBQueue->push($this->createUpdateGigaDBJob($upload));
 
         }
@@ -92,8 +99,10 @@ class MoveJob extends \yii\base\Component implements \yii\queue\JobInterface
             $updateJob->file = $upload->attributes;
             $updateJob->file_attributes = $upload->uploadAttributes;
             $updateJob->sample_ids = explode(",",$upload->sample_ids);
+            Yii::warning("Created instance of UpdateGigaDBJob for file".$upload->name." for dataset ".$this->doi);
             return $updateJob;
         }
+        Yii::error("Upload record is null");
         return $upload;
     }
 }
