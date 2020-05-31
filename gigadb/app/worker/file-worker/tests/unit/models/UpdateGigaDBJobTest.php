@@ -7,6 +7,7 @@ use \common\models\Upload;
 use app\fixtures\DatasetFixture;
 use app\fixtures\AttributeFixture;
 use app\fixtures\UnitFixture;
+use app\fixtures\SampleFixture;
 use \Yii;
 
 class UpdateGigaDBJobTest extends \Codeception\Test\Unit
@@ -22,18 +23,22 @@ class UpdateGigaDBJobTest extends \Codeception\Test\Unit
      */
     public function _fixtures(){
           return [
-              'datasets' => [
+            'datasets' => [
                   'class' => DatasetFixture::className(),
                   'dataFile' => codecept_data_dir() . 'dataset.php'
               ],
-              'attributes' => [
+            'attributes' => [
                   'class' => AttributeFixture::className(),
                   'dataFile' => codecept_data_dir() . 'attribute.php'
               ],
-              'units' => [
+            'units' => [
                   'class' => UnitFixture::className(),
                   'dataFile' => codecept_data_dir() . 'unit.php'
-              ]                            
+              ],
+            'samples' => [
+                  'class' => SampleFixture::className(),
+                  'dataFile' => codecept_data_dir() . 'sample.php'
+              ] 
           ];
     }
 
@@ -97,6 +102,30 @@ class UpdateGigaDBJobTest extends \Codeception\Test\Unit
         }
     }
 
+    public function testSaveSamples()
+    {
+        $update = new UpdateGigaDBJob();
+        $fileId = $this->tester->haveRecord('app\models\File', [
+                'dataset_id' => 1,
+                'name' => "sequence.csv",
+                'location' => "ftp://sequence",
+                'extension' => 'CSV',
+                'size' => 24564343,
+                'format_id' => $this->tester->grabRecord('app\models\FileFormat',['name'=> 'CSV'])->id,
+                'type_id' => $this->tester->grabRecord('app\models\FileType',['name'=> 'Sequence assembly'])->id,
+        ]);
+        $update->sample_ids = ["Sample A", "Sample C"];
+        $result = $update->saveSamples($fileId);
+        $this->tester->seeRecord('app\models\FileSample',[
+                'file_id' => $fileId,
+                'sample_id' => 1,
+        ]);
+        $this->tester->seeRecord('app\models\FileSample',[
+                'file_id' => $fileId,
+                'sample_id' => 3,
+        ]);        
+    }
+
     public function testExecute()
     {
         $mockJob =  $this->createMock(\app\models\UpdateGigaDBJob::class);
@@ -111,10 +140,15 @@ class UpdateGigaDBJobTest extends \Codeception\Test\Unit
                     ];
 
         $mockJob->expects($this->once())
-            ->method('saveFile');
+            ->method('saveFile')
+            ->willReturn(1);
 
         $mockJob->expects($this->once())
-            ->method('saveAttributes');
+            ->method('saveAttributes')
+            ->willReturn(true);
+
+        $mockJob->expects($this->once())
+            ->method('saveSamples');
 
         $result = $job->execute($mockQueue);
     }

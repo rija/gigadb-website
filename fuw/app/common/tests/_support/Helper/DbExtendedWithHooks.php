@@ -50,6 +50,8 @@ class DbExtendedWithHooks extends \Codeception\Module\Db
         $this->amConnectedToDatabase(self::DEFAULT_DATABASE);
         $this->_getDriver()->deleteQueryByCriteria('file_attributes', ["unit_id" => "Celsius"]);
         $this->_getDriver()->deleteQueryByCriteria('file_attributes', ["unit_id" => "Percent"]);
+        $this->_getDriver()->sqlQuery("delete from file_sample where file_id in (select id from file where name='seq1.fa')");
+        $this->_getDriver()->sqlQuery("delete from file_sample where file_id in (select id from file where name='Specimen.pdf')");
         $this->_getDriver()->deleteQueryByCriteria('file', ["name" => "seq1.fa"]);
         $this->_getDriver()->deleteQueryByCriteria('file', ["name" => "Specimen.pdf"]);
         $this->_getDriver()->deleteQueryByCriteria('attribute', ["attribute_name" => "Temperature"]);

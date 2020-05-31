@@ -28,6 +28,7 @@ Scenario: there's no button to trigger file transfer for dataset if status not C
 Scenario: Clicking the move button create a job for the workers
 	Given I sign in as an admin
 	And file uploads with samples and attributes have been uploaded for DOI "000007"
+	And I wait "1" seconds
 	When I go to "/adminDataset/admin"
 	And I press "Update Dataset" for dataset "000007"
 	And I press "Move files to public ftp"
@@ -37,6 +38,7 @@ Scenario: Clicking the move button create a job for the workers
 Scenario: The files are copied to the new location when the workers complete the job
 	Given I sign in as an admin
 	And file uploads with samples and attributes have been uploaded for DOI "000007"
+	And I wait "1" seconds
 	And I go to "/adminDataset/admin"
 	And I press "Update Dataset" for dataset "000007"
 	And I press "Move files to public ftp"
@@ -51,6 +53,7 @@ Scenario: The files are copied to the new location when the workers complete the
 Scenario: Files that have been moved are marked as such in File Upload Wizard API
 	Given I sign in as an admin
 	And file uploads with samples and attributes have been uploaded for DOI "000007"
+	And I wait "1" seconds	
 	And I go to "/adminDataset/admin"
 	And I press "Update Dataset" for dataset "000007"
 	And I press "Move files to public ftp"
@@ -65,6 +68,7 @@ Scenario: Files that have been moved are marked as such in File Upload Wizard AP
 Scenario: Completion of moving files triggers update of the file database table
 	Given I sign in as an admin
 	And file uploads with samples and attributes have been uploaded for DOI "000007"
+	And I wait "1" seconds	
 	And I go to "/adminDataset/admin"
 	And I press "Update Dataset" for dataset "000007"
 	And I press "Move files to public ftp"
@@ -84,6 +88,7 @@ Scenario: Completion of moving files triggers update of the file database table
 Scenario: Completion of moving files triggers update of the file, attributes tables
 	Given I sign in as an admin
 	And file uploads with samples and attributes have been uploaded for DOI "000007"
+	And I wait "1" seconds
 	And reference data for Attribute for Unit is created for
 	| Table | Name |
 	| attribute | Temperature |
@@ -105,10 +110,20 @@ Scenario: Completion of moving files triggers update of the file, attributes tab
 	| seq1.fa | 
 	| Specimen.pdf |
 
-@not-yet
+@ok @no-ci
 Scenario: Completion of moving files triggers update of the file, attributes and samples tables
 	Given I sign in as an admin
 	And file uploads with samples and attributes have been uploaded for DOI "000007"
+	And I wait "1" seconds
+	And reference data for Attribute for Unit is created for
+	| Table | Name |
+	| attribute | Temperature |
+	| attribute | Humidity |
+	| unit | Celsius |
+	| unit | Percent |	
+	| sample | Sample A |	
+	| sample | Sample E |	
+	| sample | Sample Z |	
 	And I go to "/adminDataset/admin"
 	And I press "Update Dataset" for dataset "000007"
 	And I press "Move files to public ftp"
@@ -117,8 +132,8 @@ Scenario: Completion of moving files triggers update of the file, attributes and
 	And I browse to the dataset page for "000007"
 	Then I should see the files
 	| File Name | Sample ID | Data Type | File Format | Size | File Attributes (1st) | File Attributes (2nd) |
-	| seq1.fa | Sample A, Sample Z | Sequence assembly | FASTA | 23.43 MiB | Temperature: 45 Celsius | Humidity: 75 |
-	| Specimen.pdf | Sample E | Annotation | PDF | 19.11 KiB | Temperature: 51 Celsius | Humidity: 90 |
+	| seq1.fa | Sample A, Sample Z | Sequence assembly | FASTA | 23.43 MiB | Temperature: 45 | Humidity: 75 |
+	| Specimen.pdf | Sample E | Annotation | PDF | 19.11 KiB | Temperature: 51 | Humidity: 90 |
 	And there is a download link for each file associated with DOI "000007"
 	| File Name |
 	| seq1.fa | 
