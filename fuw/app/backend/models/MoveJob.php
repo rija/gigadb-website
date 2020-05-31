@@ -98,7 +98,7 @@ class MoveJob extends \yii\base\Component implements \yii\queue\JobInterface
             $updateJob->doi = $this->doi;
             $updateJob->file = $upload->attributes;
             $updateJob->file_attributes = $upload->uploadAttributes;
-            $updateJob->sample_ids = explode(",",$upload->sample_ids);
+            $updateJob->sample_ids = array_map('trim',explode(",",$upload->sample_ids));
             Yii::warning("Created instance of UpdateGigaDBJob for file".$upload->name." for dataset ".$this->doi);
             return $updateJob;
         }

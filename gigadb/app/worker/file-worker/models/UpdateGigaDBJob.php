@@ -58,18 +58,15 @@ class UpdateGigaDBJob extends \yii\base\Component implements \yii\queue\JobInter
 
     public function execute($queue)
     {
-        Yii::warning("Update GigaDB for {$this->file} ({$this->doi})");
+        Yii::warning("Update GigaDB for {$this->file['name']} ({$this->doi})");
         $someSaved = true;
         $dataset = Dataset::findOne(['identifier' => $this->doi]);
         if ($dataset) {
             $fileId = $this->self->saveFile($dataset->id);
-            foreach ($this->file_attributes as $attr) {
-                $someSaved = $someSaved && $this->self->saveAttributes($fileId);
-            }
-            return $fileId && $someSaved;
+            $someSaved = $this->self->saveAttributes($fileId);
+            return $fileId && $someSaved && $this->self->saveSamples($fileId);
         }
         throw new \Exception("Dataset record not found for DOI {$this->doi}");
-        return false;
 
     }
 
@@ -109,7 +106,7 @@ class UpdateGigaDBJob extends \yii\base\Component implements \yii\queue\JobInter
      **/
     public function saveAttributes(int $fileId): bool
     {
-        Yii::warning("Creating file_attributes record for {$this->file} ({$this->doi})");
+        Yii::warning("Creating file_attributes record for {$this->file['name']} ({$this->doi})");
         $someSaved = false;
         foreach($this->file_attributes as $attr) {
             $fileAttr = new FileAttributes();
@@ -122,6 +119,36 @@ class UpdateGigaDBJob extends \yii\base\Component implements \yii\queue\JobInter
             }
             else {
                 $someSaved = true;
+            }
+        }
+        return $someSaved;
+    }
+
+    /**
+     * save file samples associated to a file that was part of upload metadata
+     *
+     * @param int $fileId id of file record this file attributes are to be associated with
+     * @return bool whether at least one file sample has been saved 
+     **/
+    public function saveSamples(int $fileId): bool
+    {
+        $someSaved = false;
+        foreach($this->sample_ids as $sample_id) {
+            Yii::warning("Creating file_sample associated to {$this->file['name']} ({$this->doi}) for sample $sample_id");
+            $sample = Sample::findOne(["name" => $sample_id]);
+            if ($sample) {
+                $fs = new FileSample();
+                $fs->file_id = $fileId;
+                $fs->sample_id = $sample->id;
+                if(!$fs->save()) {
+                    Yii::error($fs->errors);
+                }
+                else {
+                    $someSaved = true;
+                }
+            }
+            else {
+                Yii::error("no sample found for $sample_id");
             }
         }
         return $someSaved;

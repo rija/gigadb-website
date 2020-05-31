@@ -80,9 +80,13 @@ class CuratorSteps #extends \common\tests\AcceptanceTester
                 $keys = $row;
                 continue;
             }
+
             if("attribute" === $row[0]) {
                 $this->I->haveInDatabase("public.{$row[0]}",["attribute_name" => $row[1] ] );
             }
+            elseif("sample" === $row[0]) {
+                $this->I->haveInDatabase("public.{$row[0]}",["species_id" => 1128856 ,"name" => $row[1] ] );
+            }            
             else {
                 $this->I->haveInDatabase("public.{$row[0]}",["id" => $row[1], "name" => $row[1] ] );
             }
