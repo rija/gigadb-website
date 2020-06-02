@@ -152,8 +152,63 @@ class UpdateGigaDBJobTest extends \Codeception\Test\Unit
 
         $result = $job->execute($mockQueue);
     }
-    //public function testCreateSamples
-    //public function testThrowExceptionWhenFailedToFindDataset
-    //public function testThrowExceptionWhenDatasetWrongStatus
-    //public function testThrowExceptionWhenUploadWrongStatus
+
+    public function testThrowExceptionWhenFailedToFindDataset()
+    {
+        $mockJob =  $this->createMock(\app\models\UpdateGigaDBJob::class);
+        $mockQueue = $this->createMock(\yii\queue\Queue::class);
+        $job = new UpdateGigaDBJob();
+        $job->self = $mockJob;
+        $job->doi = "000008";
+        $job->file_attributes = [
+                        ["name" => "Temperature", "value" => "45", "unit" => "Celsius", "upload_id" => 1],
+                        ["name" => "Humidity","value" => "75", "unit" => "%", "upload_id" => 1],
+                        ["name" => "Age","value" => "33", "unit" => "Years", "upload_id" => 1],
+                    ];
+
+        $mockJob->expects($this->never())
+            ->method('saveFile')
+            ->willReturn(1);
+
+        $mockJob->expects($this->never())
+            ->method('saveAttributes')
+            ->willReturn(true);
+
+        $mockJob->expects($this->never())
+            ->method('saveSamples');
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("Dataset record not found for DOI 000008");
+        $result = $job->execute($mockQueue);
+    }
+
+    public function testThrowExceptionWhenDatasetWrongStatus()
+    {
+        $mockJob =  $this->createMock(\app\models\UpdateGigaDBJob::class);
+        $mockQueue = $this->createMock(\yii\queue\Queue::class);
+        $job = new UpdateGigaDBJob();
+        $job->self = $mockJob;
+        $job->doi = "000009";
+        $job->file_attributes = [
+                        ["name" => "Temperature", "value" => "45", "unit" => "Celsius", "upload_id" => 1],
+                        ["name" => "Humidity","value" => "75", "unit" => "%", "upload_id" => 1],
+                        ["name" => "Age","value" => "33", "unit" => "Years", "upload_id" => 1],
+                    ];
+
+        $mockJob->expects($this->never())
+            ->method('saveFile')
+            ->willReturn(1);
+
+        $mockJob->expects($this->never())
+            ->method('saveAttributes')
+            ->willReturn(true);
+
+        $mockJob->expects($this->never())
+            ->method('saveSamples');
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("Dataset with DOI 000009 has wrong status, Curation needed, got: UserUploading");
+        $result = $job->execute($mockQueue);
+    }
+
 }
