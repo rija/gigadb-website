@@ -26,6 +26,8 @@ use GuzzleHttp\Middleware;
 use Ramsey\Uuid\Uuid;
 use yii\validators\EmailValidator;
 
+use \backend\models\FiledropAccount;
+
 class FiledropService extends yii\base\Component
 {
 	const MOCKUP_POSSIBLE_VALIDITY  = [1,3,6];
@@ -248,7 +250,7 @@ class FiledropService extends yii\base\Component
 								    'headers' => [
 								        'Authorization' => "Bearer ".$this->token,
 								    ],
-								    'query' => [ 'filter[doi]' => $doi,  'filter[status]' => 1 ],
+								    'query' => [ 'filter[doi]' => $doi,  'filter[status]' => FiledropAccount::STATUS_ACTIVE ],
 								    'connect_timeout' => 5,
 								]);
 			if (200 === $response->getStatusCode() ) {

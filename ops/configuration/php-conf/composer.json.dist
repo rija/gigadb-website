@@ -56,7 +56,11 @@
     "autoload": {
         "psr-0": {
             "": ["features/bootstrap"]
-        }
+        },
+        "psr-4": {
+            "common\\models\\" : "/app/common/models",     
+            "backend\\models\\" : "/app/backend/models"     
+        }        
     },
     "repositories": [
         {
