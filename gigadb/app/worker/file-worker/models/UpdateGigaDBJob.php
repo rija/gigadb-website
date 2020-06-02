@@ -62,6 +62,9 @@ class UpdateGigaDBJob extends \yii\base\Component implements \yii\queue\JobInter
         $someSaved = true;
         $dataset = Dataset::findOne(['identifier' => $this->doi]);
         if ($dataset) {
+            if("Curation" !== $dataset->upload_status) {
+                throw new \Exception("Dataset with DOI {$this->doi} has wrong status, Curation needed, got: {$dataset->upload_status}");
+            }
             $fileId = $this->self->saveFile($dataset->id);
             $someSaved = $this->self->saveAttributes($fileId);
             return $fileId && $someSaved && $this->self->saveSamples($fileId);
