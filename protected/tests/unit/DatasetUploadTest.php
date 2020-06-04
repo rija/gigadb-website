@@ -8,8 +8,12 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
  * @author Rija Menage <rija+git@cinecinetique.com>
  * @license GPL-3.0
  */
-class DatasetUploadTest extends CTestCase
+class DatasetUploadTest extends CDbTestCase
 {
+
+    protected $fixtures=array(
+        'datasets'=>'Dataset',
+    );
 
 	public function testSetStatusToDataAvailableForReview()
 	{
@@ -150,6 +154,7 @@ class DatasetUploadTest extends CTestCase
 				"datatype" => "Image", 
 				"extension" => "PNG", 
 				"size" => "345634",
+				"sample_ids" => "Sample 3, Sample 4",
 			],
 			[
 				"id" => 47,
@@ -177,7 +182,7 @@ class DatasetUploadTest extends CTestCase
 				"description" => "The methodology", 
 				"datatype" => "Readme", 
 				"extension" => "TEXT", 
-				"sampleId" => 342,
+				"sample_ids" => "Sample 5",
 				"attr1" => null, 
 				"attr2" => null, 
 				"attr3" => null, 
@@ -189,7 +194,7 @@ class DatasetUploadTest extends CTestCase
 				"description" => " That diagram", 
 				"datatype" => "Annotation", 
 				"extension" => "PNG", 
-				"sampleId" => null, 
+				"sample_ids" => "Sample 1; Sample 2",
 				"attr1" => " Rating::9::Some guys's scale", 
 				"attr2" => null, 
 				"attr3" => null, 
@@ -218,6 +223,8 @@ class DatasetUploadTest extends CTestCase
 		$this->assertEquals(9, $attributes[0]["value"]);
 		$this->assertEquals("Some guys's scale", $attributes[0]["unit"]);
 		$this->assertEquals(35, $attributes[0]["upload_id"]);
+		$this->assertEquals("Sample 5", $uploadData[23]["sample_ids"]);
+		$this->assertEquals("Sample 3, Sample 4, Sample 1, Sample 2", $uploadData[35]["sample_ids"]);
 	}
 
 	/**
@@ -326,7 +333,7 @@ class DatasetUploadTest extends CTestCase
 		    ->setCellValue('B1', 'Data Type')
 		    ->setCellValue('C1', 'File Format')
 		    ->setCellValue('D1', 'Dexcription')
-		    ->setCellValue('E1', 'Sample ID')
+		    ->setCellValue('E1', 'Sample IDs')
 		    ->setCellValue('F1', 'Attribute 1')
 		    ->setCellValue('G1', 'Attribute 2')
 		    ->setCellValue('H1', 'Attribute 3')
@@ -582,7 +589,7 @@ class DatasetUploadTest extends CTestCase
 		    ->setCellValue('B1', 'Data Type')
 		    ->setCellValue('C1', 'File Format')
 		    ->setCellValue('D1', 'Description')
-		    ->setCellValue('E1', 'Sample ID')
+		    ->setCellValue('E1', 'Sample IDs')
 		    ->setCellValue('F1', 'Attribute 1')
 		    ->setCellValue('G1', 'Attribute 2')
 		    ->setCellValue('H1', 'Attribute 3')
