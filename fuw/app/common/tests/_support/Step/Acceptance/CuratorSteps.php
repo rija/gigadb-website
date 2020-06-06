@@ -75,6 +75,7 @@ class CuratorSteps #extends \common\tests\AcceptanceTester
      */
      public function referenceDataForAttributeForUnitIsCreatedFor(TableNode $files)
      {
+        $this->I->amConnectedToDatabase('default');
         foreach ($files->getRows() as $index => $row) {
             if ($index === 0) { // first row to define fields
                 $keys = $row;
@@ -259,7 +260,7 @@ class CuratorSteps #extends \common\tests\AcceptanceTester
 			$currentDate = new \DateTime('NOW');
 			$currentTimestamp = $currentDate->format('U');
 			//test that email was received within the last 10 secs
-			$this->I->assertTrue(abs($emailTimestamp-$currentTimestamp)<10);
+			$this->I->assertTrue(abs($emailTimestamp-$currentTimestamp)<30);
 			$addresses = Parse::getInstance()->parse($message->getHeaderValue('to'));
 			$this->I->assertEquals($email, $addresses["email_addresses"][0]["address"]);
      	}
