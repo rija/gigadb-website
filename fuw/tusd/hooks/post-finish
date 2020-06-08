@@ -9,3 +9,4 @@ echo "Moving the file /var/inbox/$TUS_ID.bin to /var/repo/$datasetid/$filename (
 mv "/var/inbox/$TUS_ID.bin" "/var/repo/$datasetid/$filename"
 mkdir -p "/var/repo/$datasetid/meta"
 mv "/var/inbox/$TUS_ID.info" "/var/repo/$datasetid/meta/$filename.info.json"
+cd /app && ./yii tusd/upload --doi $datasetid --jsonfile /var/repo/$datasetid/meta/$filename.info.json

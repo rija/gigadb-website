@@ -83,6 +83,7 @@ class ReviewerSteps #extends \common\tests\AcceptanceTester
      public function fileUploadsWithSamplesAndAttributesHaveBeenUploadedForDOI($doi)
      {
 
+        file_put_contents("/var/tmp/processing_flag/$doi", "flag");
         //Retrieve the filedrop_account to attach the uploads
         $this->I->amConnectedToDatabase('fuwdb');
         $filedropId = $this->I->grabFromDatabase('filedrop_account','id', array('doi' => $doi));
@@ -171,7 +172,6 @@ class ReviewerSteps #extends \common\tests\AcceptanceTester
             }
         }
 
-        file_put_contents("/var/tmp/processing_flag/$doi", "flag");
         file_put_contents("/var/repo/$doi/".$files[0]["name"], Yii::$app->security->generateRandomString(32));
         file_put_contents("/var/repo/$doi/".$files[1]["name"], Yii::$app->security->generateRandomString(32));
     }    
