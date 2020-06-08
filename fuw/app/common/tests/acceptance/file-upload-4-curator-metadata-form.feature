@@ -19,7 +19,7 @@ Scenario: after status is changed to DataAvailableForReview, add entry in curati
 	And I press "Add more"
 	And I attach the file "CC0_pixel.jpg" in the file drop panel
 	And I press "Upload 2 files"
-	And I wait "30" seconds
+	And I wait "5" seconds
 	And I press "Next"
 	And I fill in the form with
 	| File name 	| Data type | Description text 	|
