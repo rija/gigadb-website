@@ -14,7 +14,7 @@ use Yii;
  * @author Rija Menage <rija+git@cinecinetique.com>
  * @license GPL-3.0
  */
-class Tusd extends \yii\base\BaseObject
+class UploadFactory extends \yii\base\BaseObject
 {
 
 	const COMMON_EXTENSION_MAPPINGS = array(
