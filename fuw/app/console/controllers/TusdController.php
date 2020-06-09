@@ -7,7 +7,7 @@ use \yii\helpers\Console;
 use \yii\console\Controller;
 use common\models\Upload;
 use backend\models\FiledropAccount;
-use console\models\Tusd;
+use console\models\UploadFactory;
 use yii\console\ExitCode;
 
 /**
@@ -93,7 +93,7 @@ class TusdController extends Controller
 		}
 
 		$datafeedPath = "/var/www/files/data/";
-		$tusd = new Tusd($this->doi, $datafeedPath, $this->token_path);
+		$tusd = new UploadFactory($this->doi, $datafeedPath, $this->token_path);
 		$result = $tusd->createUpload(
 					new Upload(), 
 					$metadata, 

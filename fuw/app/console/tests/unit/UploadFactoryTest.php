@@ -2,9 +2,9 @@
 
 namespace console\tests;
 
-use console\models\Tusd;
+use console\models\UploadFactory;
 
-class TusdTest extends \Codeception\Test\Unit
+class UploadFactoryTest extends \Codeception\Test\Unit
 {
     /**
      * @var \console\tests\UnitTester
@@ -26,7 +26,7 @@ class TusdTest extends \Codeception\Test\Unit
         $doi = "100009";
         $datafeedPath = codecept_data_dir();
         $tokenPath = codecept_data_dir();
-        $tusd = new Tusd($doi,$datafeedPath,$tokenPath);
+        $tusd = new UploadFactory($doi,$datafeedPath,$tokenPath);
         
 
 
@@ -40,7 +40,7 @@ class TusdTest extends \Codeception\Test\Unit
         $doi = "100009";
         $datafeedPath = codecept_data_dir();
         $tokenPath = codecept_data_dir();
-        $tusd = new Tusd($doi,$datafeedPath,$tokenPath);
+        $tusd = new UploadFactory($doi,$datafeedPath,$tokenPath);
         
         $format = $tusd->getFileFormatFromFile("foobar.csv");
         $this->assertEquals("CSV", $format);
@@ -51,7 +51,7 @@ class TusdTest extends \Codeception\Test\Unit
         $doi = "100009";
         $datafeedPath = codecept_data_dir();
         $tokenPath = codecept_data_dir();
-        $tusd = new Tusd($doi,$datafeedPath,$tokenPath);
+        $tusd = new UploadFactory($doi,$datafeedPath,$tokenPath);
         
         $format = $tusd->getFileFormatFromFile("foobar.boom");
         $this->assertEquals("UNKNOWN", $format);
@@ -64,7 +64,7 @@ class TusdTest extends \Codeception\Test\Unit
         $doi = "300001";
         $datafeedPath = codecept_data_dir();
         $tokenPath = codecept_data_dir();
-        $tusd = new Tusd($doi,$datafeedPath,$tokenPath);
+        $tusd = new UploadFactory($doi,$datafeedPath,$tokenPath);
         
         $link = $tusd->generateFTPLink("somefile.fq");
         $this->assertEquals("ftp://downloader-300001:foobar@gigadb.org:9021/somefile.fq", $link);
@@ -96,7 +96,7 @@ class TusdTest extends \Codeception\Test\Unit
         $filedropAccountId =1 ;
         $datafeedPath = codecept_data_dir();
         $tokenPath = codecept_data_dir();
-        $tusd = new Tusd($doi,$datafeedPath,$tokenPath);
+        $tusd = new UploadFactory($doi,$datafeedPath,$tokenPath);
         $mockUpload = $this->createMock(\common\models\Upload::class);
 
         $mockUpload->expects($this->once())
@@ -131,7 +131,7 @@ class TusdTest extends \Codeception\Test\Unit
         $filedropAccountId =1 ;
         $datafeedPath = codecept_data_dir();
         $tokenPath = codecept_data_dir();
-        $tusd = new Tusd($doi,$datafeedPath,$tokenPath);
+        $tusd = new UploadFactory($doi,$datafeedPath,$tokenPath);
         $mockUpload = $this->createMock(\common\models\Upload::class);
 
         $mockUpload->expects($this->once())
