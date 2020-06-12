@@ -34,7 +34,7 @@ return [
     'components' => [
         'fs' => [
             'class' => 'creocoder\flysystem\LocalFilesystem',
-            'path' => '/var',
+            'path' => '/app/console/tests/_output',
         ],     
         'queue' => [
             'class' => \yii\queue\beanstalk\Queue::class,
