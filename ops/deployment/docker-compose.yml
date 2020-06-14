@@ -400,8 +400,8 @@ services:
     environment:
       YII_ENV_DEV: ${YII_ENV_DEV}
     build:
-      context: ../../fuw/app
-      dockerfile: backend/Worker-Dockerfile
+      context: ../../fuw/app/console
+      dockerfile: Worker-Dockerfile
       args:
         - PHP_BASE_IMAGE_VERSION=7.2-cli
         - INSTALL_OPCACHE=true
@@ -446,7 +446,8 @@ services:
     environment:
       YII_ENV_DEV: ${YII_ENV_DEV}
     build:
-      context: ../../gigadb/app/worker/file-worker
+      context: ..
+      dockerfile: packaging/Worker-Dockerfile
       args:
         - PHP_BASE_IMAGE_VERSION=7.2-cli
         - INSTALL_OPCACHE=true
