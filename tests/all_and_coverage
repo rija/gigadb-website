@@ -6,8 +6,8 @@ set -a
 source .env
 set +a
 
-# ./tests/unit_runner
-# ./tests/functional_runner
-# ./tests/acceptance_runner ci-js
-# ./tests/coverage_runner
+./tests/unit_runner
+./tests/functional_runner
+./tests/acceptance_runner ci-js
+./tests/coverage_runner
 
