@@ -39,7 +39,7 @@ fi
 
 set +a
 
-# If we are on staging environment override variable name with STAGING_* counterpart
+# If we are on staging environment override variable name with STAGING_* or REMOTE_* counterpart
 export DEBUG=true
 if [ $GIGADB_ENV == "staging" ];then
     FUW_DB_HOST=$STAGING_FUW_DB_HOST
@@ -47,7 +47,7 @@ if [ $GIGADB_ENV == "staging" ];then
     FUW_DB_PASSWORD=$STAGING_FUW_DB_PASSWORD
     FUW_DB_NAME=$STAGING_FUW_DB_NAME
     DEBUG=false
-    HOME_URL=$STAGING_HOME_URL
+    HOME_URL=$REMOTE_HOME_URL
 fi
 
 # generate config for Yii2 test configs in FUW webapps
