@@ -310,8 +310,6 @@ services:
       START_XVFB: "false"
 
   fuw-admin:
-    environment:
-      YII_ENV_DEV: ${YII_ENV_DEV}
     build:
       context: ../../fuw/app
       dockerfile: common/Dockerfile
@@ -353,8 +351,6 @@ services:
       - db-tier
 
   fuw-public:
-    environment:
-      YII_ENV_DEV: ${YII_ENV_DEV}
     build:
       context: ../../fuw/app
       dockerfile: common/Dockerfile
@@ -397,8 +393,6 @@ services:
       - db-tier
 
   fuw-worker:
-    environment:
-      YII_ENV_DEV: ${YII_ENV_DEV}
     build:
       context: ../../fuw/app/console
       dockerfile: Worker-Dockerfile
@@ -443,8 +437,6 @@ services:
     command: "/lib/systemd/systemd"
 
   gigadb-worker:
-    environment:
-      YII_ENV_DEV: ${YII_ENV_DEV}
     build:
       context: ..
       dockerfile: packaging/Worker-Dockerfile
