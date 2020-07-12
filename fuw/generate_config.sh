@@ -130,7 +130,7 @@ then
 else
 	REMOTE_DOCKER_HOSTNAME="tcp://$default_route_via_host:2375"
 fi
-if [ $GIGADB_ENV != "dev" && $GIGADB_ENV != "CI" ];then
+if [[ $GIGADB_ENV != "dev" && $GIGADB_ENV != "CI" ]];then
     REMOTE_DOCKER_HOSTNAME=tcp://$remote_public_ip:2376
     cafile="/etc/certs/ca.pem"
     local_cert="/etc/certs/cert.pem"
@@ -138,7 +138,7 @@ if [ $GIGADB_ENV != "dev" && $GIGADB_ENV != "CI" ];then
 fi
 export REMOTE_DOCKER_HOSTNAME
 echo "Writing REMOTE_DOCKER_HOSTNAME to params-local as '$REMOTE_DOCKER_HOSTNAME'"
-if [ $GIGADB_ENV != "dev" && $GIGADB_ENV != "CI" ];then
+if [[ $GIGADB_ENV != "dev" && $GIGADB_ENV != "CI" ]];then
     export $cafile
     export $local_cert
     export $local_pk
