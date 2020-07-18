@@ -19,7 +19,6 @@ class SmokeTestController extends \yii\console\Controller
 	*/
     public function actionCheckDockerPhp()
     {
-    	$this->stdout("DOCKER_HOST: ".getenv("DOCKER_HOST").PHP_EOL,Console::FG_RED);
         $manager = new DockerManager();
         $manager->setClient(Docker::create());
         try {
