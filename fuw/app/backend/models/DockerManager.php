@@ -109,7 +109,6 @@ class DockerManager extends yii\base\BaseObject
             $containers = $docker->containerList();
         }
         catch (Exception $e){
-            Yii::error("DOCKER_HOST: ". getenv("DOCKER_HOST"));
             Yii::error($e->getMessage());
         }
 
