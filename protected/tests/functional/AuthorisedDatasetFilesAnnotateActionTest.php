@@ -191,8 +191,10 @@ class AuthorisedDatasetFilesAnnotateAction extends FunctionalTesting
 
         //post  metadata for uploaded files and attributes.
         $metadata = [
+            "Upload[{$this->uploads[0]}][name]" => "someFile.csv",
             "Upload[{$this->uploads[0]}][datatype]" => "Script",
             "Upload[{$this->uploads[0]}][description]" => "The moon",
+            "Upload[{$this->uploads[1]}][name]" => "anotherFile.csv",
             "Upload[{$this->uploads[1]}][datatype]" => "Repeat sequence",
             "Upload[{$this->uploads[1]}][description]" => "The sun",
             "Attributes[{$this->uploads[0]}][Attributes][0][name]" => "Temperature",
