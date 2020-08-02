@@ -20,6 +20,7 @@ protected/scripts/update_links.sh
 themes/classic/views/
 files/certs
 images/tempcaptcha/
+images/vue
 
 # PhpStorm
 *.iml
