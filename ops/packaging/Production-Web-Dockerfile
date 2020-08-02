@@ -14,7 +14,6 @@ COPY images /var/www/images
 COPY index.php /var/www/index.php
 COPY js /var/www/js
 COPY less /var/www/less
-COPY assets /var/www/assets
 
 COPY fuw/app /app
 
