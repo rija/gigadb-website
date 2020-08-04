@@ -1,7 +1,7 @@
 <template>
     <nav>
-        <div v-if="stage === 'uploading' && uploadsComplete === true">
-            <a v-bind:href="annotationUrl" class="btn">Next</a>
+        <div v-if="stage === 'uploading' && (uploadsComplete === true || uploadsExist)">
+            <a v-bind:href="annotationUrl" class="btn">Next (Metadata Form)</a>
         </div>
         <div v-if="stage === 'annotating' && metadataComplete === true">
             <button class="btn btn-success complete" type="submit">Complete and return to Your Uploaded Datasets page</button>
@@ -19,7 +19,7 @@
 import {eventBus} from '../index.js'
 
 export default {
-    props: ["identifier"],
+    props: ["identifier","uploadsExist"],
     data: function() {
         return {
             stage: 'undetermined',
