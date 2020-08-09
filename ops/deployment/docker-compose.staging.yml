@@ -201,8 +201,8 @@ services:
       - ${DATA_SAVE_PATH}/pure-ftpd:/etc/pure-ftpd
       - ${DATA_SAVE_PATH}/pure-ftpd/passwd:/etc/pure-ftpd/passwd
     environment:
-      PUBLICHOST: "$REMOTE_HOME_URL"
-    command: -l puredb:/etc/pure-ftpd/pureftpd.pdb -E -j -R -P $REMOTE_HOME_URL
+      PUBLICHOST: "$FUW_FTP_HOST"
+    command: -l puredb:/etc/pure-ftpd/pureftpd.pdb -E -j -R -P $FUW_FTP_HOST
     ports:
       - target: 21
         published: 9021
