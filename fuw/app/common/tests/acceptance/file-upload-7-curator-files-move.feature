@@ -148,7 +148,8 @@ Scenario: Completion of moving files triggers notification to curators
 	And I press "Move files to public ftp"
 	And I wait "1" seconds
 	When all files have been moved to the public ftp repository
-	Then An email is sent to "database@gigasciencejournal.com"
+	And I wait "5" seconds
+	Then An email is sent to "Curators"
 
 Scenario: Curator set "AuthorReview" status after the files move, causing a curation log entry
 	Given I sign in as an admin
