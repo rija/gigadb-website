@@ -122,7 +122,7 @@ class ReviewerSteps #extends \common\tests\AcceptanceTester
         ];
 
         $temps = [ 45, 51];
-        $humidities = [ 75, 90];
+        $brightness = [ 75, 90];
 
         $insertFilesQuery = "insert into upload(doi, name, size, status, location, extension, datatype, sample_ids,filedrop_account_id) values(:doi, :name, :size, :status, :location, :extension, :datatype, :sample_ids, :account) returning id";
         $insertFilesStatement = $dbh_fuw->prepare($insertFilesQuery);
@@ -150,13 +150,13 @@ class ReviewerSteps #extends \common\tests\AcceptanceTester
                 [
                     'name' => "Temperature",
                     'value' => array_pop($temps),
-                    'unit' => "Celsius",
+                    'unit' => "degree celsius",
                     'upload_id' => $uploadId,
                 ],
                 [
-                    'name' => "Humidity",
-                    'value' => array_pop($humidities),
-                    'unit' => "Celsius",
+                    'name' => "Brightness",
+                    'value' => array_pop($brightness),
+                    'unit' => "lumen",
                     'upload_id' => $uploadId,
                 ]
             ];
@@ -212,8 +212,8 @@ class ReviewerSteps #extends \common\tests\AcceptanceTester
             if ($index === 0) { // first row to define fields
                 $keys = $row;
                 continue;
-            }            
-            $this->I->canSeeElement("a[href='ftp://$row[0]']");
+            }
+            $this->I->canSeeElement("a[href='ftp://climb.genomics.cn/pub/10.5524/000007/$row[0]']");
         }
      }
 

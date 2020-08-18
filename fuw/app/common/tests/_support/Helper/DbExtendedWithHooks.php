@@ -48,16 +48,16 @@ class DbExtendedWithHooks extends \Codeception\Module\Db
         $this->_getDriver()->deleteQueryByCriteria('public.user', ["email" => "artie_dodger@gigadb.org"]);
 
         $this->amConnectedToDatabase(self::DEFAULT_DATABASE);
-        $this->_getDriver()->deleteQueryByCriteria('file_attributes', ["unit_id" => "Celsius"]);
-        $this->_getDriver()->deleteQueryByCriteria('file_attributes', ["unit_id" => "Percent"]);
+        $this->_getDriver()->deleteQueryByCriteria('file_attributes', ["unit_id" => "UO:000002"]);
+        $this->_getDriver()->deleteQueryByCriteria('file_attributes', ["unit_id" => "UO:0000118"]);
         $this->_getDriver()->sqlQuery("delete from file_sample where file_id in (select id from file where name='seq1.fa')");
         $this->_getDriver()->sqlQuery("delete from file_sample where file_id in (select id from file where name='Specimen.pdf')");
         $this->_getDriver()->deleteQueryByCriteria('file', ["name" => "seq1.fa"]);
         $this->_getDriver()->deleteQueryByCriteria('file', ["name" => "Specimen.pdf"]);
         $this->_getDriver()->deleteQueryByCriteria('attribute', ["attribute_name" => "Temperature"]);
-        $this->_getDriver()->deleteQueryByCriteria('attribute', ["attribute_name" => "Humidity"]);
-        $this->_getDriver()->deleteQueryByCriteria('unit', ["id" => "Celsius"]);
-        $this->_getDriver()->deleteQueryByCriteria('unit', ["id" => "Percent"]);
+        $this->_getDriver()->deleteQueryByCriteria('attribute', ["attribute_name" => "Brightness"]);
+        $this->_getDriver()->deleteQueryByCriteria('unit', ["id" => "UO:000002"]);
+        $this->_getDriver()->deleteQueryByCriteria('unit', ["id" => "UO:0000118"]);
         $this->_getDriver()->deleteQueryByCriteria('dataset', ["identifier" => "000007"]);
         $this->_getDriver()->deleteQueryByCriteria('dataset', ["identifier" => "000008"]);
         $this->_getDriver()->deleteQueryByCriteria('dataset', ["identifier" => "100006"]);
