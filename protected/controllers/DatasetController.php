@@ -65,7 +65,7 @@ class DatasetController extends Controller
         $userHostSubnet = substr($userHostAddress,0,strrpos($userHostAddress,"."));
 
         // configuring files table
-        if("172.16.238" == $userHostSubnet) { //always displays all columns in tests
+        if("172.16.238" == $userHostSubnet && $id !== "101001") { //always displays all columns in tests
             $fileSettings = $datasetPageSettings->getFileSettings($cookies, DatasetPageSettings::MOCKUP_COLUMNS);
         }
         else {
