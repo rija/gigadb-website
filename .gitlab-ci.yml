@@ -216,7 +216,7 @@ with_new_cert_deploy:
     # appending staging variables at the end of the .env and .secrets
     - env | grep -iE "^staging_" | grep -viE "(password|email|tester|secret|key|user|app_id|client_id|token|tlsauth)" >> $APPLICATION/.env
     - echo $?
-    - env | grep -iE "^staging_" | grep -iE "(password|email|tester|secret|key|user|app_id|client_id|token)" | grep -viE "tlsauth">> $APPLICATION/.secrets 2> stderr.log
+    - env | grep -iE "^staging_" | grep -iE "(password|email|tester|secret|key|user|app_id|client_id|token)" | grep -viE "tlsauth"
     - echo $?
     - echo "Before pulling"
     # pulling the CI build of the application and configure it for staging for the purpose of building production containers
