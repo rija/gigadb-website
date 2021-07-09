@@ -14,6 +14,8 @@ $composer=dirname(__FILE__).'/vendor/autoload.php';
 require_once($composer);
 
 # Run the Yii1.1 application
+defined('YII_DEBUG') or define('YII_DEBUG',true);
+defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL',3);
 Yii::$enableIncludePath = false;
 $config=dirname(__FILE__).'/protected/config/main.php';
 Yii::createWebApplication($config)->run();
