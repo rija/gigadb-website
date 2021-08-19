@@ -116,8 +116,14 @@ Execute Terraform plan:
 $ terraform apply
 ```
 
-In addition to `AmazonRDSFullAccess` and `AmazonVPCFullAccess` policies, the 
-following AWS IAM policy is required to permit a user to create RDS instances:
+To destroy the RDS instance:
+```
+$ terraform destroy
+```
+
+In addition to the permissions from `AmazonRDSFullAccess` and 
+`AmazonVPCFullAccess` policies, the following AWS IAM VisualEditor0 policy is
+required to permit a user to create RDS instances:
 ```
 {
     "Version": "2012-10-17",
