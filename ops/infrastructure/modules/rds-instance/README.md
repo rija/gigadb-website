@@ -109,5 +109,34 @@ Plan: 34 to add, 0 to change, 0 to destroy.
 
 Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform
 apply" now.
+```
 
+Execute Terraform plan:
+```
+$ terraform apply
+```
+
+In addition to `AmazonRDSFullAccess` and `AmazonVPCFullAccess` policies, the 
+following AWS IAM policy is required to permit a user to create RDS instances:
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetRole",
+                "iam:ListInstanceProfilesForRole",
+                "iam:ListAttachedRolePolicies",
+                "iam:TagRole",
+                "iam:DeleteRole",
+                "iam:CreateRole",
+                "iam:AttachRolePolicy",
+                "iam:ListRolePolicies"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
 ```
