@@ -1,5 +1,7 @@
 provider "aws" {
   region = local.region
+  shared_credentials_file = pathexpand("~/.aws/credentials")
+  profile = "Peter"
 }
 
 locals {

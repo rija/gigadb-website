@@ -1,5 +1,12 @@
 # rds-instance
 
+## Preparation
+
+Make sure you have configured AWS by providing it with config and credentials
+files in the ~/.aws directory
+
+## Create RDS instance
+
 This module contains a main.tf file. From this directory, fetch dependent 
 modules:
 ```
@@ -62,10 +69,45 @@ commands will detect it and remind you to do so if necessary.
 Create an execution plan. This currently results in an error:
 ```
 $ terraform plan
-│ Error: error configuring Terraform AWS Provider: error validating provider credentials: error calling sts:GetCallerIdentity: InvalidClientTokenId: The security token included in the request is invalid.
-│       status code: 403, request id: 5f5893f7-dbad-44de-8528-a0112560cd86
-│ 
-│   with provider["registry.terraform.io/hashicorp/aws"],
-│   on main.tf line 1, in provider "aws":
-│    1: provider "aws" {
+module.db_default.random_password.master_password[0]: Refreshing state... [id=none]
+module.db_default.module.db_instance.random_id.snapshot_identifier[0]: Refreshing state... [id=YKKbWA]
+module.db.module.db_parameter_group.aws_db_parameter_group.this[0]: Refreshing state... [id=complete-postgresql-20210819062736219800000001]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.security_group.aws_security_group.this_name_prefix[0] will be created
+  + resource "aws_security_group" "this_name_prefix" {
+      + arn                    = (known after apply)
+      + description            = "Complete PostgreSQL example security group"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = (known after apply)
+      + name_prefix            = "complete-postgresql-"
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "Environment" = "dev"
+          + "Name"        = "complete-postgresql"
+          + "Owner"       = "user"
+        }
+      + tags_all               = {
+          + "Environment" = "dev"
+          + "Name"        = "complete-postgresql"
+          + "Owner"       = "user"
+        }
+      + vpc_id                 = (known after apply)
+    }
+<snip>
+</snip>
+Plan: 34 to add, 0 to change, 0 to destroy.
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform
+apply" now.
+
 ```
