@@ -5,7 +5,7 @@ provider "aws" {
 }
 
 locals {
-  name   = "rds-ape1-test-postgres-gigadb"
+  name   = "rds-ape1-test-gigadb"
   region = "ap-east-1"
   tags = {
     Owner       = "user"
@@ -60,10 +60,10 @@ module "security_group" {
 # RDS Module
 ################################################################################
 
-module "db_default" {
+module "db" {
   source = "terraform-aws-modules/rds/aws"
 
-  identifier = "${local.name}-default"
+  identifier = "${local.name}"
 
   create_db_option_group    = false
   create_db_parameter_group = false
