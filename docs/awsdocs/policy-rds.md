@@ -51,12 +51,23 @@ Policy Name: GigadbRDSAccess
                 "ec2:ModifyVpcAttribute",
                 "ec2:GetManagedPrefixListEntries",
                 "ec2:AssociateSubnetCidrBlock",
-                "rds:CreateDBInstance",
                 "rds:CreateDBSubnetGroup",
                 "rds:AddTagsToResource",
                 "ec2:GetManagedPrefixListAssociations"
             ],
             "Resource": "*"
+        },
+        {
+            "Sid": "CreateRDSInstancesWithRegionAndInstanceTypeRestriction",
+            "Effect": "Allow",
+            "Action": "rds:CreateDBInstance",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "rds:DatabaseEngine": "postgres",
+                    "rds:DatabaseClass": "db.t3.micro"
+                }
+            }
         },
         {
             "Sid": "DeleteRDSInstance",
