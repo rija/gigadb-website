@@ -65,7 +65,8 @@ Policy Name: GigadbRDSAccess
             "Condition": {
                 "StringEquals": {
                     "rds:DatabaseEngine": "postgres",
-                    "rds:DatabaseClass": "db.t3.micro"
+                    "rds:DatabaseClass": "db.t3.micro",
+                    "aws:RequestedRegion": "ap-east-1"
                 }
             }
         },
