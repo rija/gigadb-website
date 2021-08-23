@@ -58,7 +58,7 @@ Policy Name: GigadbRDSAccess
             "Resource": "*"
         },
         {
-            "Sid": "CreateRDSInstancesWithRegionAndInstanceTypeRestriction",
+            "Sid": "CreatePostgresRDSInstancesWithRegionAndInstanceTypeRestriction",
             "Effect": "Allow",
             "Action": "rds:CreateDBInstance",
             "Resource": "*",
@@ -67,6 +67,17 @@ Policy Name: GigadbRDSAccess
                     "rds:DatabaseEngine": "postgres",
                     "rds:DatabaseClass": "db.t3.micro",
                     "aws:RequestedRegion": "ap-east-1"
+                }
+            }
+        },
+        {
+            "Sid": "CreateRDSInstancesWithOwnerTagRestriction",
+            "Effect": "Deny",
+            "Action": "rds:CreateDBInstance",
+            "Resource": "*",
+            "Condition": {
+                "StringNotLike": {
+                    "aws:RequestTag/Owner": "${aws.username}"
                 }
             }
         },
@@ -92,7 +103,12 @@ Policy Name: GigadbRDSAccess
                 "rds:DeleteDBSubnetGroup",
                 "rds:DeleteDBInstance"
             ],
-            "Resource": "*"
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "ec2:ResourceTag/Owner": "${aws:username}"
+                }
+            }
         }
     ]
 }
