@@ -10,7 +10,7 @@ Policy Name: GigadbRDSAccess
             "Effect": "Allow",
             "Action": [
                 "rds:Describe*",
-                "rds:ListTagsForResource"
+                "rds:List*"
             ],
             "Resource": "*"
         },
@@ -82,7 +82,7 @@ Policy Name: GigadbRDSAccess
             }
         },
         {
-            "Sid": "DeleteRDSInstance1",
+            "Sid": "DeleteEC2ResourcesWithOwnerTagRestriction",
             "Effect": "Allow",
             "Action": [
                 "iam:DeleteRole",
@@ -110,7 +110,7 @@ Policy Name: GigadbRDSAccess
             }
         },
         {
-            "Sid": "DeleteRDSInstance2",
+            "Sid": "DeleteDBSubnetWithOwnerTagRestriction",
             "Action": [
                 "rds:ModifyDBSubnetGroup",
                 "rds:DeleteDBSubnetGroup",
@@ -125,15 +125,90 @@ Policy Name: GigadbRDSAccess
             }
         },
         {
-            "Sid": "DeleteRDSInstance3",
+            "Sid": "ManageDBInstancesWithOwnerTagRestriction",
             "Action": [
-                "rds:DeleteDBInstance"
+                "rds:DeleteDBInstance",
+                "rds:RebootDBInstance",
+                "rds:ModifyDBInstance"
             ],
             "Effect": "Allow",
             "Resource": "*",
             "Condition": {
                 "StringEqualsIgnoreCase": {
                     "rds:db-tag/Owner": "${aws:username}"
+                }
+            }
+        },
+        {
+            "Sid": "ManageOptionGroupsWithOwnerTagRestriction",
+            "Action": [
+                "rds:ModifyOptionGroup",
+                "rds:DeleteOptionGroup"
+            ],
+            "Effect": "Allow",
+            "Resource": "*",
+            "Condition": {
+                "StringEqualsIgnoreCase": {
+                    "rds:og-tag/Owner": "${aws:username}"
+                }
+            }
+        },
+        {
+            "Sid": "ManageDBParameterGroupWithOwnerTagRestriction",
+            "Action": [
+                "rds:ModifyDBParameterGroup",
+                "rds:ResetDBParameterGroup"
+            ],
+            "Effect": "Allow",
+            "Resource": "*",
+            "Condition": {
+                "StringEqualsIgnoreCase": {
+                    "rds:pg-tag/Owner": "${aws:username}"
+                }
+            }
+        },
+        {
+            "Sid": "ManageDBSecurityGroupWithOwnerTagRestriction",
+            "Action": [
+                "rds:AuthorizeDBSecurityGroupIngress",
+                "rds:RevokeDBSecurityGroupIngress",
+                "rds:DeleteDBSecurityGroup"
+            ],
+            "Effect": "Allow",
+            "Resource": "*",
+            "Condition": {
+                "StringEqualsIgnoreCase": {
+                    "rds:secgrp-tag/Owner": "${aws:username}"
+                }
+            }
+        },
+        {
+            "Sid": "ManageDBSnapshotWithOwnerTagRestriction",
+            "Action": [
+                "rds:DeleteDBSnapshot",
+                "rds:RestoreDBInstanceFromDBSnapshot"
+            ],
+            "Effect": "Allow",
+            "Resource": "*",
+            "Condition": {
+                "StringEqualsIgnoreCase": {
+                    "rds:snapshot-tag/Owner": "${aws:username}"
+                }
+            }
+        },
+        {
+            "Sid": "ManageEventSubscriptionsWithOwnerTagRestriction",
+            "Action": [
+                "rds:ModifyEventSubscription",
+                "rds:AddSourceIdentifierToSubscription",
+                "rds:RemoveSourceIdentifierFromSubscription",
+                "rds:DeleteEventSubscription"
+            ],
+            "Effect": "Allow",
+            "Resource": "*",
+            "Condition": {
+                "StringEqualsIgnoreCase": {
+                    "rds:es-tag/Owner": "${aws:username}"
                 }
             }
         }
