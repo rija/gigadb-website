@@ -58,7 +58,7 @@ Policy Name: GigadbRDSAccess
             "Resource": "*"
         },
         {
-            "Sid": "CreatePostgresRDSInstancesWithRegionAndInstanceTypeRestriction",
+            "Sid": "CreateRDSInstancesWithRegionAndInstanceTypeRestriction",
             "Effect": "Allow",
             "Action": "rds:CreateDBInstance",
             "Resource": "*",
@@ -82,7 +82,7 @@ Policy Name: GigadbRDSAccess
             }
         },
         {
-            "Sid": "DeleteRDSInstance",
+            "Sid": "DeleteRDSInstance1",
             "Effect": "Allow",
             "Action": [
                 "iam:DeleteRole",
@@ -100,13 +100,40 @@ Policy Name: GigadbRDSAccess
                 "ec2:RevokeSecurityGroupIngress",
                 "ec2:DeleteVpc",
                 "ec2:DeleteRoute",
-                "rds:DeleteDBSubnetGroup",
-                "rds:DeleteDBInstance"
+                "ec2:DisassociateRouteTable"
             ],
             "Resource": "*",
             "Condition": {
                 "StringEquals": {
                     "ec2:ResourceTag/Owner": "${aws:username}"
+                }
+            }
+        },
+        {
+            "Sid": "DeleteRDSInstance2",
+            "Action": [
+                "rds:ModifyDBSubnetGroup",
+                "rds:DeleteDBSubnetGroup",
+                "ram:GetResourceShareAssociations"
+            ],
+            "Effect": "Allow",
+            "Resource": "*",
+            "Condition": {
+                "StringEqualsIgnoreCase": {
+                    "rds:subgrp-tag/Owner": "${aws:username}"
+                }
+            }
+        },
+        {
+            "Sid": "DeleteRDSInstance3",
+            "Action": [
+                "rds:DeleteDBInstance"
+            ],
+            "Effect": "Allow",
+            "Resource": "*",
+            "Condition": {
+                "StringEqualsIgnoreCase": {
+                    "rds:db-tag/Owner": "${aws:username}"
                 }
             }
         }
