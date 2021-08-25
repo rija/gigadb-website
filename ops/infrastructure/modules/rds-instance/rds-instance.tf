@@ -1,22 +1,3 @@
-data "external" "callerUserName" {
-  program = ["${path.module}/../../getIAMUserNameToJSON.sh"]
-}
-
-locals {
-  region = "ap-east-1"
-  deployment_target = "testing"
-  tags = {
-    Owner = data.external.callerUserName.result.userName
-    Environment = local.deployment_target
-  }
-}
-
-provider "aws" {
-  region = local.region
-  shared_credentials_file = pathexpand("~/.aws/credentials")
-  profile = data.external.callerUserName.result.userName
-}
-
 ################################################################################
 # Supporting Resources
 ################################################################################
@@ -25,24 +6,27 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "~> 2"
 
-  name = "vpc-ape1-${local.deployment_target}-gigadb-stack"
+  name = "vpc-ape1-${var.deployment_target}-gigadb-stack"
   cidr = "10.99.0.0/18"
 
-  azs              = ["${local.region}a", "${local.region}b", "${local.region}c"]
+  azs              = ["ap-east-1a", "ap-east-1b", "ap-east-1c"]
   public_subnets   = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
   private_subnets  = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
   database_subnets = ["10.99.7.0/24", "10.99.8.0/24", "10.99.9.0/24"]
 
   create_database_subnet_group = true
 
-  tags = local.tags
+  tags = {
+    Owner = var.owner
+    Environment = var.deployment_target
+  }
 }
 
 module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 4"
 
-  name        = "secgrp-ape1-${local.deployment_target}-rds"
+  name        = "secgrp-ape1-${var.deployment_target}-rds"
   description = "Security group for GigaDB RDS"
   vpc_id      = module.vpc.vpc_id
 
@@ -57,7 +41,10 @@ module "security_group" {
     },
   ]
 
-  tags = local.tags
+  tags = {
+    Owner = var.owner
+    Environment = var.deployment_target
+  }
 }
 
 ################################################################################
@@ -67,7 +54,7 @@ module "security_group" {
 module "db" {
   source = "terraform-aws-modules/rds/aws"
 
-  identifier = "rds-ape1-${local.deployment_target}-gigadb"
+  identifier = "rds-ape1-${var.deployment_target}-gigadb"
 
   create_db_option_group    = false
   create_db_parameter_group = false
@@ -98,5 +85,8 @@ module "db" {
 
   backup_retention_period = 0
 
-  tags = local.tags
+  tags = {
+    Owner = var.owner
+    Environment = var.deployment_target
+  }
 }
