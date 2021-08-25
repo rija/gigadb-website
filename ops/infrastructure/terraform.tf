@@ -45,3 +45,10 @@ module "ec2" {
 output "ec2_private_ip" {
   value = module.ec2.instance_ip_addr
 }
+
+# Container for multiple resources
+module "rds" {
+  source = "../../modules/rds-instance"
+  owner = data.external.callerUserName.result.userName
+  deployment_target = var.deployment_target
+}
