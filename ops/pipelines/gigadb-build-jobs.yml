@@ -114,7 +114,7 @@
     - docker pull registry.gitlab.com/$CI_PROJECT_PATH/production_beanstalkd:latest || true
     - docker pull registry.gitlab.com/$CI_PROJECT_PATH/production_web:latest || true
     # build the javascript app, so that the Vue.js app can be baked in production_app
-    - docker-compose run --rm js
+#    - docker-compose run --rm js
     # build Nginx web container, making sure static assets are baked in
     - cp -R fuw/app/backend ops/configuration/fuw-conf/
     - docker-compose build production_web
@@ -169,7 +169,7 @@ build_staging:
   variables:
     GIGADB_ENV: "staging"
   extends: .pb_gigadb
-  stage: production build
+  stage: staging build
   environment:
     name: "staging"
     url: $REMOTE_HOME_URL
@@ -178,7 +178,7 @@ build_live:
   variables:
     GIGADB_ENV: "live"
   extends: .pb_gigadb
-  stage: production build
+  stage: live build
   environment:
     name: "live"
     deployment_tier: production
