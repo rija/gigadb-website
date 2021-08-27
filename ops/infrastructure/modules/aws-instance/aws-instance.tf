@@ -1,9 +1,7 @@
-# Data source saying to use default values
 data "aws_vpc" "default" {
   default = true
 }
 
-# Describes AWS security group for EC2 instance
 resource "aws_security_group" "docker_host_sg" {
   name        = "docker_host_sg_${var.deployment_target}_${var.owner}"
   description = "Allow connection to docker host for ${var.deployment_target}"
@@ -62,7 +60,7 @@ resource "aws_security_group" "docker_host_sg" {
    }
 }
 
-# Describes AWS EC2 instance
+
 resource "aws_instance" "docker_host" {
   ami = "ami-0b197b1f02309cb3c"
   instance_type = "t3.micro"
@@ -85,7 +83,6 @@ resource "aws_instance" "docker_host" {
   }
 }
 
-# Data source providing elastic IP address for EC2 instance
 data "aws_eip" "docker_host_eip" {
   filter {
     name   = "tag:Name"
@@ -93,13 +90,11 @@ data "aws_eip" "docker_host_eip" {
   }
 }
 
-# Describes association of the elastic IP address with EC2 instance
 resource "aws_eip_association" "docker_host_eip_assoc" {
   instance_id   = aws_instance.docker_host.id
   allocation_id = data.aws_eip.docker_host_eip.id
 }
 
-# Returns EC2 private IP address
 output "instance_ip_addr" {
   value = aws_instance.docker_host.private_ip
 }
