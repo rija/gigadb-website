@@ -61,9 +61,9 @@ module "db" {
 
   # All available versions: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html#PostgreSQL.Concepts
   engine               = "postgres"
-  engine_version       = "11.10"
-  family               = "postgres11" # DB parameter group
-  major_engine_version = "11"         # DB option group
+  engine_version       = "9.6"
+  family               = "postgres9" # DB parameter group
+  major_engine_version = "9"         # DB option group
   instance_class       = "db.t3.micro"
 
   allocated_storage = 20
@@ -71,10 +71,9 @@ module "db" {
   # NOTE: Do NOT use 'user' as the value for 'username' as it throws:
   # "Error creating DB Instance: InvalidParameterValue: MasterUsername
   # user cannot be used as it is a reserved word used by the engine"
-  name                   = "completePostgresql"
-  username               = "complete_postgresql"
-  create_random_password = true
-  random_password_length = 12
+  name                   = var.gigadb_db_database
+  username               = var.gigadb_db_user
+  password               = var.gigadb_db_password
   port                   = 5432
 
   subnet_ids             = module.vpc.database_subnets

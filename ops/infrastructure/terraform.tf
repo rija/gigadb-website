@@ -9,6 +9,21 @@ variable "key_name" {
   description = "Name of ssh key pair created for EC2 access"
 }
 
+variable "gigadb_db_database" {
+  type = string
+  description = "Name of PostgreSQL database"
+}
+
+variable "gigadb_db_user" {
+  type = string
+  description = "Name of PostgreSQL database user"
+}
+
+variable "gigadb_db_password" {
+  type = string
+  description = "Password for PostgreSQL database"
+}
+
 terraform {
     backend "http" {
     }
@@ -51,4 +66,7 @@ module "rds" {
   source = "../../modules/rds-instance"
   owner = data.external.callerUserName.result.userName
   deployment_target = var.deployment_target
+  gigadb_db_database = var.gigadb_db_database
+  gigadb_db_user = var.gigadb_db_user
+  gigadb_db_password = var.gigadb_db_password
 }
