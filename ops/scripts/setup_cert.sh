@@ -44,6 +44,10 @@ else
   chain_pem_remote_exists="false"
 fi
 
+echo "fullchain_pem_remote_exists: $fullchain_pem_remote_exists"
+echo "privkey_pem_remote_exists: $privkey_pem_remote_exists"
+echo "chain_pem_remote_exists: $chain_pem_remote_exists"
+
 
 if [[ $cert_files_local_exists == 'true' ]];then
 	echo "Renewing the certificate for $REMOTE_HOSTNAME"
