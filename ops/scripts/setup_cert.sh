@@ -103,32 +103,10 @@ else
   else
     echo "No certs on GitLab, certbot to create one"
     $DOCKER_COMPOSE run --rm certbot certonly -d $REMOTE_HOSTNAME
-#
-#  if [[ $fullchain_remote_exists -eq 404 || $privkey_remote_exists -eq 404 || $chain_remote_exists -eq 404 ]];then
-#    echo "Not all certs found in gitlab, creating the certificate for $REMOTE_HOSTNAME!"
-#	  $DOCKER_COMPOSE run --rm certbot certonly -d $REMOTE_HOSTNAME
-#	  echo "Fullchain cert created and put it into gitlab"
-#    $DOCKER_COMPOSE run --rm config /usr/bin/curl --show-error --silent --output /dev/null \
-#      --request POST --url "$CI_PROJECT_URL/variables" \
-#      --header "PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN" \
-#      --form "environment_scope=$GIGADB_ENV" \
-#      --form "key=tls_fullchain_pem" \
-#      --form "value=$(cat $FULLCHAIN_PEM)"
-#
-#    echo "Private cert created and put it into gitlab"
-#    $DOCKER_COMPOSE run --rm config /usr/bin/curl --show-error --silent --output /dev/null \
-#      --request POST --url "$CI_PROJECT_URL/variables" \
-#      --header "PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN" \
-#      --form "environment_scope=$GIGADB_ENV" \
-#      --form "key=tls_privkey_pem" \
-#      --form "value=$(cat $PRIVATE_PEM)"
-#
-#    echo "Chain cert created and put it into gitlab"
-#    $DOCKER_COMPOSE run --rm config /usr/bin/curl --show-error --silent --output /dev/null \
-#      --request POST --url "$CI_PROJECT_URL/variables" \
-#      --header "PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN" \
-#      --form "environment_scope=$GIGADB_ENV" \
-#      --form "key=tls_chain_pem" \
-#      --form "value=$(cat $CHAIN_PEM)"
+    echo "And then backup the newly created cert to GitLab"
+    $DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl -L --show-error --silent --request POST --url '$CI_API_V4_URL/projects/$encoded_gitlab_project/variables' --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' --form 'environment_scope=$GIGADB_ENV' --form 'key=tls_fullchain_pem' --form 'value=$fullchain'"
+    $DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl -L --show-error --silent --request POST --url '$CI_API_V4_URL/projects/$encoded_gitlab_project/variables' --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' --form 'environment_scope=$GIGADB_ENV' --form 'key=tls_privkey_pem' --form 'value=$privkey'"
+    $DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl -L --show-error --silent --request POST --url '$CI_API_V4_URL/projects/$encoded_gitlab_project/variables' --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' --form 'environment_scope=$GIGADB_ENV' --form 'key=tls_chain_pem' --form 'value=$chain'"
+
   fi
 fi
