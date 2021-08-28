@@ -174,7 +174,7 @@ build_staging:
     name: "staging"
     url: $REMOTE_HOME_URL
 
-.build_live:
+build_live:
   variables:
     GIGADB_ENV: "live"
   extends: .pb_gigadb
