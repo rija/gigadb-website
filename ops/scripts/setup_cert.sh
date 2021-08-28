@@ -85,8 +85,6 @@ if [[ $cert_files_local_exists == 'true' ]];then
 
 else
   echo "Certs do not exist in the filesystem"
-  $DOCKER_COMPOSE run --rm certbot certonly -d $REMOTE_HOSTNAME
-
   if [[ $fullchain_remote_exists -eq 200 && $privkey_remote_exists -eq 200 && $chain_remote_exists -eq 200 ]];then
     echo "Certs fullchain, privkey and chain could be found in gitlab"
     echo "Get fullchain cert from gitlab"
@@ -102,7 +100,9 @@ else
     $DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl -o $CHAIN_PEM --show-error --silent \
       --request GET --url '$CI_API_V4_URL/projects/$encoded_gitlab_project/variables/tls_chain_pem?filter%5benvironment_scope%5d=$GIGADB_ENV' \
       --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' | jq -r '.value'"
-  fi
+  else
+    echo "No certs on GitLab, certbot to create one"
+    $DOCKER_COMPOSE run --rm certbot certonly -d $REMOTE_HOSTNAME
 #
 #  if [[ $fullchain_remote_exists -eq 404 || $privkey_remote_exists -eq 404 || $chain_remote_exists -eq 404 ]];then
 #    echo "Not all certs found in gitlab, creating the certificate for $REMOTE_HOSTNAME!"
