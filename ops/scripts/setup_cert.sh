@@ -87,6 +87,8 @@ else
   echo "Certs do not exist in the filesystem"
   if [[ $fullchain_pem_remote_exists == "true" && $privkey_pem_remote_exists == "true" && $chain_pem_remote_exists == "true" ]];then
     echo "Certs fullchain, privkey and chain could be found in gitlab"
+    mkdir -p /etc/letsencrypt/archive/$REMOTE_HOSTNAME
+    mkdir -p /etc/letsencrypt/live/$REMOTE_HOSTNAME
     echo "Get fullchain cert from gitlab"
     $DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl --show-error --silent \
       --request GET --url '$CI_API_V4_URL/projects/$encoded_gitlab_project/variables/tls_fullchain_pem?filter%5benvironment_scope%5d=$GIGADB_ENV' \
