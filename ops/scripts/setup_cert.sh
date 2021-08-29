@@ -85,7 +85,7 @@ if [[ $cert_files_local_exists == 'true' ]];then
 
 else
   echo "Certs do not exist in the filesystem"
-  if [[ $fullchain_remote_exists == "true" && $privkey_remote_exists == "true" && $chain_remote_exists == "true" ]];then
+  if [[ $fullchain_pem_remote_exists == "true" && $privkey_pem_remote_exists == "true" && $chain_pem_remote_exists == "true" ]];then
     echo "Certs fullchain, privkey and chain could be found in gitlab"
     echo "Get fullchain cert from gitlab"
     $DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl -o $FULLCHAIN_PEM --show-error --silent \
