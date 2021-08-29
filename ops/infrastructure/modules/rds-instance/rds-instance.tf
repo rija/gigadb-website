@@ -2,19 +2,65 @@
 # Supporting Resources
 ################################################################################
 
+# Create virtual private cloud network for RDS instance to be launched in
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "~> 2"
 
-  name = "vpc-ape1-${var.deployment_target}-gigadb-stack"
+  name = "vpc-ape1-${var.deployment_target}-gigadb"
+  # CIDR block is a range of IPv4 addresses in the VPC
   cidr = "10.99.0.0/18"
+  # This means that the main route table has the following routes:
+  # Destination = 10.99.0.0/18 , Target = local
 
+  # VPC spans all the availability zones (AZs) in the region
   azs              = ["ap-east-1a", "ap-east-1b", "ap-east-1c"]
+  
+  # We can add one or more subnets into each AZ. A subnet is required to launch
+  # AWS resources into a VPC and is a range of IP addresses. Each subnet has a 
+  # CIDR block which is a subset of the VPC CIDR block.
+  
+  # Public subnet will contain resources with public IP addresses and routes
+  # Do these public subnets need a custom route table that points to an IGW?
   public_subnets   = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
-  private_subnets  = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
-  database_subnets = ["10.99.7.0/24", "10.99.8.0/24", "10.99.9.0/24"]
+  public_subnet_tags = {
+    Name = "overridden-name-public"
+  }
 
+  # Internet gateway is designed to expose resources with public IPs to
+  # inbound traffic from the internet. All public subnets must route to an
+  # Internet Gateway for non-local addresses. This is what makes the subnet
+  # public.
+
+  # Need to create and attach an Internet Gateway (called it igw-blah-blah) 
+  # to the VPC to give resources access to the internet. RDS instance will need 
+  # a public IP or an elastic IP. The subnet's route table needs to point to the 
+  # internet gateway. Need to ensure network ACL and security groups rules allow 
+  # traffic to flow to and from RDS
+  
+  # Private subnets will contain resources that do not have public IPs. They 
+  # have private IPs and can only interact with resources inside same network
+  # If resources in private subnet needs internet access then they need a NAT
+  # device
+  private_subnets  = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
+
+  # NAT gateways provide resources in private subnets that do not have
+  # public IP address with outbound access to the public Internet or other AWS
+  # resources. NAT gateways are placed in public subnet. Will create one NAT 
+  # gateway for each private subnet - a total of 3 NAT gateways
+//  enable_nat_gateway = true
+//  single_nat_gateway = true
+//  one_nat_gateway_per_az = false
+
+  database_subnets = ["10.99.7.0/24", "10.99.8.0/24", "10.99.9.0/24"]
+  
+  # Enable communication from internet to RDS is via an internet gateway to 
+  # provide public access to RDS instance - not recommended for production! 
   create_database_subnet_group = true
+  create_database_subnet_route_table = true
+  create_database_internet_gateway_route = true
+  enable_dns_hostnames = true
+  enable_dns_support = true
 
   tags = {
     Owner = var.owner
@@ -30,14 +76,13 @@ module "security_group" {
   description = "Security group for GigaDB RDS"
   vpc_id      = module.vpc.vpc_id
 
-  # ingress
   ingress_with_cidr_blocks = [
     {
       from_port   = 5432
       to_port     = 5432
       protocol    = "tcp"
-      description = "PostgreSQL access from within VPC"
-      cidr_blocks = module.vpc.vpc_cidr_block
+      description = "PostgreSQL access from public internet"
+      cidr_blocks = "0.0.0.0/0"
     },
   ]
 
@@ -76,6 +121,8 @@ module "db" {
   password               = var.gigadb_db_password
   port                   = 5432
 
+  publicly_accessible = true
+
   subnet_ids             = module.vpc.database_subnets
   vpc_security_group_ids = [module.security_group.security_group_id]
 
@@ -83,6 +130,8 @@ module "db" {
   backup_window      = "03:00-06:00"
 
   backup_retention_period = 0
+  skip_final_snapshot     = true
+  deletion_protection     = false
 
   tags = {
     Owner = var.owner
