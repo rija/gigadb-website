@@ -88,18 +88,18 @@ else
   if [[ $fullchain_pem_remote_exists == "true" && $privkey_pem_remote_exists == "true" && $chain_pem_remote_exists == "true" ]];then
     echo "Certs fullchain, privkey and chain could be found in gitlab"
     echo "Get fullchain cert from gitlab"
-    $DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl -o $FULLCHAIN_PEM --show-error --silent \
+    $DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl --show-error --silent \
       --request GET --url '$CI_API_V4_URL/projects/$encoded_gitlab_project/variables/tls_fullchain_pem?filter%5benvironment_scope%5d=$GIGADB_ENV' \
-      --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' | jq -r '.value'"
+      --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' | jq -r '.value' | tee $FULLCHAIN_PEM "
 
     echo "Get private cert from gitlab"
-    $DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl -o $PRIVATE_PEM --show-error --silent \
+    $DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl --show-error --silent \
       --request GET --url '$CI_API_V4_URL/projects/$encoded_gitlab_project/variables/tls_privkey_pem?filter%5benvironment_scope%5d=$GIGADB_ENV' \
-      --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' | jq -r '.value'"
+      --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' | jq -r '.value' | tee $PRIVATE_PEM"
     echo "Get chain cert from gitlab"
-    $DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl -o $CHAIN_PEM --show-error --silent \
+    $DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl --show-error --silent \
       --request GET --url '$CI_API_V4_URL/projects/$encoded_gitlab_project/variables/tls_chain_pem?filter%5benvironment_scope%5d=$GIGADB_ENV' \
-      --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' | jq -r '.value'"
+      --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' | jq -r '.value' | tee $CHAIN_PEM"
   else
     echo "No certs on GitLab, certbot to create one"
     $DOCKER_COMPOSE run --rm certbot certonly -d $REMOTE_HOSTNAME --dry-run
