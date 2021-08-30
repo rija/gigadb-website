@@ -97,22 +97,25 @@ else
     remote_fullchain=$($DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl --show-error --silent \
       --request GET --url '$CI_API_V4_URL/projects/$encoded_gitlab_project/variables/tls_fullchain_pem?filter%5benvironment_scope%5d=$GIGADB_ENV' \
       --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' | cat | jq -r '.value'")
-    echo $remote_fullchain > $FULLCHAIN_PEM
-    ln -s $FULLCHAIN_PEM $FULLCHAIN_LINK
+    $DOCKER_COMPOSE run --rm config echo $remote_fullchain > $FULLCHAIN_PEM
+    $DOCKER_COMPOSE run --rm config ln -s $FULLCHAIN_PEM $FULLCHAIN_LINK
 
     echo "Get private cert from gitlab"
     remote_privkey=$($DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl --show-error --silent \
       --request GET --url '$CI_API_V4_URL/projects/$encoded_gitlab_project/variables/tls_privkey_pem?filter%5benvironment_scope%5d=$GIGADB_ENV' \
       --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' | cat | jq -r '.value'")
-    echo $remote_privkey > $PRIVATE_PEM
-    ln -s $PRIVATE_PEM $PRIVATE_LINK
+    $DOCKER_COMPOSE run --rm config echo $remote_privkey > $PRIVATE_PEM
+    $DOCKER_COMPOSE run --rm config ln -s $PRIVATE_PEM $PRIVATE_LINK
+
     echo "Get chain cert from gitlab"
     remote_chain=$($DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl --show-error --silent \
       --request GET --url '$CI_API_V4_URL/projects/$encoded_gitlab_project/variables/tls_chain_pem?filter%5benvironment_scope%5d=$GIGADB_ENV' \
       --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' | cat | jq -r '.value'")
-    echo $remote_chain > $CHAIN_PEM
-    ln -s $CHAIN_PEM $CHAIN_LINK
-    ls -alrt /etc/letsencrypt/live/$REMOTE_HOSTNAME
+    $DOCKER_COMPOSE run --rm config echo $remote_chain > $CHAIN_PEM
+    $DOCKER_COMPOSE run --rm config ln -s $CHAIN_PEM $CHAIN_LINK
+    
+    $DOCKER_COMPOSE run --rm config ls -alrt /etc/letsencrypt/archive/$REMOTE_HOSTNAME
+    $DOCKER_COMPOSE run --rm config ls -alrt /etc/letsencrypt/live/$REMOTE_HOSTNAME
 
   else
     echo "No certs on GitLab, certbot to create one"
