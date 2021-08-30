@@ -118,6 +118,8 @@ else
     echo "No certs on GitLab, certbot to create one"
     $DOCKER_COMPOSE run --rm certbot certonly -d $REMOTE_HOSTNAME --dry-run
     echo "Read content of files"
+    $DOCKER_COMPOSE run --rm config mkdir -vp /etc/letsencrypt/archive/$REMOTE_HOSTNAME
+    $DOCKER_COMPOSE run --rm config mkdir -vp /etc/letsencrypt/live/$REMOTE_HOSTNAME
     $DOCKER_COMPOSE run --rm config touch $FULLCHAIN_PEM
     $DOCKER_COMPOSE run --rm config touch $PRIVATE_PEM
     $DOCKER_COMPOSE run --rm config touch $CHAIN_PEM
