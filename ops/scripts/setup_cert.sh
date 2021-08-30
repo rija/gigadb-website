@@ -120,16 +120,16 @@ else
     echo "Read content of files"
     $DOCKER_COMPOSE run --rm config mkdir -vp /etc/letsencrypt/archive/$REMOTE_HOSTNAME
     $DOCKER_COMPOSE run --rm config mkdir -vp /etc/letsencrypt/live/$REMOTE_HOSTNAME
-    $DOCKER_COMPOSE run --rm config touch $FULLCHAIN_PEM
-    $DOCKER_COMPOSE run --rm config touch $PRIVATE_PEM
-    $DOCKER_COMPOSE run --rm config touch $CHAIN_PEM
+    $DOCKER_COMPOSE run --rm config bash -c "echo 'boo' > $FULLCHAIN_PEM"
+    $DOCKER_COMPOSE run --rm config bash -c "echo 'foobar' >  $PRIVATE_PEM"
+    $DOCKER_COMPOSE run --rm config bash -c "echo 'hello' >  $CHAIN_PEM"
     fullchain=$($DOCKER_COMPOSE run --rm config cat $FULLCHAIN_PEM)
     privkey=$($DOCKER_COMPOSE run --rm config cat $PRIVATE_PEM)
     chain=$($DOCKER_COMPOSE run --rm config cat $CHAIN_PEM)
     echo "And then backup the newly created cert to GitLab"
+    echo "/usr/bin/curl --show-error --silent --request POST --url '$CI_API_V4_URL/projects/$encoded_gitlab_project/variables' --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' --form 'environment_scope=$GIGADB_ENV' --form 'key=tls_fullchain_pem' --form 'value=$fullchain'"
     $DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl --show-error --silent --request POST --url '$CI_API_V4_URL/projects/$encoded_gitlab_project/variables' --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' --form 'environment_scope=$GIGADB_ENV' --form 'key=tls_fullchain_pem' --form 'value=$fullchain'"
     $DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl --show-error --silent --request POST --url '$CI_API_V4_URL/projects/$encoded_gitlab_project/variables' --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' --form 'environment_scope=$GIGADB_ENV' --form 'key=tls_privkey_pem' --form 'value=$privkey'"
     $DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl --show-error --silent --request POST --url '$CI_API_V4_URL/projects/$encoded_gitlab_project/variables' --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' --form 'environment_scope=$GIGADB_ENV' --form 'key=tls_chain_pem' --form 'value=$chain'"
-
   fi
 fi
