@@ -94,10 +94,10 @@ else
     $DOCKER_COMPOSE run --rm config mkdir -vp /etc/letsencrypt/archive/$REMOTE_HOSTNAME
     $DOCKER_COMPOSE run --rm config mkdir -vp /etc/letsencrypt/live/$REMOTE_HOSTNAME
     echo "Get fullchain cert from gitlab"
-    remote_fullchain=$($DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl --show-error --silent \
+    $DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl --show-error --silent \
       --request GET --url '$CI_API_V4_URL/projects/$encoded_gitlab_project/variables/tls_fullchain_pem?filter%5benvironment_scope%5d=$GIGADB_ENV' \
-      --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' | cat | jq -r '.value'")
-    $DOCKER_COMPOSE run --rm config bash -c "echo -e $remote_fullchain > $FULLCHAIN_PEM"
+      --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' | cat | jq -r '.value' > /etc/letsencrypt/archive/$REMOTE_HOSTNAME/fullchain1.pem"
+#    $DOCKER_COMPOSE run --rm config bash -c "echo -e $remote_fullchain > $FULLCHAIN_PEM"
     $DOCKER_COMPOSE run --rm config ln -s $FULLCHAIN_PEM $FULLCHAIN_LINK
 
     echo "Get private cert from gitlab"
