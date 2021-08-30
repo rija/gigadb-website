@@ -97,19 +97,19 @@ else
     $DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl --show-error --silent \
       --request GET --url '$CI_API_V4_URL/projects/$encoded_gitlab_project/variables/tls_fullchain_pem?filter%5benvironment_scope%5d=$GIGADB_ENV' \
       --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' | cat | jq -r '.value' > /etc/letsencrypt/archive/$REMOTE_HOSTNAME/fullchain1.pem"
-    $DOCKER_COMPOSE run --rm config ln -s /etc/letsencrypt/archive/$REMOTE_HOSTNAME/fullchain1.pem /etc/letsencrypt/live/$REMOTE_HOSTNAME/fullchain.pem
+    $DOCKER_COMPOSE run --rm config ln -fs /etc/letsencrypt/archive/$REMOTE_HOSTNAME/fullchain1.pem /etc/letsencrypt/live/$REMOTE_HOSTNAME/fullchain.pem
 
     echo "Get private cert from gitlab"
     $DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl --show-error --silent \
       --request GET --url '$CI_API_V4_URL/projects/$encoded_gitlab_project/variables/tls_privkey_pem?filter%5benvironment_scope%5d=$GIGADB_ENV' \
       --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' | cat | jq -r '.value' > /etc/letsencrypt/archive/$REMOTE_HOSTNAME/privkey1.pem"
-    $DOCKER_COMPOSE run --rm config ln -s /etc/letsencrypt/archive/$REMOTE_HOSTNAME/privkey1.pem /etc/letsencrypt/live/$REMOTE_HOSTNAME/privkey.pem
+    $DOCKER_COMPOSE run --rm config ln -fs /etc/letsencrypt/archive/$REMOTE_HOSTNAME/privkey1.pem /etc/letsencrypt/live/$REMOTE_HOSTNAME/privkey.pem
 
     echo "Get chain cert from gitlab"
     $DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl --show-error --silent \
       --request GET --url '$CI_API_V4_URL/projects/$encoded_gitlab_project/variables/tls_chain_pem?filter%5benvironment_scope%5d=$GIGADB_ENV' \
       --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' | cat | jq -r '.value' > /etc/letsencrypt/archive/$REMOTE_HOSTNAME/chain1.pem"
-    $DOCKER_COMPOSE run --rm config ln -s /etc/letsencrypt/archive/$REMOTE_HOSTNAME/chain1.pem /etc/letsencrypt/live/$REMOTE_HOSTNAME/chain.pem
+    $DOCKER_COMPOSE run --rm config ln -fs /etc/letsencrypt/archive/$REMOTE_HOSTNAME/chain1.pem /etc/letsencrypt/live/$REMOTE_HOSTNAME/chain.pem
 
     $DOCKER_COMPOSE run --rm config ls -alrt /etc/letsencrypt/archive/$REMOTE_HOSTNAME
     $DOCKER_COMPOSE run --rm config ls -alrt /etc/letsencrypt/live/$REMOTE_HOSTNAME
