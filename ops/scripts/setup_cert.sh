@@ -112,6 +112,7 @@ else
       --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' | cat | jq -r '.value'")
     echo $remote_chain > $CHAIN_PEM
     ln -s $CHAIN_PEM $CHAIN_LINK
+    ls -alrt /etc/letsencrypt/live/$REMOTE_HOSTNAME
 
   else
     echo "No certs on GitLab, certbot to create one"
