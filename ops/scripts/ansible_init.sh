@@ -34,6 +34,7 @@ fi
 
 # copy files into the environment specific directory
 cp ../../playbook.yml .
+cp ../../rds-playbook.yml .
 
 
 
