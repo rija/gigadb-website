@@ -116,13 +116,10 @@ else
 
   else
     echo "No certs on GitLab, certbot to create one"
-    $DOCKER_COMPOSE run --rm certbot certonly -d $REMOTE_HOSTNAME --dry-run
+    $DOCKER_COMPOSE run --rm certbot certonly -d $REMOTE_HOSTNAME 
     echo "Read content of files"
     $DOCKER_COMPOSE run --rm config mkdir -vp /etc/letsencrypt/archive/$REMOTE_HOSTNAME
     $DOCKER_COMPOSE run --rm config mkdir -vp /etc/letsencrypt/live/$REMOTE_HOSTNAME
-    $DOCKER_COMPOSE run --rm config bash -c "echo 'boo' > $FULLCHAIN_PEM"
-    $DOCKER_COMPOSE run --rm config bash -c "echo 'foobar' >  $PRIVATE_PEM"
-    $DOCKER_COMPOSE run --rm config bash -c "echo 'hello' >  $CHAIN_PEM"
     fullchain=$($DOCKER_COMPOSE run --rm config cat $FULLCHAIN_PEM)
     privkey=$($DOCKER_COMPOSE run --rm config cat $PRIVATE_PEM)
     chain=$($DOCKER_COMPOSE run --rm config cat $CHAIN_PEM)
