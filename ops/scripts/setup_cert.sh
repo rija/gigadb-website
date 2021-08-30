@@ -90,18 +90,23 @@ else
     mkdir -vp /etc/letsencrypt/archive/$REMOTE_HOSTNAME
     mkdir -vp /etc/letsencrypt/live/$REMOTE_HOSTNAME
     echo "Get fullchain cert from gitlab"
-    $DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl --show-error --silent \
+    remote_fullchain=$($DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl --show-error --silent \
       --request GET --url '$CI_API_V4_URL/projects/$encoded_gitlab_project/variables/tls_fullchain_pem?filter%5benvironment_scope%5d=$GIGADB_ENV' \
-      --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' | cat | jq -r '.value' > $FULLCHAIN_PEM "
+      --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' | cat | jq -r '.value'")
+    echo $remote_fullchain > $FULLCHAIN_PEM
 
     echo "Get private cert from gitlab"
-    $DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl --show-error --silent \
+    remote_privkey=$($DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl --show-error --silent \
       --request GET --url '$CI_API_V4_URL/projects/$encoded_gitlab_project/variables/tls_privkey_pem?filter%5benvironment_scope%5d=$GIGADB_ENV' \
-      --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' | cat | jq -r '.value' > $PRIVATE_PEM"
+      --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' | cat | jq -r '.value'")
+    echo $remote_privkey > $PRIVATE_PEM
+
     echo "Get chain cert from gitlab"
-    $DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl --show-error --silent \
+    remote_chain=$($DOCKER_COMPOSE run --rm config bash -c "/usr/bin/curl --show-error --silent \
       --request GET --url '$CI_API_V4_URL/projects/$encoded_gitlab_project/variables/tls_chain_pem?filter%5benvironment_scope%5d=$GIGADB_ENV' \
-      --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' | cat | jq -r '.value' > $CHAIN_PEM"
+      --header 'PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN' | cat | jq -r '.value'")
+    echo $remote_chain > $CHAIN_PEM
+    
   else
     echo "No certs on GitLab, certbot to create one"
     $DOCKER_COMPOSE run --rm certbot certonly -d $REMOTE_HOSTNAME --dry-run
