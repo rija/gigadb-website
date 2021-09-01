@@ -3,12 +3,7 @@
   connection: local
 
   tasks:
-
-    - name: "Test pg_restore"
-      shell: "export PGPASSWORD='{{ gigadb_db_password }}'; /opt/local/bin/pg_restore -h rds-server-staging.cfkc0cbc20ii.ap-east-1.rds.amazonaws.com -p 5432 -d gigadb -U gigadb /Volumes/PLEXTOR/PhpstormProjects/gigadb-website/sql/production_like.pgdmp"
+    - name: "Restore database on RDS instance"
+      shell: "export PGPASSWORD='{{ pg_password }}'; pg_restore -v -c -h {{ pg_host }} -p 5432 -d {{ pg_database }} -U {{ pg_user }} ../../../../sql/{{ pg_db_dump_file }}"
       register: "output"
-
-    - debug: var=output.stdout_lines
-
-#  roles:
-#    - role: ../../roles/rds-restore-database
+    - debug: msg="{{ lookup('env','USER') }}"

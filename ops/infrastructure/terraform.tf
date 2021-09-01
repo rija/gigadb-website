@@ -70,3 +70,7 @@ module "rds" {
   gigadb_db_user = var.gigadb_db_user
   gigadb_db_password = var.gigadb_db_password
 }
+
+output "rds_instance_address" {
+  value = module.rds.db_instance_addr
+}

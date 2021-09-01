@@ -136,5 +136,10 @@ module "db" {
   tags = {
     Owner = var.owner
     Environment = var.deployment_target
+    Name = "rds_server_${var.deployment_target}'"
   }
+}
+
+output "db_instance_addr" {
+  value = module.db.db_instance_address
 }
