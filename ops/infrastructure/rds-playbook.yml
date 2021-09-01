@@ -4,6 +4,6 @@
 
   tasks:
     - name: "Restore database on RDS instance"
-      shell: "export PGPASSWORD='{{ pg_password }}'; pg_restore -v -c -h {{ pg_host }} -p 5432 -d {{ pg_database }} -U {{ pg_user }} ../../../../sql/{{ pg_db_dump_file }}"
+      shell: "export PGPASSWORD='{{ pg_password }}'; pg_restore -c --if-exists -h {{ pg_host }} -p 5432 -d {{ pg_database }} -U {{ pg_user }} ../../../../sql/{{ pg_db_dump_file }}"
       register: "output"
     - debug: msg="{{ lookup('env','USER') }}"
