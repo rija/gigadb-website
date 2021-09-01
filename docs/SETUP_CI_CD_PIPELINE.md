@@ -177,6 +177,7 @@ Ensure the following variables are set for their respective environments in the 
 | REMOTE_SMTP_PASSWORD | yes |
 | REMOTE_SMTP_PORT | no |
 | REMOTE_SMTP_USERNAME | no |
+| GITLAB_PRIVATE_TOKEN | yes |
 | gigadb_db_host | no |
 | gigadb_db_user | no |
 | gigadb_db_password | yes |
