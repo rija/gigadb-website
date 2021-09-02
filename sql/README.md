@@ -64,7 +64,7 @@ sql/convert_production_db_to_latest_ver.sh
 
 ### How does the script work
 First, download the production database using `files-url-updater` tool. You could specify the which database backup you want to download
-by including `--date` parameter. By default, this command will download the latest production database. 
+by including `--date` parameter. By default, this command will download the latest production database.
 ```bash
 cd gigadb/app/tools/files-url-updater/
 docker-compose run --rm updater ./yii dataset-files/download-restore-backup --latest --norestore
@@ -75,6 +75,11 @@ go to [here](https://github.com/rija/gigadb-website/tree/files-url-updater-%2362
 Then go into docker environment and do the conversion using `pg_restore` and `pg_dump`, for example:
 ```bash
 cd /gigadb-website
+
+# Spin up the PostgreSQL server container
+docker-compose up -d --build database
+
+# Get into the container environment
 docker-compose run --rm test bash
 
 # Create database for the restore
@@ -85,4 +90,10 @@ pg_restore -v -U gigadb -h database -p 5432 -d gigadbv3_production /gigadb/app/t
 
 # Convert the database
 pg_dump -v -U gigadb -h database -p 5432 -Fc -d gigadbv3_production -f /sql/psql-v96/gigadbv3_$date_$version.pgdmp
+
+# Load the upgraded database dump back to PostgreSQL server
+pg_restore -v -U gigadb -h database -p 5432 --clean -d gigadbv3_production /sql/psql-v96/gigadbv3_$date_$version.pgdmp
+
+# Get out from the container and stop the PostgreSQL server container
+docker stop eployment_database_1
 ```
