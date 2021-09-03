@@ -4,7 +4,7 @@ class m200529_025806_create_sample_attribute_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE sample_attribute (
+        $this->execute("CREATE TABLE IF NOT EXISTS sample_attribute (
             id integer NOT NULL,
             sample_id integer NOT NULL,
             attribute_id integer NOT NULL,

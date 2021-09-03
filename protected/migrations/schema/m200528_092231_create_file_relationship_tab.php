@@ -4,7 +4,7 @@ class m200528_092231_create_file_relationship_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE file_relationship (
+        $this->execute("CREATE TABLE IF NOT EXISTS file_relationship (
             id integer NOT NULL,
             file_id integer NOT NULL,
             related_file_id integer NOT NULL,

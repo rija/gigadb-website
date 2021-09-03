@@ -4,7 +4,7 @@ class m200528_065406_create_dataset_session_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE dataset_session (
+        $this->execute("CREATE TABLE IF NOT EXISTS dataset_session (
             id integer NOT NULL,
             identifier text NOT NULL,
             dataset text,

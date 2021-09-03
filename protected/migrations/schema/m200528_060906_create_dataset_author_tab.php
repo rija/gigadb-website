@@ -4,7 +4,7 @@ class m200528_060906_create_dataset_author_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE dataset_author (
+        $this->execute("CREATE TABLE IF NOT EXISTS dataset_author (
             id integer NOT NULL,
             dataset_id integer NOT NULL,
             author_id integer NOT NULL,

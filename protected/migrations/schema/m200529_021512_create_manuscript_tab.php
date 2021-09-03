@@ -4,7 +4,7 @@ class m200529_021512_create_manuscript_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE manuscript (
+        $this->execute("CREATE TABLE IF NOT EXISTS manuscript (
             id integer NOT NULL,
             identifier character varying(32) NOT NULL,
             pmid integer,

@@ -4,7 +4,7 @@ class m200528_054920_create_author_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE author (
+        $this->execute("CREATE TABLE IF NOT EXISTS author (
             id integer NOT NULL,
             surname character varying(255) NOT NULL,
             middle_name character varying(255),

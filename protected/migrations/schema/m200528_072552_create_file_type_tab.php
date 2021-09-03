@@ -4,7 +4,7 @@ class m200528_072552_create_file_type_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE file_type (
+        $this->execute("CREATE TABLE IF NOT EXISTS file_type (
             id integer NOT NULL,
             name character varying(100) NOT NULL,
             description text DEFAULT ''::text NOT NULL,

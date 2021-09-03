@@ -4,7 +4,7 @@ class m200528_054960_create_author_rel_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE author_rel (
+        $this->execute("CREATE TABLE IF NOT EXISTS author_rel (
             id integer NOT NULL,
             author_id integer NOT NULL,
             related_author_id integer NOT NULL,

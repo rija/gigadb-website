@@ -4,7 +4,7 @@ class m200528_055100_create_publisher_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE publisher (
+        $this->execute("CREATE TABLE IF NOT EXISTS publisher (
             id integer NOT NULL,
             name character varying(45) NOT NULL,
             description text DEFAULT ''::text NOT NULL);");

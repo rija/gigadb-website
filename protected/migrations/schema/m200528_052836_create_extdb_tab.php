@@ -4,7 +4,7 @@ class m200528_052836_create_extdb_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE extdb (
+        $this->execute("CREATE TABLE IF NOT EXISTS extdb (
             id integer NOT NULL,
             database_name character varying(100),
             definition character varying(1000),

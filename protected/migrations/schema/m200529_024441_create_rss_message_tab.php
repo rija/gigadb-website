@@ -4,7 +4,7 @@ class m200529_024441_create_rss_message_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE rss_message (
+        $this->execute("CREATE TABLE IF NOT EXISTS rss_message (
             id integer NOT NULL,
             message character varying(128) NOT NULL,
             publication_date date DEFAULT ('now'::text)::date NOT NULL);");

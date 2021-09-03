@@ -4,7 +4,7 @@ class m200528_052860_create_gigadb_user_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE gigadb_user (
+        $this->execute("CREATE TABLE IF NOT EXISTS gigadb_user (
             id integer NOT NULL,
             email character varying(64) NOT NULL,
             password character varying(128) NOT NULL,

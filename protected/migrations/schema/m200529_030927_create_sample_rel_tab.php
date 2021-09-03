@@ -4,7 +4,7 @@ class m200529_030927_create_sample_rel_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE sample_rel (
+        $this->execute("CREATE TABLE IF NOT EXISTS sample_rel (
             id integer NOT NULL,
             sample_id integer NOT NULL,
             related_sample_id integer NOT NULL,

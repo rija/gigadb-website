@@ -4,7 +4,7 @@ class m200528_092609_create_file_sample_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE file_sample (
+        $this->execute("CREATE TABLE IF NOT EXISTS file_sample (
             id integer NOT NULL,
             sample_id integer NOT NULL,
             file_id integer NOT NULL);");

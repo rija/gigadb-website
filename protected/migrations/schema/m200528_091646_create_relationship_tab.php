@@ -4,7 +4,7 @@ class m200528_091646_create_relationship_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE relationship (
+        $this->execute("CREATE TABLE IF NOT EXISTS relationship (
             id integer NOT NULL,
             name character varying(100));");
 

@@ -4,7 +4,7 @@ class m200529_035151_create_user_command_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE user_command (
+        $this->execute("CREATE TABLE IF NOT EXISTS user_command (
             id integer NOT NULL,
             action_label character varying(32) NOT NULL,
             requester_id integer NOT NULL,

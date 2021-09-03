@@ -4,7 +4,7 @@ class m200529_020859_create_link_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE link (
+        $this->execute("CREATE TABLE IF NOT EXISTS link (
             id integer NOT NULL,
             dataset_id integer NOT NULL,
             is_primary boolean DEFAULT false NOT NULL,

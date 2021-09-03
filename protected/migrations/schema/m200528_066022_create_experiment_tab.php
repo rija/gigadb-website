@@ -4,7 +4,7 @@ class m200528_066022_create_experiment_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE experiment (
+        $this->execute("CREATE TABLE IF NOT EXISTS experiment (
             id integer NOT NULL,
             experiment_type character varying(100),
             experiment_name character varying(100),

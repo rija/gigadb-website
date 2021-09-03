@@ -4,7 +4,7 @@ class m200529_022144_create_news_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE news (
+        $this->execute("CREATE TABLE IF NOT EXISTS news (
             id integer NOT NULL,
             title character varying(200) NOT NULL,
             body text DEFAULT ''::text NOT NULL,

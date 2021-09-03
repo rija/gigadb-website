@@ -4,7 +4,7 @@ class m200528_052880_create_sample_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE sample (
+        $this->execute("CREATE TABLE IF NOT EXISTS sample (
             id integer NOT NULL,
             species_id integer NOT NULL,
             name character varying(100) DEFAULT 'SAMPLE:SRS188811'::character varying NOT NULL,

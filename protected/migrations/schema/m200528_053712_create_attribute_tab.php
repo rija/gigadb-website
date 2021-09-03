@@ -4,7 +4,7 @@ class m200528_053712_create_attribute_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE attribute (
+        $this->execute("CREATE TABLE IF NOT EXISTS attribute (
             id integer NOT NULL,
             attribute_name character varying(100),
             definition character varying(1000),

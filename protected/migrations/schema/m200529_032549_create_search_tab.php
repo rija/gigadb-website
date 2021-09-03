@@ -4,7 +4,7 @@ class m200529_032549_create_search_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE search (
+        $this->execute("CREATE TABLE IF NOT EXISTS search (
             id integer NOT NULL,
             user_id integer NOT NULL,
             name character varying(128) NOT NULL,

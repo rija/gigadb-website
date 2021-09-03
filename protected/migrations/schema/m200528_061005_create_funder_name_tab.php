@@ -4,7 +4,7 @@ class m200528_061005_create_funder_name_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE funder_name (
+        $this->execute("CREATE TABLE IF NOT EXISTS funder_name (
             id integer NOT NULL,
             uri character varying(100) NOT NULL,
             primary_name_display character varying(1000),

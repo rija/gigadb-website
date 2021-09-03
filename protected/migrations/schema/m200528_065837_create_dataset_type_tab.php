@@ -4,7 +4,7 @@ class m200528_065837_create_dataset_type_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE dataset_type (
+        $this->execute("CREATE TABLE IF NOT EXISTS dataset_type (
             id integer NOT NULL,
             dataset_id integer NOT NULL,
             type_id integer);");

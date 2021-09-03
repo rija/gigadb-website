@@ -4,7 +4,7 @@ class m200528_052900_create_alternative_identifiers_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE alternative_identifiers (
+        $this->execute("CREATE TABLE IF NOT EXISTS alternative_identifiers (
             id integer NOT NULL,
             sample_id integer NOT NULL,
             extdb_id integer NOT NULL,

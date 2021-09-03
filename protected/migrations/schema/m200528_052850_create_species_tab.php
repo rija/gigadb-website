@@ -4,7 +4,7 @@ class m200528_052850_create_species_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE species (
+        $this->execute("CREATE TABLE IF NOT EXISTS species (
             id integer NOT NULL,
             tax_id integer NOT NULL,
             common_name character varying(128),

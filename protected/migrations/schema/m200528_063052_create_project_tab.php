@@ -4,7 +4,7 @@ class m200528_063052_create_project_tab extends CDbMigration
 {
     public function safeUp()
     {
-        $this->execute("CREATE TABLE project (
+        $this->execute("CREATE TABLE IF NOT EXISTS project (
             id integer NOT NULL,
             url character varying(128) NOT NULL,
             name character varying(255) DEFAULT ''::character varying NOT NULL,
