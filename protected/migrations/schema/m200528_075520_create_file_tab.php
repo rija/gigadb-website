@@ -20,7 +20,7 @@ class m200528_075520_create_file_tab extends CDbMigration
             download_count integer DEFAULT 0 NOT NULL,
             alternative_location character varying(200));");
 
-        $this->execute("CREATE SEQUENCE file_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS file_id_seq
             START WITH 6300
             INCREMENT BY 1
             NO MINVALUE

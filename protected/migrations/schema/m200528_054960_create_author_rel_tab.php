@@ -10,7 +10,7 @@ class m200528_054960_create_author_rel_tab extends CDbMigration
             related_author_id integer NOT NULL,
             relationship_id integer);");
 
-        $this->execute("CREATE SEQUENCE author_rel_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS author_rel_id_seq
             START WITH 1
             INCREMENT BY 1
             NO MINVALUE

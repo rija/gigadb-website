@@ -9,7 +9,7 @@ class m200528_055100_create_publisher_tab extends CDbMigration
             name character varying(45) NOT NULL,
             description text DEFAULT ''::text NOT NULL);");
 
-        $this->execute("CREATE SEQUENCE publisher_id_seq 
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS publisher_id_seq 
             START WITH 10 
             INCREMENT BY 1 
             NO MINVALUE 

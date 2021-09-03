@@ -12,7 +12,7 @@ class m200528_052850_create_species_tab extends CDbMigration
             scientific_name character varying(128) NOT NULL,
             eol_link character varying(100));");
 
-        $this->execute("CREATE SEQUENCE species_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS species_id_seq
             START WITH 500
             INCREMENT BY 1
             NO MINVALUE

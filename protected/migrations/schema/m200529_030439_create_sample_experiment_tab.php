@@ -9,7 +9,7 @@ class m200529_030439_create_sample_experiment_tab extends CDbMigration
             sample_id integer,
             experiment_id integer);");
 
-        $this->execute("CREATE SEQUENCE sample_experiment_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS sample_experiment_id_seq
             START WITH 1
             INCREMENT BY 1
             NO MINVALUE

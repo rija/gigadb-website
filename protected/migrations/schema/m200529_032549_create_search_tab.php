@@ -11,7 +11,7 @@ class m200529_032549_create_search_tab extends CDbMigration
             query text NOT NULL,
             result text);");
 
-        $this->execute("CREATE SEQUENCE search_id_seq 
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS search_id_seq 
             START WITH 1 
             INCREMENT BY 1 
             NO MINVALUE 

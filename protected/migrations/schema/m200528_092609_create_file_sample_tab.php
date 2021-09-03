@@ -9,7 +9,7 @@ class m200528_092609_create_file_sample_tab extends CDbMigration
             sample_id integer NOT NULL,
             file_id integer NOT NULL);");
 
-        $this->execute("CREATE SEQUENCE file_sample_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS file_sample_id_seq
             START WITH 5800
             INCREMENT BY 1
             NO MINVALUE

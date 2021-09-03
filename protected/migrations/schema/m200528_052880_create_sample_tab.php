@@ -15,7 +15,7 @@ class m200528_052880_create_sample_tab extends CDbMigration
             contact_author_email character varying(100),
             sampling_protocol character varying(100));");
 
-        $this->execute("CREATE SEQUENCE sample_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS sample_id_seq
             START WITH 500
             INCREMENT BY 1
             NO MINVALUE

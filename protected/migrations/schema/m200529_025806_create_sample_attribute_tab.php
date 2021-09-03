@@ -11,7 +11,7 @@ class m200529_025806_create_sample_attribute_tab extends CDbMigration
             value character varying(10000),
             unit_id character varying(30));");
 
-        $this->execute("CREATE SEQUENCE sample_attribute_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS sample_attribute_id_seq
             START WITH 30000
             INCREMENT BY 1
             NO MINVALUE

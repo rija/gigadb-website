@@ -13,7 +13,7 @@ class m200528_054920_create_author_tab extends CDbMigration
             gigadb_user_id integer,
             custom_name character varying(100));");
 
-        $this->execute("CREATE SEQUENCE author_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS author_id_seq
             START WITH 3500
             INCREMENT BY 1
             NO MINVALUE

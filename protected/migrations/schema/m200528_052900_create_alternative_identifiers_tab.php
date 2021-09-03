@@ -10,7 +10,7 @@ class m200528_052900_create_alternative_identifiers_tab extends CDbMigration
             extdb_id integer NOT NULL,
             extdb_accession character varying(100));");
 
-        $this->execute("CREATE SEQUENCE alternative_identifiers_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS alternative_identifiers_id_seq
             START WITH 1
             INCREMENT BY 1
             NO MINVALUE

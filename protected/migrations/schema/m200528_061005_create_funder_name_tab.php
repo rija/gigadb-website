@@ -10,7 +10,7 @@ class m200528_061005_create_funder_name_tab extends CDbMigration
             primary_name_display character varying(1000),
             country character varying(128) DEFAULT ''::character varying);");
 
-        $this->execute("CREATE SEQUENCE funder_name_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS funder_name_id_seq
             START WITH 6200
             INCREMENT BY 1
             NO MINVALUE

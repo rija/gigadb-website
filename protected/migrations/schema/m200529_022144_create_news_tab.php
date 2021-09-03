@@ -11,7 +11,7 @@ class m200529_022144_create_news_tab extends CDbMigration
             start_date date NOT NULL,
             end_date date NOT NULL);");
 
-        $this->execute("CREATE SEQUENCE news_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS news_id_seq
             START WITH 1
             INCREMENT BY 1
             NO MINVALUE

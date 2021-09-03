@@ -12,7 +12,7 @@ class m200528_066022_create_experiment_tab extends CDbMigration
             dataset_id integer,
             \"protocols.io\" character varying(200));");
 
-        $this->execute("CREATE SEQUENCE experiment_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS experiment_id_seq
             START WITH 1
             INCREMENT BY 1
             NO MINVALUE

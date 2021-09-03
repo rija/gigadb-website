@@ -14,7 +14,7 @@ class m200529_035151_create_user_command_tab extends CDbMigration
             action_date timestamp without time zone,
             status character varying(32) NOT NULL);");
 
-        $this->execute("CREATE SEQUENCE user_command_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS user_command_id_seq
             START WITH 1
             INCREMENT BY 1
             NO MINVALUE

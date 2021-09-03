@@ -10,7 +10,7 @@ class m200529_021512_create_manuscript_tab extends CDbMigration
             pmid integer,
             dataset_id integer NOT NULL);");
 
-        $this->execute("CREATE SEQUENCE manuscript_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS manuscript_id_seq
             START WITH 500
             INCREMENT BY 1
             NO MINVALUE

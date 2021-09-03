@@ -9,7 +9,7 @@ class m200528_064612_create_dataset_project_tab extends CDbMigration
             dataset_id integer,
             project_id integer);");
 
-        $this->execute("CREATE SEQUENCE dataset_project_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS dataset_project_id_seq
             START WITH 20
             INCREMENT BY 1
             NO MINVALUE

@@ -10,7 +10,7 @@ class m200528_071227_create_external_link_tab extends CDbMigration
             url character varying(300) NOT NULL,
             external_link_type_id integer NOT NULL);");
 
-        $this->execute("CREATE SEQUENCE external_link_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS external_link_id_seq
             START WITH 1000
             INCREMENT BY 1
             NO MINVALUE

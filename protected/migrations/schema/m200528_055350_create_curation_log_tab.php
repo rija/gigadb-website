@@ -15,7 +15,7 @@ class m200528_055350_create_curation_log_tab extends CDbMigration
             action character varying(100),
             comments character varying(1000));");
 
-        $this->execute("CREATE SEQUENCE curation_log_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS curation_log_id_seq
             START WITH 1
             INCREMENT BY 1
             NO MINVALUE

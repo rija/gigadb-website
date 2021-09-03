@@ -12,7 +12,7 @@ class m200528_061339_create_dataset_funder_tab extends CDbMigration
             comments text DEFAULT ''::text,
             awardee character varying(100));");
 
-        $this->execute("CREATE SEQUENCE dataset_funder_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS dataset_funder_id_seq
             START WITH 50
             INCREMENT BY 1
             NO MINVALUE

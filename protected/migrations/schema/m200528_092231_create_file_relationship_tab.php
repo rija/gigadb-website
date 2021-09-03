@@ -10,7 +10,7 @@ class m200528_092231_create_file_relationship_tab extends CDbMigration
             related_file_id integer NOT NULL,
             relationship_id integer);");
 
-        $this->execute("CREATE SEQUENCE file_relationship_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS file_relationship_id_seq
             START WITH 1
             INCREMENT BY 1
             NO MINVALUE

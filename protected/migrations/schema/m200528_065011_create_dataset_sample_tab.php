@@ -9,7 +9,7 @@ class m200528_065011_create_dataset_sample_tab extends CDbMigration
             dataset_id integer NOT NULL,
             sample_id integer NOT NULL);");
 
-        $this->execute("CREATE SEQUENCE dataset_sample_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS dataset_sample_id_seq
             START WITH 500
             INCREMENT BY 1
             NO MINVALUE

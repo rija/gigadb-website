@@ -9,7 +9,7 @@ class m200529_024441_create_rss_message_tab extends CDbMigration
             message character varying(128) NOT NULL,
             publication_date date DEFAULT ('now'::text)::date NOT NULL);");
 
-        $this->execute("CREATE SEQUENCE rss_message_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS rss_message_id_seq
             START WITH 1
             INCREMENT BY 1
             NO MINVALUE

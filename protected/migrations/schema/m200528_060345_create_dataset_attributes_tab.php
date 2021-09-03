@@ -13,7 +13,7 @@ class m200528_060345_create_dataset_attributes_tab extends CDbMigration
             image_id integer,
             until_date date);");
 
-        $this->execute("CREATE SEQUENCE dataset_attributes_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS dataset_attributes_id_seq
             START WITH 2500
             INCREMENT BY 1
             NO MINVALUE

@@ -8,7 +8,7 @@ class m200528_071027_create_external_link_type_tab extends CDbMigration
             id integer NOT NULL,
             name character varying(45) NOT NULL);");
 
-        $this->execute("CREATE SEQUENCE external_link_type_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS external_link_type_id_seq
             START WITH 10
             INCREMENT BY 1
             NO MINVALUE

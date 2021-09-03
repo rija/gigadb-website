@@ -23,7 +23,7 @@ class m200528_052860_create_gigadb_user_tab extends CDbMigration
             orcid_id text,
             preferred_link character varying(128) DEFAULT 'EBI'::character varying);");
 
-        $this->execute("CREATE SEQUENCE gigadb_user_id_seq 
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS gigadb_user_id_seq 
             START WITH 20 
             INCREMENT BY 1 
             NO MINVALUE 

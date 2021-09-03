@@ -25,7 +25,7 @@ class m200528_055110_create_dataset_tab extends CDbMigration
             manuscript_id character varying(50),
             handing_editor character varying(50));");
 
-        $this->execute("CREATE SEQUENCE dataset_id_seq 
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS dataset_id_seq 
             START WITH 50 
             INCREMENT BY 1 
             NO MINVALUE 

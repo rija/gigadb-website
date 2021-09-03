@@ -11,7 +11,7 @@ class m200528_090557_create_file_attributes_tab extends CDbMigration
             value character varying(1000),
             unit_id character varying(30));");
 
-        $this->execute("CREATE SEQUENCE file_attributes_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS file_attributes_id_seq
             START WITH 11000
             INCREMENT BY 1
             NO MINVALUE

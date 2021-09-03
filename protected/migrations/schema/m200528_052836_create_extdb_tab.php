@@ -11,7 +11,7 @@ class m200528_052836_create_extdb_tab extends CDbMigration
             database_homepage character varying(100),
             database_search_url character varying(100));");
 
-        $this->execute("CREATE SEQUENCE extdb_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS extdb_id_seq
             START WITH 10
             INCREMENT BY 1
             NO MINVALUE

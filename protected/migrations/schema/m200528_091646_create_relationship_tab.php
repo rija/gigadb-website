@@ -8,7 +8,7 @@ class m200528_091646_create_relationship_tab extends CDbMigration
             id integer NOT NULL,
             name character varying(100));");
 
-        $this->execute("CREATE SEQUENCE relationship_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS relationship_id_seq
             START WITH 40
             INCREMENT BY 1
             NO MINVALUE

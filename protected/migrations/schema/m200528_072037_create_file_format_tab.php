@@ -10,7 +10,7 @@ class m200528_072037_create_file_format_tab extends CDbMigration
             description text DEFAULT ''::text NOT NULL,
             edam_ontology_id character varying(100));");
 
-        $this->execute("CREATE SEQUENCE file_format_id_seq
+        $this->execute("CREATE SEQUENCE IF NOT EXISTS file_format_id_seq
             START WITH 100
             INCREMENT BY 1
             NO MINVALUE
