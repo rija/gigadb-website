@@ -1,11 +1,19 @@
-data "aws_vpc" "default" {
-  default = true
-}
+//data "aws_vpc" "default" {
+//  default = true
+//}
 
 resource "aws_security_group" "docker_host_sg" {
   name        = "docker_host_sg_${var.deployment_target}_${var.owner}"
   description = "Allow connection to docker host for ${var.deployment_target}"
-  vpc_id      = data.aws_vpc.default.id
+  vpc_id      = var.vpc_id
+  
+  ingress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    description = "PostgreSQL"
+    cidr_blocks = var.database_cidr_blocks
+  }
 
   ingress {
     from_port   = 80
@@ -66,6 +74,7 @@ resource "aws_instance" "docker_host" {
   instance_type = "t3.micro"
   vpc_security_group_ids = [aws_security_group.docker_host_sg.id]
   key_name = var.key_name
+  subnet_id = var.ec2_subnet_id
 
   tags = {
     Name = "gigadb_server_${var.deployment_target}_${var.owner}",
