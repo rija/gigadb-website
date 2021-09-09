@@ -12,15 +12,18 @@ Feature:
     Given I am not logged in to Gigadb web site
     When I go to "site/faq"
     Then there is a meta tag "robots" with value "noindex, nofollow"
+    And there is a meta tag "googlebot" with value "noindex, nofollow"
 
   @ok
   Scenario: Search engines cannot index and follow main page
     Given I am not logged in to Gigadb web site
     When I go to "/index.php"
     Then there is a meta tag "robots" with value "noindex, nofollow"
+    And there is a meta tag "googlebot" with value "noindex, nofollow"
 
   @ok
   Scenario: Search engines cannot index and follow dataset page
     Given I am not logged in to Gigadb web site
     When I go to "/dataset/100016"
     Then there is a meta tag "robots" with value "noindex, nofollow"
+    And there is a meta tag "googlebot" with value "noindex, nofollow"
