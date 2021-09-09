@@ -2,11 +2,7 @@
 # Supporting Resources
 ################################################################################
 
-module myip {
-  source  = "4ops/myip/http"
-  version = "1.0.0"
-}
-
+# Access to RDS is required by EC2 dockerhost and EC2 bastion
 module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 4"
@@ -17,12 +13,12 @@ module "security_group" {
 
   ingress_with_cidr_blocks = [
     {
+      description = "PostgreSQL access only for internal VPC clients"
       from_port   = 5432
       to_port     = 5432
       protocol    = "tcp"
-      description = "PostgreSQL access from EC2 instance and developer IP"
       //cidr_blocks = "0.0.0.0/0"
-      cidr_blocks = "${var.ec2_cidr_block},${module.myip.address}/32"
+      cidr_blocks = "10.99.0.0/18"
     }
   ]
 
@@ -61,8 +57,6 @@ module "db" {
   password               = var.gigadb_db_password
   port                   = 5432
 
-  publicly_accessible = true
-
   subnet_ids             = var.rds_subnet_ids
   vpc_security_group_ids = [module.security_group.security_group_id]
 
@@ -80,6 +74,10 @@ module "db" {
   }
 }
 
-output "db_instance_addr" {
+output "rds_instance_address" {
   value = module.db.db_instance_address
+}
+
+output "rds_instance_endpoint" {
+  value = module.db.db_instance_endpoint
 }
