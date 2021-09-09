@@ -24,4 +24,3 @@ Feature:
     Given I am not logged in to Gigadb web site
     When I go to "/dataset/100016"
     Then there is a meta tag "robots" with value "noindex, nofollow"
-
