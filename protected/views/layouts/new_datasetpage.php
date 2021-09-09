@@ -5,7 +5,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="language" content="en" />
     <?php if ( true || $metaData['private']) {//TODO: remove true|| when going to prod. or get env ?>
-        <meta name="robots" content="noindex, nofollow">
+        <meta name="robots" content="noindex">
+        <meta name="googlebot" content="noindex">
     <?php } ?>
     <?php if ($metaData['redirect']) {
             Yii::app()->clientScript->registerMetaTag("5;url={$metaData['redirect']}", null, 'refresh');
