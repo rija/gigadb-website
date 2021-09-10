@@ -44,6 +44,24 @@ resource "aws_instance" "bastion" {
     Environment = var.deployment_target
     Name = "bastion_server_volume_${var.deployment_target}"
   }
+
+  provisioner "remote-exec" {
+    connection {
+      type     = "ssh"
+      host     = aws_instance.bastion.public_ip
+      user     = "centos"
+      private_key = file("~/.ssh/${var.key_name}.pem")
+    }
+
+    inline = [
+      "# Exclude postgresql packages from CentOS-Base repository",
+      "sudo sed -i '/^gpgkey.*/a exclude=postgresql*' /etc/yum.repos.d/CentOS-Base.repo",
+      "# Install repository configuration package using official PostgreSQL repository for CentOS",
+      "sudo yum -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm",
+      "# Install PostgreSQL client tools",
+      "sudo yum -y install postgresql96"
+    ]
+  }
 }
 
 output "bastion_private_ip" {
@@ -53,5 +71,5 @@ output "bastion_private_ip" {
 
 output "bastion_public_ip" {
   description = "EC2 bastion instance public IP address"
-  value       = aws_instance.bastion.public_ip
+  value = aws_instance.bastion.public_ip
 }
