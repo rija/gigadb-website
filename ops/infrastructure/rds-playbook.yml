@@ -14,7 +14,7 @@
     - name: Copy pgdmp file to bastion server
       ansible.builtin.copy:
         src: "../../../../sql/gigadbv3_20210901_9.6.22.pgdmp"
-        dest: "/home/centos/{{ pg_db_dump_file }}"
+        dest: "/home/centos/gigadbv3_20210901_9.6.22.pgdmp"
         owner: centos
         group: centos
 
