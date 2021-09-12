@@ -1,9 +1,24 @@
-- name: Restore database on RDS instance
-  hosts: localhost
-  connection: local
-
+- hosts: all
   tasks:
-    - name: "Restore database on RDS instance"
-      shell: "export PGPASSWORD='{{ pg_password }}'; pg_restore -c --if-exists -h {{ pg_host }} -p 5432 -d {{ pg_database }} -U {{ pg_user }} ../../../../sql/{{ pg_db_dump_file }}"
-      register: "output"
-    - debug: msg="{{ lookup('env','USER') }}"
+    - name: Test pg_isready can connect to RDS instance
+      ansible.builtin.command: /usr/pgsql-9.6/bin/pg_isready -h {{ pg_host }}
+      register: pg_isready
+    - debug: msg="{{ pg_isready.stdout }}"
+
+    # Might be a good idea to have a bash script running as a cron job that
+    # converts the PostgreSQL version 9.1 dump file to version 9.6 and saves
+    # the new dump file to S3. The next step will download the version 9.6
+    # file from S3 onto the bastion server for use in the final database
+    # restore step.
+
+    - name: Copy pgdmp file to bastion server
+      ansible.builtin.copy:
+        src: "../../../../sql/gigadbv3_20210901_9.6.22.pgdmp"
+        dest: "/home/centos/{{ pg_db_dump_file }}"
+        owner: centos
+        group: centos
+
+    - name: Restore database on RDS instance using dump file
+      shell: "export PGPASSWORD='{{ pg_password }}'; pg_restore -c --if-exists -h {{ {{ pg_host }} }} -p 5432 -d {{ pg_database }} -U {{ pg_user }} {{ pg_db_dump_file }}"
+      register: pg_restore
+    - debug: msg="{{ pg_restore.stdout }}"

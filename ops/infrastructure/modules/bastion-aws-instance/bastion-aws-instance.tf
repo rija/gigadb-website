@@ -59,7 +59,9 @@ resource "aws_instance" "bastion" {
       "# Install repository configuration package using official PostgreSQL repository for CentOS",
       "sudo yum -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm",
       "# Install PostgreSQL client tools",
-      "sudo yum -y install postgresql96"
+      "sudo yum -y install postgresql96",
+      "# Disable SELinux",
+      "sudo setenforce 0"
     ]
   }
 }

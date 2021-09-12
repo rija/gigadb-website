@@ -17,15 +17,9 @@ module "security_group" {
       from_port   = 5432
       to_port     = 5432
       protocol    = "tcp"
-      //cidr_blocks = "0.0.0.0/0"
       cidr_blocks = "10.99.0.0/18"
     }
   ]
-
-  tags = {
-    Owner = var.owner
-    Environment = var.deployment_target
-  }
 }
 
 ################################################################################
@@ -49,9 +43,6 @@ module "db" {
 
   allocated_storage = 20
 
-  # NOTE: Do NOT use 'user' as the value for 'username' as it throws:
-  # "Error creating DB Instance: InvalidParameterValue: MasterUsername
-  # user cannot be used as it is a reserved word used by the engine"
   name                   = var.gigadb_db_database
   username               = var.gigadb_db_user
   password               = var.gigadb_db_password
@@ -68,16 +59,10 @@ module "db" {
   deletion_protection     = false
 
   tags = {
-    Owner = var.owner
-    Environment = var.deployment_target
     Name = "rds_server_${var.deployment_target}'"
   }
 }
 
 output "rds_instance_address" {
   value = module.db.db_instance_address
-}
-
-output "rds_instance_endpoint" {
-  value = module.db.db_instance_endpoint
 }
