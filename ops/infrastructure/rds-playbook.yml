@@ -13,12 +13,12 @@
 
     - name: Copy pgdmp file to bastion server
       ansible.builtin.copy:
-        src: "../../../../sql/gigadbv3_20210901_9.6.22.pgdmp"
-        dest: "/home/centos/gigadbv3_20210901_9.6.22.pgdmp"
+        src: "../../../../sql/{{ pg_db_dump_file }}"
+        dest: "/home/centos/{{ pg_db_dump_file }}"
         owner: centos
         group: centos
 
     - name: Restore database on RDS instance using dump file
-      shell: "export PGPASSWORD='{{ pg_password }}'; pg_restore -c --if-exists -h {{ {{ pg_host }} }} -p 5432 -d {{ pg_database }} -U {{ pg_user }} {{ pg_db_dump_file }}"
+      shell: "export PGPASSWORD='{{ pg_password }}'; pg_restore -c --if-exists -h {{ pg_host }} -p 5432 -d {{ pg_database }} -U {{ pg_user }} /home/centos/{{ pg_db_dump_file }}"
       register: pg_restore
     - debug: msg="{{ pg_restore.stdout }}"
