@@ -3,6 +3,9 @@ resource "aws_security_group" "bastion_sg" {
   description = "Allow connection to bastion server for ${var.deployment_target}"
   vpc_id      = var.vpc_id
 
+  # Allowing access from public internet - it is expected that developers will
+  # terraform destroy the bastion instance once finished performing PostgreSQL
+  # admin tasks
   ingress {
     from_port   = 22
     to_port     = 22
@@ -31,7 +34,7 @@ resource "aws_instance" "bastion" {
   subnet_id = var.public_subnet_id
 
   tags = {
-    Name = "bastion_${var.deployment_target}_${var.owner}",
+    Name = "bastion_server_${var.deployment_target}_${var.owner}",
     System = "t3_micro-centos7",
   }
 
@@ -53,6 +56,8 @@ resource "aws_instance" "bastion" {
       private_key = file("~/.ssh/${var.key_name}.pem")
     }
 
+    # Provisioning PostgreSQL client tools here in terraform script rather than
+    # using Ansible which seems overkill for a simple install step
     inline = [
       "# Exclude postgresql packages from CentOS-Base repository",
       "sudo sed -i '/^gpgkey.*/a exclude=postgresql*' /etc/yum.repos.d/CentOS-Base.repo",
