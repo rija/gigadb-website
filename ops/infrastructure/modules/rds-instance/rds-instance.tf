@@ -1,8 +1,3 @@
-################################################################################
-# Supporting Resources
-################################################################################
-
-# Access to RDS is required by EC2 dockerhost and EC2 bastion
 module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 4"
@@ -13,7 +8,7 @@ module "security_group" {
 
   ingress_with_cidr_blocks = [
     {
-      description = "PostgreSQL access only for internal VPC clients"
+      description = "PostgreSQL access only for internal VPC clients, i.e. dockerhost and bastion servers"
       from_port   = 5432
       to_port     = 5432
       protocol    = "tcp"
@@ -22,19 +17,15 @@ module "security_group" {
   ]
 }
 
-################################################################################
-# RDS Module
-################################################################################
-
 module "db" {
   source = "terraform-aws-modules/rds/aws"
 
-  identifier = "rds-ape1-${var.deployment_target}-gigadb"
+  # Only lowercase alphanumeric characters and hyphens allowed in "identifier"
+  identifier = "rds-server-${var.deployment_target}"
 
   create_db_option_group    = false
   create_db_parameter_group = false
 
-  # All available versions: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html#PostgreSQL.Concepts
   engine               = "postgres"
   engine_version       = "9.6"
   family               = "postgres9" # DB parameter group
@@ -59,7 +50,7 @@ module "db" {
   deletion_protection     = false
 
   tags = {
-    Name = "rds_server_${var.deployment_target}'"
+//    Name = "rds_server_${var.deployment_target}"
   }
 }
 
