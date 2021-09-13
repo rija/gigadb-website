@@ -107,3 +107,7 @@ resource "aws_eip_association" "docker_host_eip_assoc" {
 output "instance_ip_addr" {
   value = aws_instance.docker_host.private_ip
 }
+
+output "instance_public_ip_addr" {
+  value = aws_instance.docker_host.public_ip
+}
