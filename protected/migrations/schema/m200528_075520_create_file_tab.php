@@ -30,7 +30,7 @@ class m200528_075520_create_file_tab extends CDbMigration
         $this->execute("ALTER SEQUENCE file_id_seq 
             OWNED BY file.id;");
 
-        $this->execute("CREATE VIEW file_number AS
+        $this->execute("CREATE OR REPLACE VIEW file_number AS
             SELECT count(file.id) AS count 
             FROM file;");
 

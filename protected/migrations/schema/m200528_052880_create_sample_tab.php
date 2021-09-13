@@ -25,7 +25,7 @@ class m200528_052880_create_sample_tab extends CDbMigration
         $this->execute("ALTER SEQUENCE sample_id_seq 
             OWNED BY sample.id;");
 
-        $this->execute("CREATE VIEW sample_number AS
+        $this->execute("CREATE OR REPLACE VIEW sample_number AS
             SELECT count(sample.id) AS count FROM sample;");
 
         $this->execute("ALTER TABLE ONLY sample 
