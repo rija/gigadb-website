@@ -6,6 +6,14 @@
 
 # do not add any IP address here as it is dynamically managed using terraform-inventory
 
+[name_rds_server_staging]
+
+# do not add any IP address here as it is dynamically managed using terraform-inventory
+
+[name_rds_server_live]
+
+# do not add any IP address here as it is dynamically managed using terraform-inventory
+
 [all:vars]
 
 gitlab_url = "https://gitlab.com/api/v4/projects/{{ lookup('ini', 'gitlab_project type=properties file=ansible.properties') | urlencode | regex_replace('/','%2F') }}"
