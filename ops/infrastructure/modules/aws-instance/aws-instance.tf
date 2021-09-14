@@ -1,19 +1,7 @@
-//data "aws_vpc" "default" {
-//  default = true
-//}
-
 resource "aws_security_group" "docker_host_sg" {
   name        = "docker_host_sg_${var.deployment_target}_${var.owner}"
   description = "Allow connection to docker host for ${var.deployment_target}"
   vpc_id      = var.vpc_id
-  
-//  ingress {
-//    from_port   = 5432
-//    to_port     = 5432
-//    protocol    = "tcp"
-//    description = "PostgreSQL"
-//    cidr_blocks = var.database_cidr_blocks
-//  }
 
   ingress {
     from_port   = 80
