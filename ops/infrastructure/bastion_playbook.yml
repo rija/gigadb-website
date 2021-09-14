@@ -1,9 +1,12 @@
-- name: Restore PostgreSQL database on RDS instance
-  hosts: all
+---
+# Use bastion server to restore PostgreSQL database on RDS instance
+
+- name: Restore PostgreSQL database on RDS instance using pg_restore
+  hosts: name_bastion_server_staging:name_bastion_server_live
 
   tasks:
   - name: Test pg_isready can connect to RDS instance
-    ansible.builtin.command: /usr/pgsql-9.6/bin/pg_isready -h {{ pg_host }}
+    ansible.builtin.command: "/usr/pgsql-9.6/bin/pg_isready -h {{ pg_host }}"
     register: pg_isready
   - debug: msg="{{ pg_isready.stdout }}"
 
