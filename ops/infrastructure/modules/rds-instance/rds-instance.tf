@@ -2,7 +2,7 @@ module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 4"
 
-  name        = "secgrp-ape1-${var.deployment_target}-rds"
+  name        = "rds_sg_${var.deployment_target}_${var.owner}"
   description = "Security group for GigaDB RDS"
   vpc_id      = var.vpc_id
 
