@@ -52,7 +52,7 @@ resource "aws_security_group" "docker_host_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
    tags = {
-     Name = var.deployment_target
+     Name = "docker_host_sg_${var.deployment_target}_${var.owner}"
    }
 }
 
