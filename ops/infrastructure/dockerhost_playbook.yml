@@ -24,4 +24,4 @@
       dds_restart_docker: no
       dds_client_cert_path: /home/centos/.docker
     - role: ../../roles/docker-postinstall
-#    - role: ../../roles/fuw
+    - role: ../../roles/fuw
