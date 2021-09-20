@@ -12,9 +12,9 @@
     # Steps below are for interacting with the remote staging server to deploy, configure and start the production containers using staging compose file
     # Create client certificate files for authenticating with remote docker daemon
     - mkdir -pv ~/.docker
-    - echo '$docker_tlsauth_ca' >  ~/.docker/ca.pem
-    - echo '$docker_tlsauth_cert' > ~/.docker/cert.pem
-    - echo '$docker_tlsauth_key' > ~/.docker/key.pem
+    - bash -c "echo '$docker_tlsauth_ca' >  ~/.docker/ca.pem || true"
+    - bash -c "echo '$docker_tlsauth_cert' > ~/.docker/cert.pem || true"
+    - bash -c "echo '$docker_tlsauth_key' > ~/.docker/key.pem || true"
 
 sd_top:
   variables:
