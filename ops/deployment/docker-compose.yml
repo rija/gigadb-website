@@ -150,23 +150,6 @@ services:
       - ${APPLICATION}/:/var/www
     command: /var/www/fuw/generate_config.sh
 
-  gigadb:
-    environment:
-      YII_PATH: ${YII_PATH}
-      YII2_PATH: ${YII2_PATH}
-    image: ${COMPOSE_PROJECT_NAME}_application:latest
-    volumes:
-      - ${APPLICATION}/:/var/www
-    depends_on:
-      - application
-      - database
-      # - phantomjs
-    command: composer install
-    networks:
-      - web-tier
-    cap_drop:
-      - NET_ADMIN
-      - SYS_ADMIN
 
   less:
     environment:
@@ -203,26 +186,7 @@ services:
       - web-tier
       - db-tier
 
-  fuw:
-    environment:
-      YII_PATH: ${YII_PATH}
-      YII2_PATH: ${YII2_PATH}
-    image: ${COMPOSE_PROJECT_NAME}_fuw-admin:latest
-    volumes:
-      - ${APPLICATION}/fuw/app:/app
-      - ${APPLICATION}/.env:/app/.env
-    depends_on:
-      - fuw-admin
-      - fuw-public
-      - database
 
-      # - phantomjs
-    command: composer install
-    networks:
-      - web-tier
-    cap_drop:
-      - NET_ADMIN
-      - SYS_ADMIN
 
   test:
     build:
@@ -270,7 +234,7 @@ services:
       - "gigadb.test:172.16.238.10"
       - "fuw-admin-api:172.16.238.10"
       - "fuw-public-api:172.16.238.10"
-    command: bash -c "./tests/all_and_coverage"
+    command: bash -c "pwd"
 
   csv-to-migrations:
     image: node:14.18.0-buster
@@ -554,6 +518,9 @@ services:
       # Mount source-code for development
       - ../../fuw/app:/app
       - ../../gigadb/app:/gigadb-apps      
+      - ../../vendor:/gigadb-website/vendor
+      - ../../sql:/gigadb-website/sql
+      - ../../protected:/gigadb-website
       # php config
       - ../../fuw/app/php-conf/fuw.ini:/usr/local/etc/php/conf.d/fuw.ini
       - ../../fuw/app/php-conf/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
