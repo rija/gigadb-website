@@ -19,7 +19,7 @@ version=$($DOCKER_COMPOSE run --rm pg9_3 bash -c "psql --version | cut -d' ' -f 
 $DOCKER_COMPOSE run --rm updater ./yii dataset-files/download-restore-backup --latest
 
 echo "Export production data as text (only the strictly necessary data is exported)"
-$DOCKER_COMPOSE run --rm updater pg_dump -h pg9_3 -U gigadb  --clean --create --schema=public --no-privileges --no-tablespaces gigadb -f sql/gigadbv3_"$latest"_v"$version".backup
+$DOCKER_COMPOSE run --rm updater pg_dump -h pg9_3 -U gigadb  --clean --create --schema=public --no-privileges --no-tablespaces --dbname gigadb -f sql/gigadbv3_"$latest"_v"$version".backup
 
 if [[ $? -eq 0  && -f sql/gigadbv3_"$latest"_v"$version".backup ]];then
   echo "Finished convert production database to postgreSQL $version!"
