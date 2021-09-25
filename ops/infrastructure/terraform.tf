@@ -9,6 +9,12 @@ variable "key_name" {
   description = "Name of ssh key pair created for EC2 access"
 }
 
+variable "aws_region" {
+  type = string
+  description = "AWS region where deployment occurs"
+  default = "ap-east-1"
+}
+
 terraform {
     backend "http" {
     }
@@ -21,7 +27,7 @@ data "external" "callerUserName" {
 }
 
 provider "aws" {
-  region     = "ap-east-1"
+  region     = var.aws_region
   default_tags {
       tags = {
         Environment = var.deployment_target,
@@ -39,7 +45,7 @@ module "ec2" {
   owner = data.external.callerUserName.result.userName
   deployment_target = var.deployment_target
   key_name = var.key_name
-  eip_tag_name = "eip-ape1-${var.deployment_target}-${data.external.callerUserName.result.userName}-gigadb"
+  eip_tag_name = "eip-gigadb-${var.deployment_target}-${data.external.callerUserName.result.userName}"
 }
 
 output "ec2_private_ip" {

@@ -262,8 +262,8 @@ There are two activities to perform on the AWS dashboard's EC2 console prior to 
 
 Those resources needs to be globally unique in the same AWS acccount, so you need to follow the naming convention below:
 
-1. For Elastic IPS: ``eip-ape1-<environment>-<IAM Role Username>-gigadb``
-1. For SSH Key pair: any name of your choosing that's unique and contains your IAM Role Username
+1. For Elastic IPS: ``eip-<application>-<environment>-<IAM Role Username>``, e.g: ``eip-gigadb-staging-Rija``
+1. For SSH Key pair: ``aws-<application>-<AWS region>-<IAM Role Username>.pem``, e.g: ``aws-gigadb-eu-west-3-Rija.pem``
 
 The private part of the SSH Key pair needs to be dowloaded to your developer machine in the ``~/.ssh`` directory and with 
 permission set to ``600``.
@@ -321,12 +321,12 @@ to use a remote state backend wich has the following benefits:
  * If a developer lose their development machine, they are not losing the map of what's provisioned
 
 We use GitLab as our remote backend. When we want to operate Terraform, we initialise our remote state using the 
-script ``ops/scripts/tf_init.sh``.
+script ``ops/scripts/provisioner_init.sh``.
 
 To avoid impactful mistakes, It's important to maintain a different state for each environment.
 However there's no logical link between GitLab environment and Terraform state hosted in GitLab, so we need to make sure the 
 name we choose for the Terraform state reflects the environment it is for.
-``ops/scripts/tf_init.sh`` does that by accepting as parameter the target environment and prefix the state it initialise with 
+``ops/scripts/provisioner_init.sh`` does that by accepting as parameter the target environment and prefix the state it initialise with 
 that value.
 
 Like GitLab pipelines and variables, Terraform state are specific to a GitLab project, so that's another input
@@ -339,14 +339,14 @@ it will prompt the user for value.
 It also needs to know the path to the private ssh key that will allow Ansible to configure the target server, so the user 
 will be prompted for that information.
 
-``ops/scripts/tf_init.sh`` need to be used from an environment specific directory, either ``ops/infrastructure/envs/staging``
+``ops/scripts/provisioner_init.sh`` need to be used from an environment specific directory (see below), either ``ops/infrastructure/envs/staging``
 or ``ops/infrastructure/envs/live``
 
 This is how the script is run:
 
 ```
 $ cd ops/infrastructure/envs/environment
-$ ../../../scripts/tf_init.sh --project gigascience/forks/rija-gigadb-website --env environment
+$ ../../../scripts/provisioner_init.sh --project gigascience/forks/rija-gigadb-website --env environment
 ```
 
 where we replace ``gigascience/forks/rija-gigadb-website`` with the appropriate GitLab project.
@@ -355,16 +355,28 @@ and ``environment`` with ``staging`` or ``live``
 The script also copies the ``ops/infrastructure/terraform.tf`` root module in the environment-specific directory so 
 that terraform commands can be run from that directory.
 
-##### Environment specific directories
+#### Environment specific directories
 
 * For staging: ``cd ops/infractructure/envs/staging``
 * For live: ``cd ops/infractructure/envs/live``
 
-Those directories start empty, but the ``ops/scripts/tf_init.sh`` aforementioned and ``ops/scripts/ansible_init.sh`` below will populate them with necessary files
+Those directories start empty (except for a ``.gitignore`` file), but the ``ops/scripts/provisioner_init.sh`` script will populate them with necessary files
 so we can run ``terraform`` and ``ansible-playbook`` commands from those directories for a safe provisioning of the desired environment.
 
-In particular, the ``ops/scripts/tf_init.sh`` script will write in a ``.init_vars`` file the answer to the prompted value, so that they are not asked
-again in subsequent runs. ``ops/scripts/ansible_init.sh`` will also source that file.
+In particular, the ``ops/scripts/provisioner_init.sh`` script will write in a ``.init_env_vars`` file the answer to the prompted value, so that they are not asked
+again in subsequent runs.
+
+###### The list of files that will be created or placed in those directories during deployment:
+
+| name | description | used by |
+| --- | --- | --- |
+| ansible.properties | created by ``provisioner_init.sh``, holds variables assignment used by Ansible to configure deployed application| ansible-playbook | 
+| getIAMUserNameToJSON.sh | copied by ``provisioner_init.sh`` | terraform |
+| output/ | created by ``ansible-playbook`` to store a copy of Docker certs | docker |
+| playbook.yml | copied by ``provisioner_init.sh`` | ansible-playbook | 
+| terraform.tf | copied by ``provisioner_init.sh`` | terraform |
+| terraform.tfvars | created by ``provisioner_init.sh`` to hold Terraform variables assigments | terraform | 
+
 
 #### Ansible
 
@@ -415,14 +427,6 @@ However, the connection parameters (like SSH keys) are variables we need to supp
 The machines controlled by Ansible are defined in a [`hosts`](https://github.com/gigascience/gigadb-website/blob/develop/ops/infrastructure/inventories/hosts)
 file which lists the host machines connection details. Our file is located at `ops/infrastructure/inventories/hosts` and here is the current content annotated:
 ```
-[name_gigadb_server_staging] # host name for staging deployment, the name is a concatenation of AWS tag key and value attached to the EC2 instance
-
-# do not add any IP address here as it is dynamically managed using terraform-inventory
-
-[name_gigadb_server_live] # host name for live deployment, the name is a concatenation of AWS tags attached to the EC2 instance
-
-# do not add any IP address here as it is dynamically managed using terraform-inventory
-
 [all:vars] # host variables needed by Ansible to configure software and services. Most have their value pulled from ansible.properties created with the ansible_init.sh script
 
 gitlab_url = "https://gitlab.com/api/v4/projects/{{ lookup('ini', 'gitlab_project type=properties file=ansible.properties') | urlencode | regex_replace('/','%2F') }}"
@@ -442,30 +446,14 @@ fuw_db_database = "{{ lookup('ini', 'fuw_db_database type=properties file=ansibl
 
 ```
 
->Note that the header **[name_gigadb_staging]** must match the "Name" tag associated to the AWS EC2 resource defined in ``ops/infrastructure/modules/aws-instance/aws-instance.tf`` for the environment of interest (here ``staging``):
-
-```
-tags = {
-    Name = "gigadb_server_${var.deployment_target}",
-    Hosting = "ec2-as1-t2m-centos"
-    Environment = "staging"
-    Owner = "Rija"
- }
-```
-
->**Note:** host names in Ansible must be made of alphanumerical and underscore characters only. Although Terraform and AWS don't have that limitation, the Name tag needs to follow it so the connection between Terraform and Ansible can be made.
-
-An ``ansible.properties`` file needs to exist in the environment-specific directory for a given environment.
-This file is queried by the host variables shown above, and is created using the ``ops/scripts/ansible_init.sh``:
+An ``ansible.properties`` file needs to exist in the environment-specific directory (see above) for a given environment.
+This file is queried by the host variables shown above, and is created using the ``ops/scripts/provisioner_init.sh``:
 
 ```
 $ cd ops/infrastructure/envs/environment
-$ ../../../scripts/ansible_init.sh --env environment
+$ ../../../scripts/provisioner_init.sh --env environment --project gitlab-project-path
 ```
 Where environment must be replaced by ``staging`` or ``live``.
-
-That script needs to be executed after ``ops/scripts/tf_init.sh`` has been run, as our script is dependent
-on the existence of an ``.init_env_vars`` file created by the latter.
 
 That script also makes a copy of the ``ops/infrastructure/playbook.yml`` into the environment-specific directory
 so the playbook can be performed from environment specific directory.
@@ -496,8 +484,20 @@ where ``environment`` is replaced by ``staging`` or ``live``, the environment fo
 Provision the EC2 instance using Ansible:
 ```
 $ cd ops/infrastructure/envs/staging
-$ ansible-playbook -i ../../inventories -i name_gigadb_staging  playbook.yml
+$ ansible-playbook -i ../../inventories -i name_gigadb_server_staging_<IAMUser>  playbook.yml
 ```
+
+>Note that that **name_gigadb_server_staging_<IAMUser>** must match the "Name" tag associated to the AWS EC2 resource defined in ``ops/infrastructure/modules/aws-instance/aws-instance.tf`` for the environment of interest (here ``staging``):
+
+```
+  tags = {
+    Name = "gigadb_server_${var.deployment_target}_${var.owner}",
+    System = "t3_micro-centos7",
+  }
+```
+
+>**Note:** host names in Ansible must be made of alphanumerical and underscore characters only. Although Terraform and AWS don't have that limitation, the Name tag needs to follow it so the connection between Terraform and Ansible can be made.
+
 
 > Since an elastic IP address is being used, you might need to delete the entry
 in the `~/.ssh/known_hosts` file associated with the elastic IP address if this
@@ -608,27 +608,20 @@ thus reducing the risk of hitting weekly rate-limit for certificate creation imp
 * For staging: ``cd ops/infractructure/envs/staging``
 * For live: ``cd ops/infractructure/envs/live``
 
-Those directories start empty, but the ``tf_init.sh`` and ``ansible_init.sh`` scripts below will populate them with necessary files
+Those directories start empty, but the ``provisioner_init.sh`` script below will populate them with necessary files
 so we can run ``terraform`` and ``ansible-playbook`` commands from those directories for a safe provisioning of the desired environment.
 
-#### 2. Initialise Terraform
+#### 2. Initialise Terraform and Ansible
 
 ```
-$ ../../../scripts/tf_init.sh --project gigascience/forks/rija-gigadb-website --env environment
+$ ../../../scripts/provisioner_init.sh --project gigascience/forks/rija-gigadb-website --env environment
 ```
 
 where you replace ``gigascience/forks/rija-gigadb-website`` with the appropriate GitLab project.
 and ``environment`` with ``staging`` or ``live``
 
-#### 3. Initialise Ansible
 
-```
-$ ../../../scripts/ansible_init.sh --env environment
-```
-
-where you replace ``environment`` with ``staging`` or ``live``
-
-#### 4. Provision with  Terraform and perform Ansible playbook
+#### 3. Provision with Terraform and perform Ansible playbook
 
 Ensure you are still in ``ops/infractructure/envs/staging`` or ``ops/infractructure/envs/live``
 
@@ -645,14 +638,14 @@ when performing the plays, It's important to pay particular attention  to the se
 
 The two valid values are listed in ``ops/infrastructure/inventories/hosts`` as section heads ``[...]``
 
-That latter file also shows how the files created in the environment-specific directory by ``tf_init.sh`` and ``ansible_init.sh`` are used to set the Ansible host variables.
+That latter file also shows how the files created in the environment-specific directory by ``provisioner_init.sh`` are used to set the Ansible host variables.
 There's no need to use ``ansible-vault`` anymore.
 
 > Since an elastic IP address is being used, you might need to delete the entry
 in the `~/.ssh/known_hosts` file associated with the elastic IP address if this
 is not the first time you have performedthe plays in the playbook.
 
-#### 5. Build and deploy
+#### 4. Build and deploy
 
 Use the Gitlab Pipelines dashboard to build the application (by triggering manual job ``build_staging`` or ``build_live``).
 Once the production containers are build (in the Gitlab Containers Registry they are listed as production_<service>:<environment),
