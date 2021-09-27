@@ -1,210 +1,67 @@
 # rds-instance
 
-## Preparation
+## Procedure for deploying GigaDB application with RDS service
 
-Make sure you have configured AWS by providing it with config and credentials
-files in the ~/.aws directory
+### Prerequisites
 
-## Create RDS instance
+* A SSH key pair created using the AWS console
+* A `sql/production_like.pgdmp` file that is created by `./up.sh`
+* An elastic IP, e.g. `eip-ape1-staging-Peter-gigadb`
 
-This module contains a main.tf file. From this directory, fetch dependent 
-modules:
+### Steps
+
 ```
-$ terraform get
-Downloading terraform-aws-modules/rds/aws 3.3.0 for db...
-- db in .terraform/modules/db
-- db.db_instance in .terraform/modules/db/modules/db_instance
-- db.db_option_group in .terraform/modules/db/modules/db_option_group
-- db.db_parameter_group in .terraform/modules/db/modules/db_parameter_group
-- db.db_subnet_group in .terraform/modules/db/modules/db_subnet_group
-Downloading terraform-aws-modules/rds/aws 3.3.0 for db_default...
-- db_default in .terraform/modules/db_default
-- db_default.db_instance in .terraform/modules/db_default/modules/db_instance
-- db_default.db_option_group in .terraform/modules/db_default/modules/db_option_group
-- db_default.db_parameter_group in .terraform/modules/db_default/modules/db_parameter_group
-- db_default.db_subnet_group in .terraform/modules/db_default/modules/db_subnet_group
-Downloading terraform-aws-modules/rds/aws 3.3.0 for db_disabled...
-- db_disabled in .terraform/modules/db_disabled
-- db_disabled.db_instance in .terraform/modules/db_disabled/modules/db_instance
-- db_disabled.db_option_group in .terraform/modules/db_disabled/modules/db_option_group
-- db_disabled.db_parameter_group in .terraform/modules/db_disabled/modules/db_parameter_group
-- db_disabled.db_subnet_group in .terraform/modules/db_disabled/modules/db_subnet_group
-Downloading terraform-aws-modules/security-group/aws 4.3.0 for security_group...
-- security_group in .terraform/modules/security_group
-Downloading terraform-aws-modules/vpc/aws 3.6.0 for vpc...
-- vpc in .terraform/modules/vpc
-```
+# Go to dir
+$ cd <path to>/gigadb-website/ops/infrastructure/envs/staging
+# Copy terraform files to staging environment
+$ ../../../scripts/tf_init.sh --project gigascience/forks/pli888-gigadb-website --env staging
 
-Initialize a working directory containing Terraform configuration files.
-```
-$ terraform init
-Initializing modules...
-
-Initializing the backend...
-
-Initializing provider plugins...
-- Finding hashicorp/aws versions matching ">= 2.42.0, >= 2.49.0, >= 3.28.0"...
-- Finding hashicorp/random versions matching ">= 2.2.0, >= 3.1.0"...
-- Installing hashicorp/aws v3.54.0...
-- Installed hashicorp/aws v3.54.0 (signed by HashiCorp)
-- Installing hashicorp/random v3.1.0...
-- Installed hashicorp/random v3.1.0 (signed by HashiCorp)
-
-Terraform has created a lock file .terraform.lock.hcl to record the provider
-selections it made above. Include this file in your version control repository
-so that Terraform can guarantee to make the same selections by default when
-you run "terraform init" in the future.
-
-Terraform has been successfully initialized!
-
-You may now begin working with Terraform. Try running "terraform plan" to see
-any changes that are required for your infrastructure. All Terraform commands
-should now work.
-
-If you ever set or change modules or backend configuration for Terraform,
-rerun this command to reinitialize your working directory. If you forget, other
-commands will detect it and remind you to do so if necessary.
-```
-
-Create an execution plan. This currently results in an error:
-```
-$ terraform plan
-module.db_default.random_password.master_password[0]: Refreshing state... [id=none]
-module.db_default.module.db_instance.random_id.snapshot_identifier[0]: Refreshing state... [id=YKKbWA]
-module.db.module.db_parameter_group.aws_db_parameter_group.this[0]: Refreshing state... [id=complete-postgresql-20210819062736219800000001]
-
-Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
-  + create
-
-Terraform will perform the following actions:
-
-  # module.security_group.aws_security_group.this_name_prefix[0] will be created
-  + resource "aws_security_group" "this_name_prefix" {
-      + arn                    = (known after apply)
-      + description            = "Complete PostgreSQL example security group"
-      + egress                 = (known after apply)
-      + id                     = (known after apply)
-      + ingress                = (known after apply)
-      + name                   = (known after apply)
-      + name_prefix            = "complete-postgresql-"
-      + owner_id               = (known after apply)
-      + revoke_rules_on_delete = false
-      + tags                   = {
-          + "Environment" = "dev"
-          + "Name"        = "complete-postgresql"
-          + "Owner"       = "user"
-        }
-      + tags_all               = {
-          + "Environment" = "dev"
-          + "Name"        = "complete-postgresql"
-          + "Owner"       = "user"
-        }
-      + vpc_id                 = (known after apply)
-    }
-<snip>
-</snip>
-Plan: 34 to add, 0 to change, 0 to destroy.
-
-───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform
-apply" now.
-```
-
-Execute Terraform plan:
-```
+# Provision with Terraform
+$ terraform plan  
 $ terraform apply
+$ terraform refresh
+
+# Copy ansible files
+$ ../../../scripts/ansible_init.sh --env staging
+
+# Provision with ansible
+$ ansible-playbook -i ../../inventories dockerhost_playbook.yml
+$ ansible-playbook -i ../../inventories bastion_playbook.yml
 ```
 
-To destroy the RDS instance:
+* Run `build_staging` step on Gitlab CI/CD pipeline
+* Run `sd_gigadb` step on Gitlab CI/CD pipeline
+
+If you browse the GigaDB website on your staging server, you should see that the static web pages are displayed but there are error messages viewing the dataset pages probably due to the `dropcontraints` and `dropindexes` database migration steps executed by the `gigadb-deploy-jobs.yml`. To fix this problem, we restore a `gigadb` database using production data on the RDS instance:
+
 ```
-$ terraform destroy
+# In GitLab, click sd_stop_app button in the pipeline
+# Assume a backup pgdmp file has been created using files-url-updater tool
+
+# Find out domain name for RDS instance and IP address of bastion server
+$ cd <path to>/gigadb-website/ops/infrastructure/envs/staging
+$ terraform output
+ec2_bastion_public_ip = "18.162.xxx.xxx"
+ec2_private_ip = "10.99.x.xx"
+ec2_public_ip = "16.162.xxx.xxx"
+rds_instance_address = "rds-server-staging.cfkc0cbc20ii.ap-east-1.rds.amazonaws.com"
+
+$ cd <path to>/gigadb-website
+
+# Copy pgdmp file from your local machine to bastion server
+$ sftp -i ~/.ssh/id-rsa-aws.pem  centos@18.162.xxx.xxx
+sftp> put sql/gigadbv3_20210901_9.6.22.pgdmp
+sftp> exit
+
+# Use bastion server to restore database using pgdmp file - will need your gigadb database password
+$ ssh -i ~/.ssh/id-rsa-aws.pem  centos@18.162.xxx.xxx "psql -h rds-server-staging.cfkc0cbc20ii.ap-east-1.rds.amazonaws.com -U gigadb -d postgres -c 'drop database gigadb'"
+$ ssh -i ~/.ssh/id-rsa-aws.pem  centos@18.162.xxx.xxx "psql -h rds-server-staging.cfkc0cbc20ii.ap-east-1.rds.amazonaws.com -U gigadb -d postgres -c 'create database gigadb owner gigadb'"
+$ ssh -i ~/.ssh/id-rsa-aws.pem  centos@18.162.147.130 'pg_restore -c --if-exists -h rds-server-staging.cfkc0cbc20ii.ap-east-1.rds.amazonaws.com -d gigadb -U gigadb /home/centos/gigadbv3_20210901_9.6.22.pgdmp'
+
+# In GitLab, click sd_start_app button in pipeline
 ```
 
-In addition to the permissions from `AmazonRDSFullAccess` and 
-`AmazonVPCFullAccess` policies, the following AWS IAM VisualEditor0 policy is
-required to permit a user to create RDS instances:
+To get terraform to destroy bastion server:
 ```
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid":"AllowRDSListDescribe",
-      "Effect": "Allow",
-      "Action": [
-        "rds:Describe*",
-        "rds:ListTagsForResource"
-      ],
-      "Resource":"*"
-    },
-    {
-      "Sid":"AllowEC2Describe",
-      "Effect":"Allow",
-      "Action":"ec2:Describe*",
-      "Resource":"*"
-    },
-    {
-      "Sid":"AllowIAMListDescribe",
-      "Effect": "Allow",
-      "Action": [
-        "iam:ListAttachedRolePolicies",
-        "iam:GetRole",
-        "iam:ListInstanceProfilesForRole"
-      ],
-      "Resource":"*"
-    },
-    {
-      "Sid":"CreateRDSInstance",
-      "Effect": "Allow",
-      "Action": [
-        "iam:CreateRole",
-        "iam:TagRole",
-        "iam:AttachRolePolicy",
-        "ec2:CreateInternetGateway",
-        "ec2:AttachInternetGateway",
-        "ec2:AssociateVpcCidrBlock",
-        "ec2:CreateRoute",
-        "ec2:CreateRouteTable",
-        "ec2:AssociateRouteTable",
-        "ec2:CreateSubnet",
-        "ec2:CreateDefaultSubnet",
-        "ec2:ModifySubnetAttribute",
-        "ec2:CreateSecurityGroup",
-        "ec2:CreateVpc",
-        "ec2:ModifyVpcAttribute",
-        "ec2:GetManagedPrefixListEntries",
-        "ec2:AssociateSubnetCidrBlock",
-        "rds:CreateDBInstance",
-        "rds:CreateDBSubnetGroup",
-        "rds:AddTagsToResource",
-        "ec2:GetManagedPrefixListAssociations"
-      ],
-      "Resource":"*"
-    },
-    {
-      "Sid":"DeleteRDSInstance",
-      "Effect": "Allow",
-      "Action": [
-        "iam:DeleteRole",
-        "ec2:DeleteSubnet",
-        "ec2:DeleteLocalGatewayRouteTableVpcAssociation",
-        "ec2:UpdateSecurityGroupRuleDescriptionsIngress",
-        "ec2:DeleteRouteTable",
-        "ec2:RevokeSecurityGroupEgress",
-        "ec2:UnassignIpv6Addresses",
-        "ec2:DeleteInternetGateway",
-        "ec2:UnassignPrivateIpAddresses",
-        "ec2:UpdateSecurityGroupRuleDescriptionsEgress",
-        "ec2:DetachInternetGateway",
-        "ec2:DisassociateRouteTable",
-        "ec2:RevokeSecurityGroupIngress",
-        "ec2:DeleteVpc",
-        "ec2:DeleteRoute",
-        "rds:DeleteDBSubnetGroup",
-        "rds:DeleteDBInstance"
-      ],
-      "Resource":"*"
-    }
-  ]
-}
+$ terraform destroy -target module.ec2_bastion.aws_instance.bastion
 ```
