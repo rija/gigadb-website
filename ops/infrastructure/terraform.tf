@@ -5,19 +5,11 @@
 # RDS instance hosting the PostgreSQL database are launched into.
 # ------------------------------------------------------------------------------
 
-provider "aws" {
-  region     = "ap-east-1"
-  default_tags {  # These tags are copied into child modules and resources
-    tags = {
-      Environment = var.deployment_target,
-      Owner = data.external.callerUserName.result.userName
-    }
-  }
-}
 
-terraform {
-  backend "http" {
-  }
+variable "aws_region" {
+  type = string
+  description = "AWS region where deployment occurs"
+  default = "ap-east-1"
 }
 
 variable "deployment_target" {
@@ -48,6 +40,21 @@ variable "gigadb_db_password" {
 
 data "external" "callerUserName" {
   program = ["${path.module}/getIAMUserNameToJSON.sh"]
+}
+
+provider "aws" {
+  region     =  var.aws_region
+  default_tags {  # These tags are copied into child modules and resources
+    tags = {
+      Environment = var.deployment_target,
+      Owner = data.external.callerUserName.result.userName
+    }
+  }
+}
+
+terraform {
+  backend "http" {
+  }
 }
 
 # A custom virtual private cloud network for RDS and EC2 instances
@@ -121,9 +128,9 @@ module "ec2_dockerhost" {
   owner = data.external.callerUserName.result.userName
   deployment_target = var.deployment_target
   key_name = var.key_name
-  eip_tag_name = "eip-ape1-${var.deployment_target}-${data.external.callerUserName.result.userName}-gigadb"
+  eip_tag_name = "eip-gigadb-${var.deployment_target}-${data.external.callerUserName.result.userName}"
   vpc_id = module.vpc.vpc_id
-  # Locate Dockerhost EC2 instance in public subnet so users can access website 
+  # Locate Dockerhost EC2 instance in public subnet so users can access website
   # container app
   public_subnet_id = module.vpc.public_subnets[0]
 }
