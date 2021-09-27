@@ -72,11 +72,11 @@ Policy Name: GigadbRDSAccess
         },
         {
             "Sid": "CreateRDSInstancesWithOwnerTagRestriction",
-            "Effect": "Deny",
+            "Effect": "Allow",
             "Action": "rds:CreateDBInstance",
             "Resource": "*",
             "Condition": {
-                "StringNotLike": {
+                "StringEquals": {
                     "aws:RequestTag/Owner": "${aws.username}"
                 }
             }
