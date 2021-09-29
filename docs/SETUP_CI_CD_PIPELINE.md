@@ -186,8 +186,7 @@ Ensure the following variables are set for their respective environments in the 
 | fuw_db_user | no |
 | fuw_db_password | yes |
 | fuw_db_database | no |
-| DOCKER_HUB_USERNAME | no |
-| DOCKER_HUB_PASSWORD | yes |
+
 
 so, there should be two versions of each variable, one for each environment.
 
@@ -208,6 +207,14 @@ so, there should be two versions of each variable, one for each environment.
 | DEPLOYMENT_ENV | live | x | All (default) |
 | gigadb_db_host | dockerhost | x | staging |
 
+
+##### Exceptions
+
+The following two variables need to be set for Environment "All (default)"
+| Name | Masked? |
+| --- | --- |
+| DOCKER_HUB_USERNAME | no |
+| DOCKER_HUB_PASSWORD | yes |
 
 #### Jobs and stages in GitLab configuration files
 
@@ -250,7 +257,7 @@ sd_gigadb:
 
 
 >Note: Make sure you have a Docker Hub account and that its username and access token (which can be created in Docker Hub's security settings)
-> are used as value for GitLab variables DOCKER_HUB_USERNAME and DOCKER_HUB_PASSWORD
+> are used as value for GitLab variables DOCKER_HUB_USERNAME and DOCKER_HUB_PASSWORD (set for the "All (default)" environment)
 > as the ``before_script`` section of ``.gitlab-ci.yml`` uses them to login to Docker Hub and pull the main base image to speed up the build stage
 
 ### Tools
