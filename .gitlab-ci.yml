@@ -87,6 +87,7 @@ before_script:
   # login and pull from docker hub the base image for php-fpm so it's done only once
   - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
   - docker pull php:7.1-fpm-stretch
+  - docker pull php:7.2-fpm-stretch
   # login to gitlab container registry
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
 
