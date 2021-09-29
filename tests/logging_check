@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -e
+
+docker-compose run --rm test curl -Is gigadb.dev/break-it-hard
+docker-compose logs web | grep 404 | tail -n 1 | grep "break-it-hard"
