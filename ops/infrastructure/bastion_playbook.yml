@@ -18,22 +18,34 @@
       file_type: file
     register: found_files
     delegate_to: localhost
+    become: no
 
   - name: Get path to latest back up file
     set_fact:
       latest_backup_file: "{{ (found_files.files | sort(attribute='mtime') | last).path }}"
     delegate_to: localhost
+    become: no
 
   - debug: msg="latest_backup_file is {{ latest_backup_file }}"
 
   - name: Copy pgdmp file to bastion server
     ansible.builtin.copy:
-      src: {{ latest_backup_file }}
-      dest: "/home/centos/database_bootstrap.pgdmp"
+      src: '{{ latest_backup_file }}'
+      dest: "/home/centos/database_bootstrap.backup"
       owner: centos
       group: centos
 
-  - name: Restore database on RDS instance using dump file
-    shell: "export PGPASSWORD='{{ pg_password }}'; pg_restore -c --if-exists -h {{ pg_host }} -p 5432 -d {{ pg_database }} -U {{ pg_user }} /home/centos/database_bootstrap.pgdmp"
-    register: pg_restore
-  - debug: msg="{{ pg_restore.stdout }}"
+  - name: Drop gigadb database
+    shell: "export PGPASSWORD='{{ pg_password }}'; psql -U {{ pg_user }} -d postgres -h {{ pg_host }} -p 5432 -c 'drop database if exists {{ pg_database}}'"
+    register: psql_drop
+  - debug: msg="{{ psql_drop.stdout }}"
+
+  - name: Create gigadb database
+    shell: "export PGPASSWORD='{{ pg_password }}'; psql -U {{ pg_user }} -d postgres -h {{ pg_host }} -p 5432 -c 'create database {{ pg_database}} owner {{ pg_user }}'"
+    register: psql_create
+  - debug: msg="{{ psql_create.stdout }}"
+
+  - name: Restore gigadb database with backup file
+    shell: "export PGPASSWORD='{{ pg_password }}'; psql -U {{ pg_user }} -h {{ pg_host }} -p 5432 < /home/centos/database_bootstrap.backup"
+    register: psql_restore
+  - debug: msg="{{ psql_restore.stdout }}"
