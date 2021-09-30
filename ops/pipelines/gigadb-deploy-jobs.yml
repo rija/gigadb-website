@@ -7,6 +7,14 @@
   stage: deployment
   allow_failure: false
   script:
+    # Load Base image
+    - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
+    - docker load -i php-7_1-fpm-stretch.tar
+    - docker load -i php-7_2-fpm-stretch.tar
+    - docker load -i alpine-latest.tar
+    - docker load -i nginx-1_15-alpine.tar
+    # login to gitlab container registry
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
     # appending production variables at the end of the .env and .secrets
     - env | grep -iE "^(staging_|remote_)" | grep -viE "(password|email|tester|secret|key|user|app_id|client_id|token|tls)" >> $APPLICATION/.env
     - env | grep -iE "^(staging_|remote_)" | grep -iE "(password|email|tester|secret|key|user|app_id|client_id|token)" | grep -viE "tlsauth">> $APPLICATION/.secrets

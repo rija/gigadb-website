@@ -84,12 +84,6 @@ before_script:
   - apk add --no-cache py-pip bash
   # Pin docker-compose version to stop installation error
   - pip install docker-compose~=1.23.0
-  # login and pull from docker hub the base image for php-fpm so it's done only once
-  - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
-  - docker pull php:7.1-fpm-stretch
-  - docker pull php:7.2-fpm-stretch
-  # login to gitlab container registry
-  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
 
 sd_gigadb:
   variables:
@@ -110,5 +104,5 @@ ld_gigadb:
     name: "live"
     deployment_tier: production
     url: $REMOTE_HOME_URL
-  dependencies:
+   dependencies:
     - sd_gigadb
