@@ -229,7 +229,7 @@ services:
         - INSTALL_GIT=true
         - INSTALL_APCU=true
         - INSTALL_MAILPARSE=true
-        - INSTALL_CSSLINT_JSHINT=true
+#        - INSTALL_CSSLINT_JSHINT=true
     environment:
       YII_PATH: ${YII_PATH}
       YII2_PATH: ${YII2_PATH}
@@ -509,7 +509,7 @@ services:
       context: ../../fuw/app
       dockerfile: common/Dockerfile
       args:
-        - PHP_BASE_IMAGE_VERSION=7.2-fpm-stretch
+        - PHP_BASE_IMAGE_VERSION=7.2-fpm-buster
         - APP_PORT=9001
         - INSTALL_OPCACHE=true
         - INSTALL_INTL=true

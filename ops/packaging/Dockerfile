@@ -1,5 +1,5 @@
 ARG PHP_VERSION=7.1
-FROM php:${PHP_VERSION}-fpm-stretch
+FROM php:${PHP_VERSION}-fpm-buster
 
 
 # basic dependencies
@@ -80,7 +80,7 @@ RUN if [ ${INSTALL_PG_CLIENT} = true ]; then \
     mkdir -p /usr/share/man/man7 && \
     # Install the pgsql client
     apt-get update -yq && \
-    apt-get install -y postgresql-client-${PG_CLIENT_VERSION} \
+    apt-get install -y postgresql-client-11 \
 ;fi
 
 
