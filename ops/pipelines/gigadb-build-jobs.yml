@@ -19,6 +19,7 @@ base_images:
       - php-7_2-fpm-buster.tar
       - alpine-latest.tar
       - nginx-1_15-alpine.tar
+      - node-13_5-buster.tar
 
 b_gigadb:
   stage: build for test
