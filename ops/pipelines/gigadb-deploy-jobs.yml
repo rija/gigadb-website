@@ -13,6 +13,7 @@
     - docker load -i php-7_2-fpm-buster.tar
     - docker load -i alpine-latest.tar
     - docker load -i nginx-1_15-alpine.tar
+    - docker load -i node-13_5-buster.tar
     # login to gitlab container registry
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
     # appending production variables at the end of the .env and .secrets
