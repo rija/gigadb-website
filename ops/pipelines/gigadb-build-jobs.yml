@@ -18,7 +18,7 @@ base_images:
       - alpine-latest.tar
       - nginx-1_15-alpine.tar
 
-.b_gigadb:
+b_gigadb:
   stage: build for test
   script:
     # Load Base image
