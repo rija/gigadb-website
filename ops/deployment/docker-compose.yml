@@ -230,7 +230,7 @@ services:
         - INSTALL_GIT=true
         - INSTALL_APCU=true
         - INSTALL_MAILPARSE=true
-#        - INSTALL_CSSLINT_JSHINT=true
+        - INSTALL_CSSLINT_JSHINT=true
     environment:
       YII_PATH: ${YII_PATH}
       YII2_PATH: ${YII2_PATH}
@@ -260,7 +260,7 @@ services:
     command: bash -c "./tests/all_and_coverage"
 
   csv-to-migrations:
-    image: node:14.9.0-buster
+    image: node:13.5-buster
     working_dir: /var/www/ops/scripts
     volumes:
       - ${APPLICATION}/:/var/www
