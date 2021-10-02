@@ -7,6 +7,8 @@ base_images:
     - docker save -o php-7_1-fpm-buster.tar php:7.1.33-fpm-buster
     - docker pull php:7.2.34-fpm-buster
     - docker save -o php-7_2-fpm-buster.tar php:7.2.34-fpm-buster
+    - docker pull php:7.2.34-cli-buster
+    - docker save -o php-7_2-cli-buster.tar php:7.2.34-cli-buster
     - docker pull alpine:3.14.2
     - docker save -o alpine-3_14.tar alpine:3.14.2
     - docker pull nginx:1.21.3-alpine
@@ -28,6 +30,7 @@ b_gigadb:
     - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
     - docker load -i php-7_1-fpm-buster.tar
     - docker load -i php-7_2-fpm-buster.tar
+    - docker load -i php-7_2-cli-buster.tar
     - docker load -i alpine-3_14.tar
     - docker load -i nginx-1_21-alpine.tar
     - docker load -i node-14-buster.tar
@@ -113,6 +116,7 @@ b_gigadb:
     - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
     - docker load -i php-7_1-fpm-buster.tar
     - docker load -i php-7_2-fpm-buster.tar
+    - docker load -i php-7_2-cli-buster.tar
     - docker load -i alpine-3_14.tar
     - docker load -i nginx-1_21-alpine.tar
     - docker load -i node-14-buster.tar

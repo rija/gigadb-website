@@ -260,7 +260,7 @@ services:
     command: bash -c "./tests/all_and_coverage"
 
   csv-to-migrations:
-    image: node:13.5-buster
+    image: node:14.18.0-buster
     working_dir: /var/www/ops/scripts
     volumes:
       - ${APPLICATION}/:/var/www
@@ -337,7 +337,7 @@ services:
       context: ../../fuw/app
       dockerfile: common/Dockerfile
       args:
-        - PHP_BASE_IMAGE_VERSION=7.2-fpm
+        - PHP_BASE_IMAGE_VERSION=7.2.34-fpm-buster
         - APP_PORT=9002
         - INSTALL_OPCACHE=true
         - INSTALL_INTL=true
@@ -422,7 +422,7 @@ services:
       context: ../../fuw/app/console
       dockerfile: Worker-Dockerfile
       args:
-        - PHP_BASE_IMAGE_VERSION=7.2-cli
+        - PHP_BASE_IMAGE_VERSION=7.2.34-cli-buster
         - INSTALL_OPCACHE=true
         - INSTALL_INTL=true
         - INSTALL_COMPOSER=true
@@ -464,7 +464,7 @@ services:
       context: ..
       dockerfile: packaging/Worker-Dockerfile
       args:
-        - PHP_BASE_IMAGE_VERSION=7.2-cli
+        - PHP_BASE_IMAGE_VERSION=7.2.34-cli-buster
         - INSTALL_OPCACHE=true
         - INSTALL_INTL=true
         - INSTALL_COMPOSER=true
@@ -510,7 +510,7 @@ services:
       context: ../../fuw/app
       dockerfile: common/Dockerfile
       args:
-        - PHP_BASE_IMAGE_VERSION=7.2-fpm-buster
+        - PHP_BASE_IMAGE_VERSION=7.2.34-fpm-buster
         - APP_PORT=9001
         - INSTALL_OPCACHE=true
         - INSTALL_INTL=true

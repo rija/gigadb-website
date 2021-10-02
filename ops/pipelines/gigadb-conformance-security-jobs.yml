@@ -48,6 +48,7 @@ check_PSR2:
     - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
     - docker load -i php-7_1-fpm-buster.tar
     - docker load -i php-7_2-fpm-buster.tar
+    - docker load -i php-7_2-cli-buster.tar
     - docker load -i alpine-3_14.tar
     - docker load -i nginx-1_21-alpine.tar
     - docker load -i node-14-buster.tar
@@ -75,6 +76,7 @@ check_PHPDoc:
     - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
     - docker load -i php-7_1-fpm-buster.tar
     - docker load -i php-7_2-fpm-buster.tar
+    - docker load -i php-7_2-cli-buster.tar
     - docker load -i alpine-3_14.tar
     - docker load -i nginx-1_21-alpine.tar
     - docker load -i node-14-buster.tar
