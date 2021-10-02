@@ -1,5 +1,5 @@
 ARG PHP_BASE_IMAGE_VERSION=7.1-fpm-buster
-FROM php:7.1.33-fpm-buster
+FROM php:${PHP_BASE_IMAGE_VERSION}
 
 
 # basic dependencies
