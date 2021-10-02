@@ -1,5 +1,5 @@
 ARG TARGET_PHP_VERSION=7.0
-FROM php:${TARGET_PHP_VERSION}-fpm-buster
+FROM php:7.1.33-fpm-buster
 
 
 # basic dependencies

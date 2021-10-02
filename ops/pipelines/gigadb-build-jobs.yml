@@ -3,23 +3,23 @@ base_images:
   script:
     # login and pull from docker hub the base image for php-fpm so it's done only once
     - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
-    - docker pull php:7.1-fpm-buster
-    - docker save -o php-7_1-fpm-buster.tar php:7.1-fpm-buster
-    - docker pull php:7.2-fpm-buster
-    - docker save -o php-7_2-fpm-buster.tar php:7.2-fpm-buster
-    - docker pull alpine:latest
-    - docker save -o alpine-latest.tar alpine:latest
-    - docker pull nginx:1.15-alpine
-    - docker save -o nginx-1_15-alpine.tar nginx:1.15-alpine
-    - docker pull node:13.5-buster
-    - docker save -o node-13_5-buster.tar node:13.5-buster
+    - docker pull php:7.1.33-fpm-buster
+    - docker save -o php-7_1-fpm-buster.tar php:7.1.33-fpm-buster
+    - docker pull php:7.2.34-fpm-buster
+    - docker save -o php-7_2-fpm-buster.tar php:7.2.34-fpm-buster
+    - docker pull alpine:3.14.2
+    - docker save -o alpine-3_14.tar alpine:3.14.2
+    - docker pull nginx:1.21.3-alpine
+    - docker save -o nginx-1_21-alpine.tar nginx:1.21.3-alpine
+    - docker pull node:14.18.0-buster
+    - docker save -o node-14-buster.tar node:14.18.0-buster
   artifacts:
     paths:
       - php-7_1-fpm-buster.tar
       - php-7_2-fpm-buster.tar
-      - alpine-latest.tar
-      - nginx-1_15-alpine.tar
-      - node-13_5-buster.tar
+      - alpine-3_14.tar
+      - nginx-1_21-alpine.tar
+      - node-14-buster.tar
 
 b_gigadb:
   stage: build for test
@@ -28,9 +28,9 @@ b_gigadb:
     - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
     - docker load -i php-7_1-fpm-buster.tar
     - docker load -i php-7_2-fpm-buster.tar
-    - docker load -i alpine-latest.tar
-    - docker load -i nginx-1_15-alpine.tar
-    - docker load -i node-13_5-buster.tar
+    - docker load -i alpine-3_14.tar
+    - docker load -i nginx-1_21-alpine.tar
+    - docker load -i node-14-buster.tar
     # login to gitlab container registry
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
     # build for test
@@ -113,9 +113,9 @@ b_gigadb:
     - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
     - docker load -i php-7_1-fpm-buster.tar
     - docker load -i php-7_2-fpm-buster.tar
-    - docker load -i alpine-latest.tar
-    - docker load -i nginx-1_15-alpine.tar
-    - docker load -i node-13_5-buster.tar
+    - docker load -i alpine-3_14.tar
+    - docker load -i nginx-1_21-alpine.tar
+    - docker load -i node-14-buster.tar
     # login to gitlab container registry
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
     # appending remote variables at the end of the .env and .secrets
