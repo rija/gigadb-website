@@ -19,6 +19,7 @@ base_images:
     paths:
       - php-7_1-fpm-buster.tar
       - php-7_2-fpm-buster.tar
+      - php-7_2-cli-buster.tar
       - alpine-3_14.tar
       - nginx-1_21-alpine.tar
       - node-14-buster.tar
