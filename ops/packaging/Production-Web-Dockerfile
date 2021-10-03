@@ -25,7 +25,6 @@ RUN apk --no-cache add openssl && \
     openssl dhparam -out /etc/ssl/nginx/dhparam.pem 2048 && \
     mkdir -vp /etc/nginx/sites-enabled
 
-RUN
 COPY fuw/app /app
 COPY ops/configuration/nginx-conf/sites/${GIGADB_ENV} /tmp/sites-available/
 ARG FIX_SITE_CONFIGS=false
