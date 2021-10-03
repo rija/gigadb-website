@@ -132,20 +132,19 @@ b_gigadb:
     - env | grep -iE "^(gigadb_|fuw_)" | tee -a $APPLICATION/.secrets
     # pulling the CI build of the application from registry and configure it for staging for the purpose of building production containers
     - docker pull registry.gitlab.com/$CI_PROJECT_PATH/application:latest || true
-    - docker pull registry.gitlab.com/$CI_PROJECT_PATH/fuw-admin:latest || true
-    - docker pull registry.gitlab.com/$CI_PROJECT_PATH/fuw-public:latest || true
-    - docker pull registry.gitlab.com/$CI_PROJECT_PATH/fuw-worker:latest || true
-    - docker pull registry.gitlab.com/$CI_PROJECT_PATH/gigadb-worker:latest || true
+#    - docker pull registry.gitlab.com/$CI_PROJECT_PATH/fuw-admin:latest || true
+#    - docker pull registry.gitlab.com/$CI_PROJECT_PATH/fuw-public:latest || true
+#    - docker pull registry.gitlab.com/$CI_PROJECT_PATH/fuw-worker:latest || true
+#    - docker pull registry.gitlab.com/$CI_PROJECT_PATH/gigadb-worker:latest || true
     # Generate configuration files and vendors libraries before baking an immutable image
     - docker-compose run --rm config
-    - docker images
     - docker-compose run --rm application composer install -a --no-dev
     - docker-compose run --rm less
-    - docker-compose run --rm fuw-config
-    - docker-compose run --rm console bash -c "cd /app && composer install -a --no-dev"
-    - docker-compose run --rm console bash -c 'cd /gigadb-apps/worker/file-worker/ && composer install -a --no-dev'
+#    - docker-compose run --rm fuw-config
+#    - docker-compose run --rm console bash -c "cd /app && composer install -a --no-dev"
+#    - docker-compose run --rm console bash -c 'cd /gigadb-apps/worker/file-worker/ && composer install -a --no-dev'
     # Share the model layer across apps
-    - cp gigadb/app/worker/file-worker/models/UpdateGigaDBJob.php fuw/app/
+#    - cp gigadb/app/worker/file-worker/models/UpdateGigaDBJob.php fuw/app/
     # Generate Yii migration scripts
     - docker-compose up csv-to-migrations
     # pulling production build of images from registry to use as cache
@@ -164,7 +163,7 @@ b_gigadb:
     # build the javascript app, so that the Vue.js app can be baked in production_app
 #    - docker-compose run --rm js
     # build Nginx web container, making sure static assets are baked in
-    - cp -R fuw/app/backend ops/configuration/fuw-conf/
+#    - cp -R fuw/app/backend ops/configuration/fuw-conf/
     - docker-compose build production_web
     # build and push production containers for PHP-FPM with application code and vendor code baked in and publish to registry
     - docker-compose build production_app
