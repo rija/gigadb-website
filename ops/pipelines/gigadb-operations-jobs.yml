@@ -1,4 +1,6 @@
 .remote_compose:
+  cache: []
+  dependencies: []
   variables:
     GIGADB_ENV: $DEPLOYMENT_ENV
     COMPOSE_FILE: "ops/deployment/docker-compose.yml:ops/deployment/docker-compose.ci.yml:ops/deployment/docker-compose.build.yml"
