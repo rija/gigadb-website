@@ -213,7 +213,7 @@ b_gigadb:
   when: manual
   artifacts:
     untracked: true
-    when: always
+    when: on_failure
     expire_in: 1 week
 
 build_staging:
