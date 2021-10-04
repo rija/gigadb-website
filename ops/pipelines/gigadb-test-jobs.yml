@@ -20,6 +20,7 @@ t_gigadb:
       - fuw/app/common/config/params-local.php
       - gigadb/app/tools/files-url-updater/config/params.php
       - .env
+      - .secrets
       - composer.lock
       - containers-data
     when: always
