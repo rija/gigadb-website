@@ -83,3 +83,5 @@ docker-compose up -d fuw-worker gigadb-worker
 docker-compose run --rm test ./protected/yiic generatefiletypes
 docker-compose run --rm test ./protected/yiic generatefileformats
 
+#show status of all containers
+docker-compose ps
