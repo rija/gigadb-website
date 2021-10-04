@@ -41,6 +41,7 @@ server {
         include fastcgi_params;
     }
 
+    include /etc/nginx/locations/portainer.conf;
 
     location ~ /\.ht {
         deny all;
