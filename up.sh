@@ -27,8 +27,11 @@ if ! [ -f  ./.env ];then
   rm .env.bak
 fi
 
-# start the container admin UI
-docker-compose up -d portainer
+# start the container admin UI (not in CI)
+if [ "$(uname)" == "Darwin" ];then
+  docker-compose up -d portainer
+fi;
+
 
 # Configure the container services
 docker-compose run --rm config
@@ -83,5 +86,5 @@ docker-compose up -d fuw-worker gigadb-worker
 docker-compose run --rm test ./protected/yiic generatefiletypes
 docker-compose run --rm test ./protected/yiic generatefileformats
 
-# start the container admin UI
-docker-compose up -d portainer
+#show status of all containers
+docker ps
