@@ -61,7 +61,7 @@ data "aws_ami" "centos" {
 
   filter {
     name   = "name"
-    values = ["CentOS Linux 7 x86_64 HVM EBS ENA *"]
+    values = ["CentOS 8.4.2105 x86_64"]
   }
 
   filter {
