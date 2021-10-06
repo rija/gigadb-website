@@ -54,7 +54,7 @@ variables:
 
 
 include:
-#  - local: "ops/pipelines/gigadb-build-jobs.yml"
+  - local: "ops/pipelines/gigadb-build-jobs.yml"
 #  - local: "ops/pipelines/gigadb-test-jobs.yml"
 #  - local: "ops/pipelines/gigadb-conformance-security-jobs.yml"
   - local: "ops/pipelines/gigadb-deploy-jobs.yml"
