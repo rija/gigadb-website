@@ -35,6 +35,9 @@ services:
         - INSTALL_TIDEWAYS_XHPROF=false
         - INSTALL_LIBSODIUM=true
         - INSTALL_APCU=true
+        - APP_PORT=9000
+    expose:
+      - "9000"
 
   production_gigadb-worker:
     build:
