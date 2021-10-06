@@ -26,7 +26,7 @@ resource "aws_security_group" "bastion_sg" {
 }
 
 resource "aws_instance" "bastion" {
-  ami = "ami-68e59c19"
+  ami = "ami-0b197b1f02309cb3c"  # Centos 8
   associate_public_ip_address = true
   instance_type = "t3.micro"
   vpc_security_group_ids = [aws_security_group.bastion_sg.id]
@@ -35,7 +35,7 @@ resource "aws_instance" "bastion" {
 
   tags = {
     Name = "bastion_server_${var.deployment_target}",
-    System = "t3_micro-centos7",
+    System = "t3_micro-centos8",
   }
 
   root_block_device {
@@ -46,28 +46,6 @@ resource "aws_instance" "bastion" {
     Owner = var.owner
     Environment = var.deployment_target
     Name = "bastion_server_volume_${var.deployment_target}"
-  }
-
-  provisioner "remote-exec" {
-    connection {
-      type     = "ssh"
-      host     = aws_instance.bastion.public_ip
-      user     = "centos"
-      private_key = file("~/.ssh/${var.key_name}.pem")
-    }
-
-    # Provisioning PostgreSQL client tools here in terraform script rather than
-    # using Ansible which seems overkill for a simple install step
-    inline = [
-      "# Exclude postgresql packages from CentOS-Base repository",
-      "sudo sed -i '/^gpgkey.*/a exclude=postgresql*' /etc/yum.repos.d/CentOS-Base.repo",
-      "# Install repository configuration package using official PostgreSQL repository for CentOS",
-      "sudo yum -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm",
-      "# Install PostgreSQL client tools",
-      "sudo yum -y install postgresql96",
-      "# Disable SELinux",
-      "sudo setenforce 0"
-    ]
   }
 }
 

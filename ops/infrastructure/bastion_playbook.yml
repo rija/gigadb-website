@@ -5,47 +5,67 @@
   hosts: name_bastion_server_staging:name_bastion_server_live
 
   tasks:
-  - name: Test pg_isready can connect to RDS instance
-    ansible.builtin.command: "/usr/pgsql-9.6/bin/pg_isready -h {{ pg_host }}"
-    register: pg_isready
-  - debug: msg="{{ pg_isready.stdout }}"
+    - name: Disable postgresql module in AppStream
+      command: dnf -qy module disable postgresql
+      become: true
 
-  - name: Get files in files-url-updater sql folder
-    find:
-      paths: "../../../../gigadb/app/tools/files-url-updater/sql"
-      use_regex: yes
-      patterns: "^gigadbv3*"
-      file_type: file
-    register: found_files
-    delegate_to: localhost
-    become: no
+    - rpm_key:
+        state: present
+        key: https://download.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG
 
-  - name: Get path to latest back up file
-    set_fact:
-      latest_backup_file: "{{ (found_files.files | sort(attribute='mtime') | last).path }}"
-    delegate_to: localhost
-    become: no
+    - name: Install PostgreSQL repo
+      yum:
+        name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+        state: present
 
-  - debug: msg="latest_backup_file is {{ latest_backup_file }}"
+    - name: Install PostgreSQL 11 client packages
+      dnf:
+        name: postgresql11
+        state: present
 
-  - name: Copy pgdmp file to bastion server
-    ansible.builtin.copy:
-      src: '{{ latest_backup_file }}'
-      dest: "/home/centos/database_bootstrap.backup"
-      owner: centos
-      group: centos
+    - name: Test pg_isready can connect to RDS instance
+      ansible.builtin.command: "/usr/pgsql-11/bin/pg_isready -h {{ pg_host }}"
+      register: pg_isready
+    - debug: msg="{{ pg_isready.stdout }}"
 
-  - name: Drop gigadb database
-    shell: "export PGPASSWORD='{{ pg_password }}'; psql -U {{ pg_user }} -d postgres -h {{ pg_host }} -p 5432 -c 'drop database if exists {{ pg_database}}'"
-    register: psql_drop
-  - debug: msg="{{ psql_drop.stdout }}"
+    # The next 2 localhost steps can ask for your sudo password even though
+    # become: no is specified...
+    - name: Get files in files-url-updater sql folder
+      find:
+        paths: "../../../../gigadb/app/tools/files-url-updater/sql"
+        use_regex: yes
+        patterns: "^gigadbv3*"
+        file_type: file
+      register: found_files
+      delegate_to: localhost
+      become: no
 
-  - name: Create gigadb database
-    shell: "export PGPASSWORD='{{ pg_password }}'; psql -U {{ pg_user }} -d postgres -h {{ pg_host }} -p 5432 -c 'create database {{ pg_database}} owner {{ pg_user }}'"
-    register: psql_create
-  - debug: msg="{{ psql_create.stdout }}"
+    - name: Get path to latest back up file
+      set_fact:
+        latest_backup_file: "{{ (found_files.files | sort(attribute='mtime') | last).path }}"
+      delegate_to: localhost
+      become: no
 
-  - name: Restore gigadb database with backup file
-    shell: "export PGPASSWORD='{{ pg_password }}'; psql -U {{ pg_user }} -h {{ pg_host }} -p 5432 < /home/centos/database_bootstrap.backup"
-    register: psql_restore
-  - debug: msg="{{ psql_restore.stdout }}"
+    - debug: msg="latest_backup_file is {{ latest_backup_file }}"
+
+    - name: Copy pgdmp file to bastion server
+      ansible.builtin.copy:
+        src: '{{ latest_backup_file }}'
+        dest: "/home/centos/database_bootstrap.backup"
+        owner: centos
+        group: centos
+
+    - name: Drop gigadb database
+      shell: "export PGPASSWORD='{{ pg_password }}'; psql -U {{ pg_user }} -d postgres -h {{ pg_host }} -p 5432 -c 'drop database if exists {{ pg_database}}'"
+      register: psql_drop
+    - debug: msg="{{ psql_drop.stdout }}"
+
+    - name: Create gigadb database
+      shell: "export PGPASSWORD='{{ pg_password }}'; psql -U {{ pg_user }} -d postgres -h {{ pg_host }} -p 5432 -c 'create database {{ pg_database}} owner {{ pg_user }}'"
+      register: psql_create
+    - debug: msg="{{ psql_create.stdout }}"
+
+    - name: Restore gigadb database with backup file
+      shell: "export PGPASSWORD='{{ pg_password }}'; psql -U {{ pg_user }} -h {{ pg_host }} -p 5432 < /home/centos/database_bootstrap.backup"
+      register: psql_restore
+    - debug: msg="{{ psql_restore.stdout }}"
