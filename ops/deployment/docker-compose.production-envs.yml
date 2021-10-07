@@ -276,7 +276,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
     environment:
-      - VIRTUAL_HOST=${REMOTE_HOSTNAME}
+      - VIRTUAL_HOST=${REMOTE_HOSTNAME}/portainer/
       - VIRTUAL_PORT=9000
     ports:
       - 9009:9000
