@@ -16,11 +16,6 @@ server {
     add_header                Access-Control-Allow-Methods '*';
     add_header                Access-Control-Allow-Headers '*';
 
-    map $http_upgrade $connection_upgrade {
-       default upgrade;
-       '' close;
-    }
-
 
     server_name $SERVER_HOSTNAME web gigadb.dev gigadb.test;
 
