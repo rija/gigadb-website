@@ -273,11 +273,8 @@ services:
   portainer:
     image: portainer/portainer-ce
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:latest
       - portainer_data:/data
-    environment:
-      - VIRTUAL_HOST=${REMOTE_HOSTNAME}
-      - VIRTUAL_PORT=9000
     ports:
       - 9009:9000
       - 8000:8000
