@@ -29,7 +29,7 @@ fi
 
 # start the container admin UI (not in CI)
 if [ "$(uname)" == "Darwin" ];then
-  docker-compose up -d portainer
+  ./ops/scripts/start_portainer.sh
 fi;
 
 
