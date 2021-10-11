@@ -90,5 +90,5 @@
     untracked: true
     paths:
       - fuw/app/console/config/
-    when: on_failure
+    when: always
     expire_in: 1 week

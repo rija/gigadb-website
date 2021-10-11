@@ -2,7 +2,7 @@
 
 
 # bail out as soon as there is an error
-set -eu
+set -eux
 
 # Load environment variables
 source "./.env"
