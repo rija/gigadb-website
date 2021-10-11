@@ -19,4 +19,6 @@ fi
 P_BCRYPT=$(docker run --rm httpd:2.4-alpine htpasswd -nbB admin $PORTAINER_PASSWORD | cut -d ":" -f 2 | sed -e 's/\$/\\\$/g')
 
 echo "PORTAINER_BCRYPT=$P_BCRYPT" >> .env
-$DOCKER_COMPOSE up -d portainer
+
+# start portainer in detached mode and make sure volume are recreated (rather than use potential previous state that my be erroneous)
+$DOCKER_COMPOSE up --detach --renew-anon-volumes portainer
