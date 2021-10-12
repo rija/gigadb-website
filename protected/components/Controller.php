@@ -1,6 +1,5 @@
 <?php
 
-use Ramsey\Uuid\Uuid;
 /**
  * Controller is the customized base controller class.
  * All controller classes for this application should extend from this base class.
@@ -55,11 +54,6 @@ class Controller extends CController
 
     }
 
-    public function init() {
-		$uuid = Uuid::uuid1();
-		Yii::log("******* UUID: {$uuid->toString()} *******","warning");
-
-	}
 
 }
 
