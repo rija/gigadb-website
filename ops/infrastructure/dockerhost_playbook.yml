@@ -2,7 +2,7 @@
 # build a Centos server running a secure Docker CE install
 
 - name: Setup Fail2ban
-  hosts: name_gigadb_server_staging:name_gigadb_server_live
+  hosts: name_gigadb_server_staging*:name_gigadb_server_live*
 
   tasks:
     - debug:
@@ -13,7 +13,7 @@
     - role: ../../roles/jail-ssh
 
 - name: Setup Docker CE
-  hosts: name_gigadb_server_staging:name_gigadb_server_live
+  hosts: name_gigadb_server_staging*:name_gigadb_server_live*
 
 
   roles:
