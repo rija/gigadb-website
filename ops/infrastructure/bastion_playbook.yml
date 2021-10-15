@@ -2,7 +2,7 @@
 # Use bastion server to restore PostgreSQL database on RDS instance
 
 - name: Restore PostgreSQL database on RDS instance using pg_restore
-  hosts: name_bastion_server_staging:name_bastion_server_live
+  hosts: name_bastion_server_staging*:name_bastion_server_live*
 
   tasks:
     - name: Disable postgresql module in AppStream
