@@ -30,29 +30,9 @@
       register: pg_isready
     - debug: msg="{{ pg_isready.stdout }}"
 
-    # The next 2 localhost steps can ask for your sudo password even though
-    # become: no is specified...
-    - name: Get files in files-url-updater sql folder
-      find:
-        paths: "../../../../gigadb/app/tools/files-url-updater/sql"
-        use_regex: yes
-        patterns: "^gigadbv3*"
-        file_type: file
-      register: found_files
-      delegate_to: localhost
-      become: no
-
-    - name: Get path to latest back up file
-      set_fact:
-        latest_backup_file: "{{ (found_files.files | sort(attribute='mtime') | last).path }}"
-      delegate_to: localhost
-      become: no
-
-    - debug: msg="latest_backup_file is {{ latest_backup_file }}"
-
-    - name: Copy pgdmp file to bastion server
+    - name: Copy specified backup file from files-url-updater tool to bastion server
       ansible.builtin.copy:
-        src: '{{ latest_backup_file }}'
+        src: '{{ backup_file }}'
         dest: "/home/centos/database_bootstrap.backup"
         owner: centos
         group: centos

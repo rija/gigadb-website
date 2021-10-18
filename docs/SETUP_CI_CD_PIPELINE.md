@@ -458,6 +458,7 @@ fuw_db_user = "{{ lookup('ini', 'fuw_db_user type=properties file=ansible.proper
 fuw_db_password = "{{ lookup('ini', 'fuw_db_password type=properties file=ansible.properties') }}"
 fuw_db_database = "{{ lookup('ini', 'fuw_db_database type=properties file=ansible.properties') }}"
 
+backup_file = "{{ lookup('ini', 'backup_file type=properties file=ansible.properties') }}"
 ```
 
 >Note that the header **[name_gigadb_server_staging]** must match the "Name" tag associated to the AWS EC2 resource defined in ``ops/infrastructure/modules/aws-instance/aws-instance.tf`` for the environment of interest (here ``staging``):
@@ -473,8 +474,11 @@ tags = {
 
 >**Note:** host names in Ansible must be made of alphanumerical and underscore characters only. Although Terraform and AWS don't have that limitation, the Name tag needs to follow it so the connection between Terraform and Ansible can be made.
 
-An ``ansible.properties`` file needs to exist in the environment-specific directory for a given environment.
-This file is queried by the host variables shown above, and is created using the ``ops/scripts/ansible_init.sh``:
+An ``ansible.properties`` file needs to exist in the environment-specific 
+directory for a given environment. This file is queried by the host variables 
+shown above, and is initially created with a `backup_file` variable when 
+`$ ../../../scripts/tf_init.sh` was executed above. More variables are added 
+into `ansible.properties` when `ops/scripts/ansible_init.sh` is executed:
 
 ```
 $ cd ops/infrastructure/envs/environment
@@ -670,6 +674,7 @@ $ pwd
 $ terraform plan
 $ terraform apply
 $ terraform refresh
+$ ../../../scripts/ansible_init.sh --env environment
 $ ansible-playbook -i ../../inventories dockerhost_playbook.yml
 $ ansible-playbook -i ../../inventories bastion_playbook.yml
 ```
