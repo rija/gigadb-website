@@ -34,7 +34,7 @@ resource "aws_instance" "bastion" {
   subnet_id = var.public_subnet_id
 
   tags = {
-    Name = "bastion_server_${var.deployment_target}",
+    Name = "bastion_server_${var.deployment_target}_${var.owner}",
     System = "t3_micro-centos8",
   }
 
