@@ -21,7 +21,7 @@ module "db" {
   source = "terraform-aws-modules/rds/aws"
 
   # Only lowercase alphanumeric characters and hyphens allowed in "identifier"
-  identifier = "rds-server-${var.deployment_target}"
+  identifier = "rds-server-${var.deployment_target}-${var.owner}"
 
   create_db_option_group    = false
   create_db_parameter_group = false
