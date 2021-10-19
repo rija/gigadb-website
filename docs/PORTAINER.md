@@ -6,8 +6,7 @@ Portainer is an open-source management UI for Docker, including Docker Swarm env
 ### Pre-requisites
 1. The staging server and live server are up and running. [Here]((https://gist.github.com/rija/343128de50e68d28f3537af7619a14bd)) and [here](https://github.com/gigascience/gigadb-website/blob/develop/docs/SETUP_CI_CD_PIPELINE.md) are the details of how to provision and configure an EC2 server using Ansible and Terraform.
 2. The Let's Encrypt certificate fallout has been fixed by getting the latest code from this [PR #198](https://github.com/rija/gigadb-website/pull/198).
-3. Have Docker Hub account, and store `user name` and `password`  which is the access token in gitlab CI/CD variables.
-4. 
+3. Have Docker Hub account, and store `DOCKER_HUB_USERNAME` and `DOCKER_HUB_PASSWORD`  which is the access token in gitlab CI/CD variables.
 
 ### Steps to configure the portainer
 1. Changes to the DNS record
@@ -23,7 +22,7 @@ Create a new variable as following:
    
 |  Key | Value | Environment |
 | --- | --- | --- |
-| PORTAINER_PASSWORD | "password" |  All(default) |
+| PORTAINER_PASSWORD | "Password" |  All(default) |
 | DOCKER_HUB_USERNAME | "User name" | All(default) |
 | DOCKER_HUB_PASSWORD | "Access token" | All(default) |
 
