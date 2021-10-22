@@ -69,7 +69,7 @@ data "aws_ami" "centos" {
     values = ["hvm"]
   }
 
-  owners = ["aws-marketplace"]
+  owners = ["125523088429"]
 }
 
 resource "aws_instance" "docker_host" {
