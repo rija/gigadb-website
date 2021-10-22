@@ -42,6 +42,10 @@ data "external" "callerUserName" {
   program = ["${path.module}/getIAMUserNameToJSON.sh"]
 }
 
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
 provider "aws" {
   region     =  var.aws_region
   default_tags {  # These tags are copied into child modules and resources
@@ -69,7 +73,7 @@ module "vpc" {
   cidr = "10.99.0.0/18"
   
   # VPC spans all the availability zones in region
-  azs = ["ap-east-1a", "ap-east-1b", "ap-east-1c"]
+  azs = data.aws_availability_zones.available.names
 
   # We can add one or more subnets into each AZ. A subnet is required to launch
   # AWS resources into a VPC and is a range of IP addresses. Each subnet has a 
