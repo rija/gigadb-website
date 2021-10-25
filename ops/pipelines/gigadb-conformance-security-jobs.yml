@@ -71,11 +71,9 @@ check_PHPDoc:
 
 bandit-sast:
   stage: conformance and security
-  when: manual
 
 eslint-sast:
   stage: conformance and security
-  when: manual
 
 nodejs-scan-sast:
   stage: conformance and security
@@ -85,8 +83,6 @@ phpcs-security-audit-sast:
 
 semgrep-sast:
   stage: conformance and security
-  when: manual
 
 spotbugs-sast:
   stage: conformance and security
-  when: manual
