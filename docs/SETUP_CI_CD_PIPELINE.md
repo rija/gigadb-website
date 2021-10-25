@@ -654,10 +654,17 @@ thus reducing the risk of hitting weekly rate-limit for certificate creation imp
 Those directories start empty, but the ``tf_init.sh`` and ``ansible_init.sh`` scripts below will populate them with necessary files
 so we can run ``terraform`` and ``ansible-playbook`` commands from those directories for a safe provisioning of the desired environment.
 
-#### 2. Initialise Terraform
+#### 2. Initialise and provision with Terraform
 
 ```
 $ ../../../scripts/tf_init.sh --project gigascience/forks/rija-gigadb-website --env environment
+You need to specify the path to the ssh private key to use to connect to the EC2 instance: ~/.ssh/id-rsa-aws.pem
+You need to specify your GitLab username: pli888
+You need to specify a backup file created by the files-url-updater tool: ../../../../gigadb/app/tools/files-url-updater/sql/gigadbv3_20210929_v9.3.25.backup
+# Now provision with Terraform
+$ terraform plan  
+$ terraform apply
+$ terraform refresh
 ```
 
 where you replace ``gigascience/forks/rija-gigadb-website`` with the appropriate GitLab project.
@@ -671,16 +678,11 @@ $ ../../../scripts/ansible_init.sh --env environment
 
 where you replace ``environment`` with ``staging`` or ``live``
 
-#### 4. Provision with  Terraform and perform Ansible playbook
+#### 4. Perform Ansible playbook
 
 Ensure you are still in ``ops/infractructure/envs/staging`` or ``ops/infractructure/envs/live``
 
 ```
-$ pwd
-$ terraform plan
-$ terraform apply
-$ terraform refresh
-$ ../../../scripts/ansible_init.sh --env environment
 $ ansible-playbook -i ../../inventories dockerhost_playbook.yml
 $ ansible-playbook -i ../../inventories bastion_playbook.yml
 ```
