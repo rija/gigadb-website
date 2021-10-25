@@ -69,3 +69,24 @@ check_PHPDoc:
     - docker-compose run --rm test ./tests/coverage_check
 
 
+bandit-sast:
+  stage: conformance and security
+  when: manual
+
+eslint-sast:
+  stage: conformance and security
+  when: manual
+
+nodejs-scan-sast:
+  stage: conformance and security
+
+phpcs-security-audit-sast:
+  stage: conformance and security
+
+semgrep-sast:
+  stage: conformance and security
+  when: manual
+
+spotbugs-sast:
+  stage: conformance and security
+  when: manual
