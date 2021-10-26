@@ -1,7 +1,7 @@
 @issue-739
 Feature:
   As a gigadb user
-  I want to know the the server status of gigadb
+  I want to know the the server's status of gigadb
   So that the server's status could be monitored
 
   Background:
