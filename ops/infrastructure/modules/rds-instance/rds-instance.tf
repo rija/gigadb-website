@@ -25,6 +25,8 @@ module "db" {
   source = "terraform-aws-modules/rds/aws"
   identifier = "rds-server-${var.deployment_target}-${var.owner}"
 
+  snapshot_identifier = var.snapshot_identifier
+
   name                   = var.gigadb_db_database
   username               = var.gigadb_db_user
   password               = var.gigadb_db_password
