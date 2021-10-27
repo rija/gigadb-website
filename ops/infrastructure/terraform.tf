@@ -38,6 +38,12 @@ variable "gigadb_db_password" {
   description = "Password for PostgreSQL database"
 }
 
+variable "snapshot_identifier" {
+  type = string
+  description = "Snapshot identifier for restoring RDS service"
+  default = null
+}
+
 data "external" "callerUserName" {
   program = ["${path.module}/getIAMUserNameToJSON.sh"]
 }
@@ -175,6 +181,10 @@ module "rds" {
 
   owner = data.external.callerUserName.result.userName
   deployment_target = var.deployment_target
+
+  # This variable needs to be overridden on cmd line in order to create an RDS
+  # service by restoring from a snapshot
+  snapshot_identifier = var.snapshot_identifier
 
   vpc_id = module.vpc.vpc_id
   rds_subnet_ids = module.vpc.database_subnets
