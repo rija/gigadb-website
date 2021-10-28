@@ -26,6 +26,7 @@ module "db" {
   identifier = "rds-server-${var.deployment_target}-${var.owner}"
 
   snapshot_identifier = var.snapshot_identifier
+  restore_to_point_in_time = var.restore_to_point_in_time
 
   name                   = var.gigadb_db_database
   username               = var.gigadb_db_user
