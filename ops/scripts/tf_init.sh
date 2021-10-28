@@ -26,8 +26,13 @@ while [[ $# -gt 0 ]]; do
         shift
         ;;
     --backup-file)
-        has_env=true
+        has_backup_file=true
         backup_file=$2
+        shift
+        ;;
+    --restore)
+        has_restore=true
+        restore=$2
         shift
         ;;
     *)
@@ -65,6 +70,13 @@ fi
 
 if [ -z $AWS_REGION ];then
   read -p "You need to specify an AWS region: " AWS_REGION
+fi
+
+# Restoring an RDS automated backup requires the restore_to_point_in_time
+# variable with default null value in Terraform to be overridden with a real
+# restore_to_point_in_time configuration code block
+if [ $restore = "rdsbackup" ];then
+  cp ../../override.tf .
 fi
 
 # url encode gitlab project
