@@ -20,8 +20,8 @@ Feature:
     And I go to "/index.php"
     And I click on the "Help" button
     And I click on the "Systems Status" button
-    Then I am on "https://stats.uptimerobot.com/mknA9up1BP"
-    And I should see "gigadb server monitoring test"
+    Then I am on "https://stats.uptimerobot.com/LGVQXSkN1y"
+    And I should see "GigaDB"
 
   @ok
   Scenario: Systems Status could be found in the faq page
@@ -36,8 +36,8 @@ Feature:
     And I go to "/site/faq"
     And I click on the "Help" button
     And I click on the "Systems Status" button
-    Then I am on "https://stats.uptimerobot.com/mknA9up1BP"
-    And I should see "gigadb server monitoring test"
+    Then I am on "https://stats.uptimerobot.com/LGVQXSkN1y"
+    And I should see "GigaDB"
 
   @ok
   Scenario: Systems Status could be found in the dataset page
@@ -52,5 +52,5 @@ Feature:
     And I go to "/dataset/100016"
     And I click on the "Help" button
     And I click on the "Systems Status" button
-    Then I am on "https://stats.uptimerobot.com/mknA9up1BP"
-    And I should see "gigadb server monitoring test"
+    Then I am on "https://stats.uptimerobot.com/LGVQXSkN1y"
+    And I should see "GigaDB"
