@@ -47,7 +47,7 @@ module "db" {
   deletion_protection       = false
   maintenance_window        = "Mon:00:00-Mon:03:00"
   backup_window             = "03:00-06:00"  # UTC time
-  backup_retention_period   = 5
+  backup_retention_period   = 5  # days
   skip_final_snapshot       = false  # Create final snapshot
   final_snapshot_identifier = "snapshot-final-${var.deployment_target}-${var.owner}-${local.tstamp}"
   copy_tags_to_snapshot     = true
