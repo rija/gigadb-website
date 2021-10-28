@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
 # DEPLOY A GIGADB APPLICATION IN AWS
-# This terraform script sets up a complete GigaDB application in AWS. A VPC is
-# created in AWS cloud into which an EC2 instance hosting a Docker Host and a
+# This terraform script sets up a complete GigaDB application in AWS. A VPC is 
+# created in AWS cloud into which an EC2 instance hosting a Docker Host and a 
 # RDS instance hosting the PostgreSQL database are launched into.
 # ------------------------------------------------------------------------------
 
@@ -94,29 +94,29 @@ module "vpc" {
   version = "~> 2"
 
   name = "vpc-ape1-${var.deployment_target}-gigadb"
-  # CIDR block is a range of IPv4 addresses in the VPC. This cidr block below
-  # means that the main route table has the following routes: Destination =
+  # CIDR block is a range of IPv4 addresses in the VPC. This cidr block below 
+  # means that the main route table has the following routes: Destination = 
   # 10.99.0.0/18 , Target = local
   cidr = "10.99.0.0/18"
-
+  
   # VPC spans all the availability zones in region
   azs = data.aws_availability_zones.available.names
 
   # We can add one or more subnets into each AZ. A subnet is required to launch
-  # AWS resources into a VPC and is a range of IP addresses. Each subnet has a
+  # AWS resources into a VPC and is a range of IP addresses. Each subnet has a 
   # CIDR block which is a subset of the VPC CIDR block.
 
   # Public subnets will contain resources with public IP addresses and routes
-  # A internet gateway is automatically created for these public subnets. An
-  # internet gateway exposes resources with public IPs to inbound traffic
-  # from the internet. All public subnets route to an Internet Gateway for
+  # A internet gateway is automatically created for these public subnets. An 
+  # internet gateway exposes resources with public IPs to inbound traffic 
+  # from the internet. All public subnets route to an Internet Gateway for 
   # non-local addresses which is what makes the subnet public.
   public_subnets   = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
   public_subnet_tags = {
     Name = "subnet-public"
   }
 
-  # Private subnets contain resources that do not have public IPs. They have
+  # Private subnets contain resources that do not have public IPs. They have 
   # private IPs and can only interact with resources inside the same network
   # Resources in a private subnet needing internet access require a NAT device
   # private_subnets  = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
@@ -130,7 +130,7 @@ module "vpc" {
   }
 
   # You can enable communication from internet to RDS is via an internet gateway
-  # to provide public access to RDS instance, but is not recommended for
+  # to provide public access to RDS instance, but is not recommended for 
   # production! These parameters are all false so no public access to RDS
   create_database_subnet_group = false
   create_database_subnet_route_table = false
@@ -142,8 +142,8 @@ module "vpc" {
 
   # NAT gateways provide resources in private subnets that do not have
   # public IP address with outbound access to the public Internet or other AWS
-  # resources. NAT gateways are placed in public subnet. Does RDS instance need
-  # a NAT as it will be placed in private subnet? Access to it will be via a
+  # resources. NAT gateways are placed in public subnet. Does RDS instance need 
+  # a NAT as it will be placed in private subnet? Access to it will be via a 
   # bastion server.
   # enable_nat_gateway = false
   # single_nat_gateway = false
@@ -161,7 +161,7 @@ module "ec2_dockerhost" {
   key_name = var.key_name
   eip_tag_name = "eip-gigadb-${var.deployment_target}-${data.external.callerUserName.result.userName}"
   vpc_id = module.vpc.vpc_id
-  # Locate Dockerhost EC2 instance in public subnet so users can access website
+  # Locate Dockerhost EC2 instance in public subnet so users can access website 
   # container app
   public_subnet_id = module.vpc.public_subnets[0]
 }
