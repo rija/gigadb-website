@@ -44,6 +44,12 @@ variable "snapshot_identifier" {
   default = null
 }
 
+variable "restore_to_point_in_time" {
+  type = string
+  description = "A map to restoring RDS service from an automated backup"
+  default = null
+}
+
 data "external" "callerUserName" {
   program = ["${path.module}/getIAMUserNameToJSON.sh"]
 }
@@ -185,6 +191,9 @@ module "rds" {
   # This variable needs to be overridden on cmd line in order to create an RDS
   # service by restoring from a snapshot
   snapshot_identifier = var.snapshot_identifier
+
+  # For restoring RDS from automated backup
+  restore_to_point_in_time = var.restore_to_point_in_time
 
   vpc_id = module.vpc.vpc_id
   rds_subnet_ids = module.vpc.database_subnets
