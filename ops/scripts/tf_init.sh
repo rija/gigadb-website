@@ -30,10 +30,8 @@ while [[ $# -gt 0 ]]; do
         backup_file=$2
         shift
         ;;
-    --restore)
-        has_restore=true
-        restore=$2
-        shift
+    --restore-backup)
+        has_restore_backup=true
         ;;
     *)
         echo "Invalid option: $1"
@@ -72,10 +70,9 @@ if [ -z $AWS_REGION ];then
   read -p "You need to specify an AWS region: " AWS_REGION
 fi
 
-# Restoring an RDS automated backup requires the restore_to_point_in_time
-# variable with default null value in Terraform to be overridden with a real
-# restore_to_point_in_time configuration code block
-if [ $restore = "rdsbackup" ];then
+# RDS backup restoration requires null restore_to_point_in_time variable in
+# terraform.tf to be overridden with real config code block in override.tf
+if [ "$has_restore_backup" = true ];then
   cp ../../override.tf .
 fi
 
