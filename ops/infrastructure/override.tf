@@ -14,7 +14,7 @@ variable "use_latest_restorable_time" {
 
 module "rds" {
   restore_to_point_in_time = {
-    source_dbi_resource_id     = var.source_dbi_resource_id
+    source_dbi_resource_id = var.source_dbi_resource_id
     restore_time = var.utc_restore_time
     use_latest_restorable_time = var.use_latest_restorable_time
   }
