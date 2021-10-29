@@ -523,7 +523,7 @@ $ ansible-playbook -i ../../inventories dockerhost_playbook.yml
 ```
   tags = {
     Name = "gigadb_server_${var.deployment_target}_${var.owner}",
-    System = "t3_micro-centos7",
+    System = "t3_micro-centos8",
   }
 ```
 
