@@ -707,6 +707,42 @@ We can proceed with deployment to the target environment by triggering manual jo
 
 The application should be available at the url defined in $REMOTE_HOME_URL for a given environment.
 
+### Restoration of database snapshots
+```
+# Go to environment directory
+$ cd <path>/gigadb-website/ops/infrastructure/envs/staging
+
+# Terminate existing RDS service
+$ terraform destroy --target module.rds
+
+# Restore database snapshot
+$ terraform plan -var snapshot_identifier="snapshot-for-testing"
+$ terraform apply -var snapshot_identifier="snapshot-for-testing"
+$ terraform refresh
+```
+
+### Restoration of database backups
+```
+# Go to environment directory
+$ cd <path>/gigadb-website/ops/infrastructure/envs/staging
+
+# Terminate existing RDS service
+$ terraform destroy --target module.rds
+
+# Copy override.tf to staging environment
+$ ../../../scripts/tf_init.sh --project gigascience/forks/pli888-gigadb-website --env staging --restore-backup
+
+# Backups can either be restored to its latest restorable time or to a specific
+# time.
+
+# To restore to latest restorable time - need to override database name as this 
+# will come from the backup
+$ terraform apply -var source_dbi_resource_id="db-6GQU4LWFBZI34AOR5BW2MEQFLU" -var gigadb_db_database="" -var use_latest_restorable_time="true"
+
+# To restore to specific time in backup - need to override database name as this 
+# will come from the backup
+$ terraform apply -var source_dbi_resource_id="db-6GQU4LWFBZI34AOR5BW2MEQFLU" -var gigadb_db_database="" -var utc_restore_time="2021-10-27T06:02:12+00:00"
+```
 
 ### Troubleshooting
 
