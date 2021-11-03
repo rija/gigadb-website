@@ -2,6 +2,8 @@
 
 bantime = 3600
 
+ignoreip = 10.99.0.0/18
+
 [sshd]
 
 enabled = true
