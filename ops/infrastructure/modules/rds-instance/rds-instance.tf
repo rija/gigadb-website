@@ -39,9 +39,9 @@ module "db" {
   create_db_option_group    = false
   create_db_parameter_group = false
   engine                    = "postgres"
-  engine_version            = "9.6"
-  family                    = "postgres9"  # DB parameter group
-  major_engine_version      = "9"          # DB option group
+  engine_version            = "11.13"
+  family                    = "postgres11"  # DB parameter group
+  major_engine_version      = "11"          # DB option group
   instance_class            = "db.t3.micro"
   allocated_storage         = 8
   deletion_protection       = false
