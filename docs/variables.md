@@ -318,7 +318,7 @@ they should not be used when we stumble upon them
 * TLSAUTH_KEY
 * STAGING_IP_ADDRESS
 
-## File: secrete-sample
+## File: secrets-sample
 
 The above variables are retrieved from GitLab in a step within the `up.sh` 
 script. The [secrets-sample](../ops/configuration/variables/secrets-sample) 
