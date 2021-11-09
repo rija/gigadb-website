@@ -1,4 +1,4 @@
-# GitLab variable audit
+# GitLab variables
 
 ## GROUP: gigascience
 
@@ -27,7 +27,7 @@ following variables that can be used by all projects:
 | EXPORT_CSV_GIGADB_PASSWORD | | export_csv.sh | As above |
 | FORK | gigascience | NewsletterTest.php | As above |
 | FTP_CONNECTION_URL | | main.php.dist | As above |
-| GITLAB_PRIVATE_TOKEN | | | As above |
+| GITLAB_PRIVATE_TOKEN | | GitLab API authentication | As above |
 
 ## PROJECT: gigascience > Upstream > gigadb-website
 
@@ -239,9 +239,6 @@ differ between developers:
 | DEPLOYMENT_ENV | live / staging | gigadb-build-jobs.yml, gigadb-deploy-jobs.yml, gigadb-operations-jobs.yml | Set at project level because it requires different values for live and staging environments |
 | DOCKER_HUB_PASSWORD | | gitlab-build-jobs.yml | Set at project-level so developer uses their own credetials |
 | DOCKER_HUB_USERNAME | | gitlab-build-jobs.yml | As above |
-| docker_tlsauth_ca | | | Automatically created by Ansible
-| docker_tlsauth_cert | | As above |
-| docker_tlsauth_key | | As above |
 | EXPORT_CSV_GIGADB_DB | | export_csv.sh | Differs between developer, set at project-level |
 | EXPORT_CSV_GIGADB_HOST | | export_csv.sh | As above |
 | EXPORT_CSV_GIGADB_USER | | export_csv.sh | As above |
@@ -272,10 +269,10 @@ differ between developers:
 | GITLAB_PRIVATE_TOKEN | | | Differs for each developer so set at project-level |
 | HOME_URL | http://gigadb.gigasciencejournal.com:9170 | local.php.dist, help.html.dist | Might differ for each developer so set at project-level |
 | MULTIDOWNLOAD_SERVER_HOST | | Multi download functionality | Might differ for each developer so set at project-level |
-| PORTAINER_PASSWORD | | | Differs between developer, set at project-level - realistically use same value for all environments |
+| PORTAINER_PASSWORD | | Authentication to Portainer Docker UI | Differs between developer, set at project-level - realistically use same value for all environments |
 | PREVIEW_SERVER_HOST | | preview functionality | As above |
 | REDIS_SERVER_HOST | | multi download functionality | As above |
-| REMOTE_FILES_PUBLIC_URL | https://gigadb.net/datasetfiles | | Set at project-level as this will differ between developers |
+| REMOTE_FILES_PUBLIC_URL | https://gigadb.net/datasetfiles | Public URL to reversed proxied tusd server used by FUW | Set at project-level as this will differ between developers |
 | REMOTE_FUW_DB_HOST | | used by fuw | Differs between developer, set at project-level - realistically use same value for all environments |
 | REMOTE_FUW_DB_NAME | | used by fuw | As above |
 | REMOTE_FUW_DB_PASSWORD | | used by fuw | As above |
@@ -288,23 +285,28 @@ differ between developers:
 | REMOTE_SMTP_PASSWORD | | main.php.dist | As above |
 | REMOTE_SMTP_PORT | | main.php.dist | As above |
 | REMOTE_SMTP_USERNAME | | main.php.dist | As above |
-| remote_private_ip | | Automatically created by Ansible |
-| remote_public_ip | | Automatically created by Ansible |
-| remote_private_ip | | Automatically created by Ansible |
-| remote_public_ip | | Automatically created by Ansible |
 | REMOTE_PUBLIC_HTTP_PORT | 80 | docker-compose.production-envs.yml | Set at project-level|
 | REMOTE_PUBLIC_HTTPS_PORT | 443 | docker-compose.production-envs.yml | As above |
 | SERVER_EMAIL | | test.php.dist, local.php.dist, web.php.dist | Set in at project-level so developer can use their own email provider of choice |
 | SERVER_EMAIL_PASSWORD | | test.php.dist, web.php.dist | As above |
 | SERVER_EMAIL_SMTP_HOST | | test.php.dist, web.php.dist | As above |
 | SERVER_EMAIL_SMTP_PORT | | test.php.dist, web.php.dist | As above |
-| STAGING_IP_ADDRESS | | Cannot find where it is used | Kept in project-level |
 | TENCENTCLOUD_APP_ID | | dataset-backup-tool | Set at project level so developers can use their own Tencent account |
 | TENCENTCLOUD_SECRET_ID | | As above | As above |
 | TENCENTCLOUD_SECRET_KEY | | As above | As above |
-| tls_chain_pem | | Automatically created by Ansible | |
-| tls_fullchian_pem | | As above | |
-| tls_privkey_pem | | As above | |
+
+### Automatically-created variables in PROJECT: *-gigadb-website
+
+| Variable | Example value | Used in | Comments |
+|----------|---------------|---------|----------|
+| docker_tlsauth_ca | | Certificate authority for Dockerhost | Created by Ansible |
+| docker_tlsauth_cert | | Public certificate for Dockerhost | As above |
+| docker_tlsauth_key | | Server key for above CA | As above |
+| remote_private_ip | | Private IP of Dockerhost | Created by Ansible |
+| remote_public_ip | | Public IP of Dockerhost | As above |
+| tls_chain_pem | | Contains additional intermediate certificate or certificates that web browsers need to validate server certificate | Created by Gitlab job |
+| tls_fullchain_pem | | All certificates, including server certificate (aka leaf certificate or end-entity certificate). The server certificate is the first one in this file, followed by any intermediates. | As above | |
+| tls_privkey_pem | | Private key for certificate in PEM format | As above | |
 
 ## Configuration variables that are deprecated and are no longer to be used
 
@@ -314,3 +316,15 @@ they should not be used when we stumble upon them
 * TLSAUTH_CA
 * TLSAUTH_CERT
 * TLSAUTH_KEY
+* STAGING_IP_ADDRESS
+
+## File: secrete-sample
+
+The above variables are retrieved from GitLab in a step within the `up.sh` 
+script. The [secrets-sample](../ops/configuration/variables/secrets-sample) 
+file provides a template listing of these variables.
+
+# Docker environment variables
+
+Variables used to configure the Docker environment are set in a `.env` file. A
+sample of these variables can be found in [env-sample](../ops/configuration/variables/env-sample).
