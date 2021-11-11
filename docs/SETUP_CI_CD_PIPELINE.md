@@ -450,6 +450,12 @@ file which lists the host machines connection details. Our file is located at `o
 
 gitlab_url = "https://gitlab.com/api/v4/projects/{{ lookup('ini', 'gitlab_project type=properties file=ansible.properties') | urlencode | regex_replace('/','%2F') }}"
 ansible_ssh_private_key_file = "{{ lookup('ini', 'ssh_private_key_file type=properties file=ansible.properties') }}"
+<<<<<<< HEAD
+||||||| parent of 87d75cc97 (Update the CICD doc)
+ansible_ssh_common_args="-o ProxyCommand='ssh -W %h:%p -q {{ lookup('ini', 'aws_bastion_ssh_name type=properties file=ansible.properties') }}'"
+=======
+ansible_ssh_common_args="-o ProxyCommand='ssh -W %h:%p -q {{ lookup('ini', 'ec2_bastion_login_account type=properties file=ansible.properties') }} -i {{ lookup('ini', 'ssh_private_key_file type=properties file=ansible.properties') }}'"
+>>>>>>> 87d75cc97 (Update the CICD doc)
 ansible_user = "centos"
 ansible_become = "true"
 database_bootstrap = "../../../../sql/production_like.pgdmp"
@@ -489,6 +495,44 @@ directory so the playbooks can be performed from environment specific directory.
 This ansible script also updates the `gigadb_db_host` Gitlab variable with the 
 domain name of the RDS service in preparation for its provisioning.
 
+<<<<<<< HEAD
+||||||| parent of 87d75cc97 (Update the CICD doc)
+###### To enable running ansible through a bastion server
+Bastion server provides perimeter access control, it acts as an entry point into a network containing private network instances. 
+Once the bastion server and staging/live servers have been provisioned using terraform, the `~/.ssh/config` needs to be updated, for example:
+```
+Host staging_server (user define)
+    HostName ec2-10-999-999-99.ap-east-1.compute.amazonaws.com
+    User centos
+    IdentityFile ~/.ssh/test.pem
+
+Host staging-bastion (user define)
+    HostName ec2-16-666-66-69.ap-east-1.compute.amazonaws.com    
+    User centos
+    IdentityFile ~/.ssh/test.pem
+
+Host live-server (user define)
+    HostName ec2-16-555-155-55.ap-east-1.compute.amazonaws.com
+    User centos
+    IdentityFile ~/.ssh/test.pem
+
+Host live-bastion (user define)
+    HostName ec2-18-444-44-444.ap-east-1.compute.amazonaws.com
+    User centos
+    IdentityFile ~/.ssh/test.pem
+```
+
+This line `ansible_ssh_common_args="-o ProxyCommand='ssh -W %h:%p -q {{ lookup('ini', 'aws_bastion_ssh_name type=properties file=ansible.properties') }}'"
+` in `/inventoris/hosts` will make a SSH connection to staging/live servers through the bastion server when doing ansible provisioning.
+
+=======
+###### To enable provisioning staging/live servers through a bastion server
+Bastion server provides perimeter access control, it acts as an entry point into a network containing private network instances. 
+Once staging/live servers have been provisioned using terraform with ssh port restricted, which could then only be accessed the through bastion server. 
+
+Adding `ansible_ssh_common_args` in `/inventoris/hosts` will make ansible to do the provisioning on staging/live servers through bastion host.
+
+>>>>>>> 87d75cc97 (Update the CICD doc)
 ###### Linking Terraform and Ansible.
 
 Our `hosts` file does not list any machines. Instead, a tool called 
@@ -570,7 +614,7 @@ The RDS instance is provisioned with a database via the bastion server by a
 separate ansible playbook:
 ```
 $ cd ops/infrastructure/envs/staging
-$ ansible-playbook -i ../../inventories bastion_playbook.yml
+$ TF_KEY_NAME=private_ip ansible-playbook -i ../../inventories bastion_playbook.yml
 ```
 
 The bastion playbook will create a `gigadb` database containing data from
@@ -658,6 +702,7 @@ so we can run ``terraform`` and ``ansible-playbook`` commands from those directo
 
 ```
 $ ../../../scripts/tf_init.sh --project gigascience/forks/rija-gigadb-website --env environment
+<<<<<<< HEAD
 You need to specify the path to the ssh private key to use to connect to the EC2 instance: ~/.ssh/id-rsa-aws.pem
 You need to specify your GitLab username: pli888
 You need to specify a backup file created by the files-url-updater tool: ../../../../gigadb/app/tools/files-url-updater/sql/gigadbv3_20210929_v9.3.25.backup
@@ -665,6 +710,18 @@ You need to specify a backup file created by the files-url-updater tool: ../../.
 $ terraform plan  
 $ terraform apply
 $ terraform refresh
+||||||| parent of 87d75cc97 (Update the CICD doc)
+You need to specify the path to the ssh private key to use to connect to the EC2 instance: ~/.ssh/test.pem
+You need to specify the bastsion server name in ssh config file: staging-bastion
+You need to specify your GitLab username: <username>
+You need to specify a backup file created by the files-url-updater tool: gigadbv3_20210920_v9.3.25.backup
+You need to specify an AWS region: <region code>
+=======
+You need to specify the path to the ssh private key to use to connect to the EC2 instance: ~/.ssh/test.pem
+You need to specify your GitLab username: <username>
+You need to specify a backup file created by the files-url-updater tool: <gigadbv3 backup>
+You need to specify an AWS region: <region code>
+>>>>>>> 87d75cc97 (Update the CICD doc)
 ```
 
 where you replace ``gigascience/forks/rija-gigadb-website`` with the appropriate GitLab project.
@@ -683,8 +740,26 @@ where you replace ``environment`` with ``staging`` or ``live``
 Ensure you are still in ``ops/infractructure/envs/staging`` or ``ops/infractructure/envs/live``
 
 ```
+<<<<<<< HEAD
 $ ansible-playbook -i ../../inventories dockerhost_playbook.yml
 $ ansible-playbook -i ../../inventories bastion_playbook.yml
+||||||| parent of 87d75cc97 (Update the CICD doc)
+$ pwd
+$ terraform plan
+$ terraform apply
+$ terraform refresh
+$ ../../../scripts/ansible_init.sh --env environment
+$ ansible-playbook -i ../../inventories dockerhost_playbook.yml
+$ ansible-playbook -i ../../inventories bastion_playbook.yml
+=======
+$ pwd
+$ terraform plan
+$ terraform apply
+$ terraform refresh
+$ ../../../scripts/ansible_init.sh --env environment
+$ TF_KEY_NAME=private_ip ansible-playbook -i ../../inventories dockerhost_playbook.yml
+$ TF_KEY_NAME=private_ip ansible-playbook -i ../../inventories bastion_playbook.yml
+>>>>>>> 87d75cc97 (Update the CICD doc)
 ```
 where you replace ``environment`` with ``staging`` or ``live``
 
