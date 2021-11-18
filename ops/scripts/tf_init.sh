@@ -104,7 +104,7 @@ echo "GITLAB_USERNAME=$GITLAB_USERNAME" >> .init_env_vars
 echo "GITLAB_PRIVATE_TOKEN=$GITLAB_PRIVATE_TOKEN" >> .init_env_vars
 echo "aws_ssh_key=$aws_ssh_key" >> .init_env_vars
 echo "deployment_target=$target_environment" >> .init_env_vars
-echo "backup_file=../../../../gigadb/app/tools/files-url-updater/sql/$backup_file" >> .init_env_vars
+echo "backup_file=$backup_file" >> .init_env_vars
 
 # Update terraform.tfvars file with values from GitLab so Terraform can configure RDS instance
 gigadb_db_database=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN" "$PROJECT_VARIABLES_URL/gigadb_db_database?filter%5benvironment_scope%5d=$target_environment" | jq -r .value)

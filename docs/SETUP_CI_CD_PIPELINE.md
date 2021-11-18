@@ -451,7 +451,6 @@ file which lists the host machines connection details. Our file is located at `o
 gitlab_url = "https://gitlab.com/api/v4/projects/{{ lookup('ini', 'gitlab_project type=properties file=ansible.properties') | urlencode | regex_replace('/','%2F') }}"
 ansible_ssh_private_key_file = "{{ lookup('ini', 'ssh_private_key_file type=properties file=ansible.properties') }}"
 ansible_ssh_common_args="-o ProxyCommand='ssh -W %h:%p -q {{ lookup('ini', 'ec2_bastion_login_account type=properties file=ansible.properties') }} -i {{ lookup('ini', 'ssh_private_key_file type=properties file=ansible.properties') }}'"
->>>>>>> 87d75cc97 (Update the CICD doc)
 ansible_user = "centos"
 ansible_become = "true"
 database_bootstrap = "../../../../sql/production_like.pgdmp"
@@ -495,7 +494,7 @@ domain name of the RDS service in preparation for its provisioning.
 Bastion server provides perimeter access control, it acts as an entry point into a network containing private network instances. 
 Once dockerhost servers have been provisioned using terraform with ssh port restricted, which could then only be accessed the through bastion server. 
 
-Adding `ansible_ssh_common_args` in `/inventoris/hosts` will make ansible to do the provisioning on dockerhost servers through bastion host.
+Adding `ansible_ssh_common_args` in `/inventories/hosts` will make ansible to do the provisioning on dockerhost servers through bastion host.
 
 And prefixing the ansible commands with `TF_KEY_NAME=private_ip` to dockerhost_playbook.yml is essential as it would force dockerhost server to only accept a private ip entry,
 otherwise, `UNREACHEABLE !` would be occurred.
