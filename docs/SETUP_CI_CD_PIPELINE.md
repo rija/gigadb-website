@@ -497,7 +497,7 @@ Once dockerhost servers have been provisioned using terraform with ssh port rest
 
 Adding `ansible_ssh_common_args` in `/inventoris/hosts` will make ansible to do the provisioning on dockerhost servers through bastion host.
 
-And prefixing the ansible commands with `TF_KEY_NAME=private_ip` to dockerhost_playbook.yml is essential as it would return a private ip which is used to access the dockerhost servers,
+And prefixing the ansible commands with `TF_KEY_NAME=private_ip` to dockerhost_playbook.yml is essential as it would force dockerhost server to only accept a private ip entry,
 otherwise, `UNREACHEABLE !` would be occurred.
 
 ###### Linking Terraform and Ansible.
@@ -669,10 +669,13 @@ so we can run ``terraform`` and ``ansible-playbook`` commands from those directo
 
 ```
 $ ../../../scripts/tf_init.sh --project gigascience/forks/rija-gigadb-website --env environment
-You need to specify the path to the ssh private key to use to connect to the EC2 instance: ~/.ssh/test.pem
-You need to specify your GitLab username: <username>
-You need to specify a backup file created by the files-url-updater tool: <gigadbv3 backup>
-You need to specify an AWS region: <region code>
+You need to specify the path to the ssh private key to use to connect to the EC2 instance: ~/.ssh/id-rsa-aws.pem
+You need to specify your GitLab username: pli888
+You need to specify a backup file created by the files-url-updater tool: ../../../../gigadb/app/tools/files-url-updater/sql/gigadbv3_20210929_v9.3.25.backup
+# Now provision with Terraform
+$ terraform plan  
+$ terraform apply
+$ terraform refresh
 ```
 
 where you replace ``gigascience/forks/rija-gigadb-website`` with the appropriate GitLab project.
@@ -691,11 +694,6 @@ where you replace ``environment`` with ``staging`` or ``live``
 Ensure you are still in ``ops/infractructure/envs/staging`` or ``ops/infractructure/envs/live``
 
 ```
-$ pwd
-$ terraform plan
-$ terraform apply
-$ terraform refresh
-$ ../../../scripts/ansible_init.sh --env environment
 $ TF_KEY_NAME=private_ip ansible-playbook -i ../../inventories dockerhost_playbook.yml
 $ ansible-playbook -i ../../inventories bastion_playbook.yml
 ```
