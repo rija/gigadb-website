@@ -499,6 +499,25 @@ Adding `ansible_ssh_common_args` in `/inventories/hosts` will make ansible to do
 And prefixing the ansible commands with `TF_KEY_NAME=private_ip` to dockerhost_playbook.yml is essential as it would force dockerhost server to only accept a private ip entry,
 otherwise, `UNREACHEABLE !` would be occurred.
 
+##### How to manually ssh to dockerhost through the bastion for debugging purpose
+Sometimes, it would be useful to log into dockerhost server manually for debugging. There are two important points to keep in mind:
+1. Get the private ip address of dockerhost server, either from EC2 dashboard or `terrform output`. 
+2. Both dockerhost server and bastion server share the same ssh private key.  
+
+Here are the steps:
+```
+# Make ssh private key available on bastion server
+user@dev-computer: % scp ~/.ssh/<CustomPrivateKey>.pem centos@ec2-<bastion_public_ip>.<region>.compute.amazonaws.com:~/.ssh/
+# Log in to bastion server
+user@dev-computer: % ssh -i ~/.ssh/<CustomPrivateKey>.pem centos@ec2-<bastion_public_ip>.<region>.compute.amazonaws.com
+[centos@<bastion_private_ip> ~]$ ls
+database_bootstrap.backup
+# Log in to dockerhost server through bastion
+[centos@<bastion_private_ip> ~]$ ssh -i ~/.ssh/<CustomPrivateKey>.pem centos@<dockerhost_private_ip>
+[centos@<dockerhost_private_ip> ~]$ ls
+app_data
+```
+
 ###### Linking Terraform and Ansible.
 
 Our `hosts` file does not list any machines. Instead, a tool called 
