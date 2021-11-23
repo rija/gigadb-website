@@ -501,19 +501,21 @@ otherwise, `UNREACHEABLE !` would be occurred.
 
 ##### How to manually ssh to dockerhost through the bastion for debugging purpose
 Sometimes, it would be useful to log into dockerhost server manually for debugging. There are two important points to keep in mind:
-1. Get the private ip address of dockerhost server, either from EC2 dashboard or `terrform output`. 
+1. Get the public DNS or private ip address of dockerhost server from `terraform output` or EC2 dashboard. 
 2. Both dockerhost server and bastion server share the same ssh private key.  
 
 Here are the steps:
 ```
-# Make ssh private key available on bastion server
-user@dev-computer: % scp ~/.ssh/<CustomPrivateKey>.pem centos@ec2-<bastion_public_ip>.<region>.compute.amazonaws.com:~/.ssh/
-# Log in to bastion server
-user@dev-computer: % ssh -i ~/.ssh/<CustomPrivateKey>.pem centos@ec2-<bastion_public_ip>.<region>.compute.amazonaws.com
+# To check whether bastion server is accessible by loggin in
+user@dev-computer: % ssh -i ~/.ssh/<CustomPrivateKey>.pem centos@<bastion_public_ip>
 [centos@<bastion_private_ip> ~]$ ls
 database_bootstrap.backup
-# Log in to dockerhost server through bastion
-[centos@<bastion_private_ip> ~]$ ssh -i ~/.ssh/<CustomPrivateKey>.pem centos@<dockerhost_private_ip>
+# Log in to dockerhost server through bastion by adding ProxyCommand to ssh command using public DNS
+user@dev-computer: % ssh -i ~/.ssh/<CustomPrivateKey>.pem -o ProxyCommand="ssh -W %h:%p -i ~/.ssh/<CustomPrivateKey>.pem  centos@<bastion_public_ip>" centos@ec2-<docker_public_ip>.<region>.compute.amazonaws.com
+[centos@<dockerhost_private_ip> ~]$ ls
+app_data
+# Log in to dockerhost server through bastion by adding ProxyCommand to ssh command using dockerhot private ip
+user@dev-computer: % ssh -i ~/.ssh/<CustomPrivateKey>.pem -o ProxyCommand="ssh -W %h:%p -i ~/.ssh/<CustomPrivateKey>.pem  centos@<bastion_public_ip>" centos@<docker_private_ip>
 [centos@<dockerhost_private_ip> ~]$ ls
 app_data
 ```
