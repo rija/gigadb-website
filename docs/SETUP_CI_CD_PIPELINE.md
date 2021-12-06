@@ -590,8 +590,8 @@ can use the Docker engine. This is the 2-way certificate-based authentication.
 
 >When Ansible generates the client/server certificate, it writes them on the EC2 instance at location ``/home/centos/.docker/``
 
->If an operator needs to perform a docker action on the EC2 instance from this development machine, 
-three certificates `ca.pem`, `cert.pem` and `key.pem` in `ops/infrastructure/envs/<DEPLOY_ENV>/output/` or from gitlab variables need to be copied to ``~/.docker/`` in development machine.
+>If an operator needs to perform a docker action on the EC2 instance from this development machine,
+the three files constituting the client certificates `ca.pem`, `cert.pem` and `key.pem` in `ops/infrastructure/envs/<DEPLOY_ENV>/output/` or from gitlab variables need to be copied to ``~/.docker/`` in development machine.
 Then the containers in dockerhost server can be accessed like this:
 ```
 docker --tlsverify -H=<remote_public_ip>:2376 ps
@@ -601,7 +601,7 @@ The RDS instance is provisioned with a database via the bastion server by a
 separate ansible playbook:
 ```
 $ cd ops/infrastructure/envs/staging
-$ TF_KEY_NAME=private_ip ansible-playbook -i ../../inventories bastion_playbook.yml
+$ ansible-playbook -i ../../inventories bastion_playbook.yml
 ```
 
 The bastion playbook will create a `gigadb` database containing data from
@@ -700,6 +700,15 @@ $ terraform refresh
 
 where you replace ``gigascience/forks/rija-gigadb-website`` with the appropriate GitLab project.
 and ``environment`` with ``staging`` or ``live``
+
+>To provision infrastructure for *.gigadb.org, we need to use the `Gigadb` AWS
+> IAM user account which needs to be correctly configured in ~/.aws.credentials
+> and ~/.aws/config. This IAM profile can then be used as follows:
+```
+$ AWS_PROFILE=Gigadb terraform plan
+$ AWS_PROFILE=Gigadb terraform apply
+$ AWS_PROFILE=Gigadb terraform refresh
+```
 
 #### 3. Initialise Ansible
 
