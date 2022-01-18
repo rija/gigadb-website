@@ -238,4 +238,36 @@ class AcceptanceTester extends \Codeception\Actor
         $actualUrl = $this->grabAttributeFrom("//img[@src='$image']/parent::*", "href");
         $this->assertEquals($expectedUrl, $actualUrl);
     }
+
+    /**
+     * @Then I should see :checkbox checkbox is not checked
+     */
+    public function iShouldSeeCheckboxIsNotChecked($checkbox)
+    {
+        $this->dontSeeCheckboxIsChecked($checkbox);
+    }
+
+    /**
+     * @Then I should see :checkbox checkbox is checked
+     */
+    public function iShouldSeeCheckboxIsChecked($checkbox)
+    {
+        $this->seeCheckboxIsChecked($checkbox);
+    }
+
+    /**
+     * @Then I check :checkbox checkbox
+     */
+    public function iCheckCheckbox($checkbox)
+    {
+        $this->checkOption($checkbox);
+    }
+
+    /**
+     * @Then I uncheck :checkbox checkbox
+     */
+    public function iUncheckCheckbox($checkbox)
+    {
+        $this->uncheckOption($checkbox);
+    }
 }
