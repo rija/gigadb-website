@@ -240,6 +240,14 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
     /**
+     * @Then I should be on :path
+     */
+    public function iShouldBeOn($path)
+    {
+        $this->seeCurrentUrlEquals($path);
+    }
+
+    /**
      * @Then I should see :checkbox checkbox is not checked
      */
     public function iShouldSeeCheckboxIsNotChecked($checkbox)
