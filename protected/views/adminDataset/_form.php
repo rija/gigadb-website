@@ -134,7 +134,30 @@ echo $form->hiddenField($model, "image_id");
                         <div class="controls">
                             <ul>
                                 <li style="list-style: none;"><?php echo CHtml::fileField('datasetImage'); ?></li>
-                                <li style="list-style: none;"><?php echo CHtml::htmlButton('Remove image', ['id' => 'removeButton', 'class' => 'btn btn-sm']); ?></li>
+                                <li style="list-style: none;"><?php echo CHtml::ajaxLink('Remove image',Yii::app()->createUrl('/adminDataset/removeImage/'),
+                                        array(
+                                            'type'=>'POST',
+                                            'data'=> array('doi'=>'js:$("#Dataset_identifier").val()'),
+                                            'dataType'=>'json',
+                                            'success'=>'js:function(output){
+                                                console.log(output);
+                                                if(output.status){
+                                                    $("#showImage").src = "https://assets.gigadb-cdn.net/images/datasets/no_image.png";
+                                                    $(".meta-fields").css("display", "none");
+                                                    $("#showImage").css("display", "none");
+                                                    $("#removeButton").css("display", "none");
+                                                    window.location.reload();
+                                                }else {
+                                                    $("#removing").html("Failed removing image");
+                                                }
+                                            }',
+                                        ),array('class'=>'btn btn-sm',
+                                                'id' =>'removeButton',
+                                                'style'=>'width:40%;font-size: smaller; font-weight: lighter;color: #fff ; background: #c12e2a',
+                                                
+                                        ));
+ ?></li>
+                                <li style="list-style: none;"><div id="removing"></div></li>
                             </ul>
                         </div>
                         <?php } else { ?>
