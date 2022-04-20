@@ -73,3 +73,11 @@ Feature: a user visit the dataset page
     When I am on "/dataset/100006"
     Then I should see an image "https://assets.gigadb-cdn.net/live/images/projects/genome_10k/G10Klogo.jpg" is linked to "http://www.genome10k.org/"
     And I should see an image "https://assets.gigadb-cdn.net/live/images/projects/the_avian_phylogenomic_project/phylogenomiclogo.png" is linked to "http://avian.genomics.cn/en/index.html"
+
+  @wip @issue-1023
+  Scenario: Dateset from spreadsheet uploader
+    Given I have not signed in
+    When I am on "/dataset/100679/token/nX4jrqoHiTa4mwqN"
+#    Then I make a screenshot called "test-incomplete-page"
+    Then I should see "Supporting data for "The draft nuclear genome assembly of Eucalyptus pauciflora: a pipeline for comparing de novo assemblies""
+    And I should see "Eucalyptus pauciflora (the snow gum) is a long-lived tree with high economic and ecological importance."
