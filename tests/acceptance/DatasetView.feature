@@ -79,5 +79,5 @@ Feature: a user visit the dataset page
     Given I have not signed in
     When I am on "/dataset/100679/token/nX4jrqoHiTa4mwqN"
 #    Then I make a screenshot called "test-incomplete-page"
-    Then I should see "Supporting data for "The draft nuclear genome assembly of Eucalyptus pauciflora: a pipeline for comparing de novo assemblies""
-    And I should see "Eucalyptus pauciflora (the snow gum) is a long-lived tree with high economic and ecological importance."
+#    Then I should see "Supporting data for "The draft nuclear genome assembly of Eucalyptus pauciflora: a pipeline for comparing de novo assemblies""
+    Then I should see "Eucalyptus pauciflora (the snow gum) is a long-lived tree with high economic and ecological importance."
