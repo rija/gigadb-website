@@ -8,5 +8,5 @@ set -x
 # Ensure relevant yii commands are present
 docker-compose run --rm console ./yii | grep fetch-reports
 
-# Run accepance tests
-docker-compose run --rm console ./vendor/codeception/codeception/codecept -c console/codeception.yml run acceptance
+# Run acceptance tests
+docker-compose run --rm console ./vendor/codeception/codeception/codecept -c console/codeception.yml run -vvv acceptance
