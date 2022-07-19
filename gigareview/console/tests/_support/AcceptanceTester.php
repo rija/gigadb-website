@@ -34,7 +34,7 @@ class AcceptanceTester extends \Codeception\Actor
     public function aEMReportIsUploadedDailyToASftpServer()
     {
         $testDate= (new \DateTime("yesterday"))->format("Ymd");
-        $reports = shell_exec("./yii fetch-reports/list -$testDate") ;
+        $reports = shell_exec("./yii fetch-reports/list -$testDate 2>&1") ;
         codecept_debug($reports);
         $this->assertContains("Report-GIGA-em-manuscripts-latest",$reports);
         $this->assertContains("Report-GIGA-em-authors-latest",$reports);
