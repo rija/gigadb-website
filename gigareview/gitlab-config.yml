@@ -2,7 +2,7 @@ GigaReviewTest:
   variables:
     COMPOSE_FILE: docker-compose.yml
     REPO_NAME: $CI_PROJECT_NAME
-    REVIEW_ENV: dev
+    REVIEW_ENV: ci
     POSTGRES_MAJOR_VERSION: 12
     GROUP_VARIABLES_URL: "https://gitlab.com/api/v4/groups/gigascience/variables?per_page=100"
     FORK_VARIABLES_URL: "https://gitlab.com/api/v4/groups/3501869/variables"

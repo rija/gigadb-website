@@ -48,6 +48,25 @@ return [
             'frontend/config/main-local.php',
         ],
     ],
+    'ci' => [
+        'path' => 'ci',
+        'setWritable' => [
+            'backend/runtime',
+            'backend/web/assets',
+            'console/runtime',
+            'frontend/runtime',
+            'frontend/web/assets',
+        ],
+        'setExecutable' => [
+            'yii',
+            'yii_test',
+        ],
+        'setCookieValidationKey' => [
+            'backend/config/main-local.php',
+            'common/config/codeception-local.php',
+            'frontend/config/main-local.php',
+        ],
+    ],
     'staging' => [
         'path' => 'staging',
         'setWritable' => [
