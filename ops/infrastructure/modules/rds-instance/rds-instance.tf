@@ -4,7 +4,7 @@ locals {
 
 module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
-  version = "~> 4"
+  version = "5.1.0"
 
   name        = "rds_sg_${var.deployment_target}_${var.owner}"
   description = "Security group for GigaDB RDS"
@@ -23,6 +23,7 @@ module "security_group" {
 
 module "db" {
   source = "terraform-aws-modules/rds/aws"
+  version = "6.0.0"
   identifier = "rds-server-${var.deployment_target}-${var.owner}"
 
   snapshot_identifier = var.snapshot_identifier
@@ -30,8 +31,9 @@ module "db" {
 
   db_name                = var.gigadb_db_database
   username               = var.gigadb_db_user
-  create_random_password = false
   password               = var.gigadb_db_password
+#  create_random_password = false
+  manage_master_user_password = false
   port                   = 5432
 
   # Create this RDS instance in database subnet group in VPC
@@ -43,7 +45,7 @@ module "db" {
 
   parameter_group_name      = (var.deployment_target == "staging" ? aws_db_parameter_group.gigadb-db-param-group[0].name : null)
   engine                    = "postgres"
-  engine_version            = "11.13"
+  engine_version            = "11.16"
   family                    = "postgres11"  # DB parameter group
   major_engine_version      = "11"          # DB option group
   instance_class            = "db.t3.micro"
