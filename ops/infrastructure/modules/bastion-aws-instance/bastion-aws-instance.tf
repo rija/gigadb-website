@@ -20,6 +20,13 @@ resource "aws_security_group" "bastion_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   
+  ingress {
+    from_port   = 9100
+    to_port     = 9100
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -70,6 +77,18 @@ resource "aws_instance" "bastion" {
     Environment = var.deployment_target
     Name = "bastion_server_volume_${var.deployment_target}"
   }
+}
+
+data "aws_eip" "bastion_host_eip" {
+  filter {
+    name   = "tag:Name"
+    values = [var.eip_tag_name]
+  }
+}
+
+resource "aws_eip_association" "docker_host_eip_assoc" {
+  instance_id   = aws_instance.bastion.id
+  allocation_id = data.aws_eip.bastion_host_eip.id
 }
 
 output "bastion_private_ip" {

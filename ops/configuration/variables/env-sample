@@ -53,9 +53,9 @@ NGINX_VERSION=1.21.3
 PHP_VERSION=7.4.33
 APCU_VERSION=5.1.21
 NODE_VERSION=17.6.0
-POSTGRES_VERSION=11.13
-YII_VERSION=1.1.25
-YII2_VERSION=2.0.44
+POSTGRES_VERSION=14.8
+YII_VERSION=1.1.28
+YII2_VERSION=2.0.48
 
 
 ### Application Access variables ########################################################################################
@@ -84,3 +84,8 @@ CSV_DIR=production_like
 ### Portainer credentials
 # you obtain the bcrypt password by running:
 # docker run --rm httpd:2.4-alpine htpasswd -nbB admin "your-password" | cut -d ":" -f 2 | sed -e 's/\$/\\\$/g'
+
+### Monitoring
+MONITORING_HOST=x.x.x.x
+MONITORING_USER=admin
+MONITORING_PRIVATE_KEY_LOCAL_PATH=~/.ssh/gigadb-monitoring.pem
