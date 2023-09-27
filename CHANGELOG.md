@@ -4,6 +4,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 
+- Docs #1448: Update documentation to use files metadata console tool to update
+  File location URLs
+
 ## v4.0.1 - 2023-11-20 - 57129850
 
 - Fix #1562: Make live tideways jobs only available in the tagged GitLab pipeline
