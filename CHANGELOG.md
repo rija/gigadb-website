@@ -4,8 +4,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 
-- Docs #1448: Update documentation to use files metadata console tool to update
-  File location URLs
+- Feat #1423: Create shell script to update dataset ftp_site and file location URLs to Wasabi links
 
 ## v4.0.1 - 2023-11-20 - 57129850
 
