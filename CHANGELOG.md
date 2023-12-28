@@ -4,6 +4,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 
+- Fix #1527: Make the postUpload script use the image `production-files-metadata-console:production_environment` in the staging and live environments
 - Fix #1529: Reload the same admin form page after save for private dataset
 - Feat #1259: Document how to update dataset spreadsheet template
 
