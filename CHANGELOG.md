@@ -4,6 +4,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 
+- Fix #1657: Fix the broken acceptance tests and functional tests inherited from the Feat #1334
+
+
 ## v4.2.0 - 2024-02-27 - 017ba8f58
 
 - Fix #1659: Remove dependency on abandoned inter-container-communication project and fix broken tests
