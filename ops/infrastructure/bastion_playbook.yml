@@ -357,3 +357,18 @@
     - node-exporter
   roles:
     - prometheus.prometheus.node_exporter
+
+- name: Setup cronjobs for refreshing search materialized views
+  hosts: name_bastion_server_{{gigadb_env}}*
+  tags:
+    - search-views-auto-refresh
+
+  tasks:
+  - name: Create pg_cron extension
+    command: "PGPASSWORD='{{ pg_password }}' psql -h {{ pg_host }} -U {{ pg_user }} -d postgres -c \"CREATE EXTENSION pg_cron;\" "
+
+  - name: Add gigadb user permission to use pg_cron
+    command: psql -U postgres -c "GRANT USAGE ON SCHEMA cron TO gigadb;" 
+
+  - name: Schedule refreshing materialized views for datasets
+    command: psql -U postgres -c "SELECT cron.schedule('Refreshg dataset materialized view', '30 * * * *', 'select count(*) from public.dataset');"

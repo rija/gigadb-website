@@ -9,3 +9,12 @@
     owner: root
     group: root
     mode: 0644
+
+- name: Create pg_cron extension
+  command: psql -U postgres -c "CREATE EXTENSION pg_cron;" 
+
+- name: Add gigadb user permission to use pg_cron
+  command: psql -U postgres -c "GRANT USAGE ON SCHEMA cron TO gigadb;" 
+
+- name: Schedule refreshing materialized views for datasets
+  command: psql -U postgres -c "SELECT cron.schedule('Refreshg dataset materialized view', '0 * * * *', 'select count(*) from public.dataset');"
