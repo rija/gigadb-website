@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 
+- Feat #1832: Make script for calculating the md5 values and file sizes available for bastion users 
+
 ## v4.2.7 - 2024-05-07 - 902e5bfb5
 
 - Feat #1834: Create rclone config for bastion users to allow managing files on Wasabi
