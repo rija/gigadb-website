@@ -181,7 +181,6 @@ class AdminDatasetController extends Controller
      */
     public function actionUpdate($id)
     {
-
         $model = $this->loadModel($id);
 
         // setting DatasetUpload, the busisness object for File uploading
@@ -393,17 +392,7 @@ class AdminDatasetController extends Controller
                 }
 
                 Yii::app()->user->setFlash('updateSuccess', 'Updated successfully!');
-                switch ($datasetPageSettings->getPageType()) {
-                    case "draft":
-                        $this->redirect('/adminDataset/admin/');
-                        break;
-                    case "public":
-                        $this->redirect('/dataset/' . $model->identifier);
-                        break;
-                    case "hidden":
-                        $this->redirect(array('/adminDataset/update/id/' . $model->id));
-                        break;
-                }
+                $this->redirect(array('/adminDataset/update/id/' . $model->id));
 
             } else {
                 Yii::app()->user->setFlash('updateError', 'Fail to update!');
@@ -413,6 +402,7 @@ class AdminDatasetController extends Controller
 
         $this->layout = 'new_main';
         $this->loadBaBbqPolyfills = true;
+
         $this->render('update', array(
             'model' => $model,
             'datasetPageSettings' => $datasetPageSettings,
