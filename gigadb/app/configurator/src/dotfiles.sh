@@ -63,6 +63,7 @@ function makeDotSecrets () {
       fi
 
       echo "Retrieving variables from ${GROUP_VARIABLES_URL}"
+      curl -s --header "PRIVATE-TOKEN: $accessToken" "${GROUP_VARIABLES_URL}"
       curl -s --header "PRIVATE-TOKEN: $accessToken" "${GROUP_VARIABLES_URL}" | jq -r '.[] | select(.key != "ANALYTICS_PRIVATE_KEY") | .key + "=" + .value' > "$mdsBaseDir/.group_var"
 
       if [[ $CI_PROJECT_URL != "https://gitlab.com/gigascience/upstream/gigadb-website" ]];then

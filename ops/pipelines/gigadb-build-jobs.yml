@@ -230,12 +230,9 @@ b_gigadb:
     name: $DEPLOYMENT_ENV
     url: $REMOTE_HOME_URL
   artifacts:
-    paths:
-      - php-$PHP_VERSION-fpm-buster.tar
-      - php-$PHP_VERSION-cli-buster.tar
-      - alpine-3_14.tar
-      - nginx-$NGINX_VERSION-alpine.tar
-      - node-$NODE_VERSION-buster-slim.tar
+    untracked: true
+    exclude:
+      - "*.tar"
     when: on_failure
     expire_in: 1 week
 
