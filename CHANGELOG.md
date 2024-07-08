@@ -4,6 +4,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 
+- Fix #1727: Sort files and samples by id in descending order when querying
 - Fix #2061: Allow empty keywords in dataset entry
 - Fix #1991: Update and save sample ID when updating
 - Feat #2008: Remove Dimensions citation link
