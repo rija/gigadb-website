@@ -91,6 +91,7 @@ class Dataset extends CActiveRecord
             array('identifier, excelfile_md5', 'length', 'max'=>32),
             array('title', 'length', 'max'=>300),
             array('upload_status', 'length', 'max'=>45),
+            array('upload_status', 'in', 'range'=>array_merge(self::ORIGINAL_UPLOAD_STATUS_LIST, self::FUW_UPLOAD_STATUS_LIST), 'message'=>'The value is not valid'),
             array('ftp_site', 'length', 'max'=>100),
             array('excelfile', 'length', 'max'=>50),
             array('description, publication_date, modification_date, image_id, fairnuse, types', 'safe'),
@@ -655,6 +656,10 @@ class Dataset extends CActiveRecord
                 return false;
             }
         } else {
+            if (!$this->image->url && $this->image->id !== Image::GENERIC_IMAGE_ID) {
+                $this->image->url = Image::GENERIC_IMAGE_URL;
+            }
+
             if ($this->image->url) {
                 $this->image->attributes = Yii::app()->request->getPost('Image');
             }
