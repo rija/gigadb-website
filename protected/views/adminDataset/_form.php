@@ -380,10 +380,10 @@ echo $form->hiddenField($model, "image_id");
                                             ),
                                         ],
                                         array(
-                                            'class' => 'btn background-btn m-0',
-                                            'id' => 'mint_doi_button',
-                                            'disabled' => in_array($model->upload_status, $status_array),
-                                            'title' => 'This botton will take all the dataset information stored in GigaDB and convert it to the DataCite schema in XML and via an API call, register that information with DataCite',
+                                            'class'       => 'btn background-btn m-0',
+                                            'id'          => 'mint_doi_button',
+                                            'disabled'    => in_array($model->upload_status, $status_array),
+                                            'title'       => 'This button will take all the dataset information stored in GigaDB and convert it to the DataCite schema in XML and via an API call, register that information with DataCite',
                                             'data-toggle' => 'tooltip'
                                         )
                                     );
