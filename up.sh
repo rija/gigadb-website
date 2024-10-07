@@ -10,6 +10,7 @@ dbSet=${1:-"dev"}
 
 
 echo "Starting all services..."
+echo "Starting all services..."
 
 # Make the Docker API available on TCP port 2375 on mac (unnecessary on windows or linux)
 if [ "$(uname)" == "Darwin" ];then
@@ -77,6 +78,7 @@ docker-compose up -d fuw-worker gigadb-worker
 # Start
 
 # Bootstrap the main database using data from "data/dev" by default or using the one passed as parameter
+docker-compose logs database
 ./ops/scripts/setup_devdb.sh $dbSet
 
 # Bootstrap the test database for unit tests using data from "data/gigadb_testdata"
