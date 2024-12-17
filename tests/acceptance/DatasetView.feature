@@ -5,6 +5,16 @@ Feature: a user visit the dataset page
   So that I can use it to further my research or education
 
   @ok
+  Scenario: show authors ordered by rank from the text form file
+    Given I have not signed in
+    When I am on "dataset/100006"
+    Then I should see "Zhang G, Lambert DM, Wang J"
+    When I press the button "Cite Dataset"
+    Then I should see "Text"
+    And I press the button "Text"
+    Then I should see "Zhang G, Lambert DM, Wang J"
+
+  @ok
   Scenario: number of files in current page and total number of files are displayed
     Given I have not signed in
     When I am on "dataset/100142"
@@ -248,5 +258,5 @@ Feature: a user visit the dataset page
   Scenario: List ordered author list
     Given I have not signed in
     When I am on "/dataset/100020"
-    Then I should see "Liu X; Quan Z; Cheng S; Xu X; Pan S; Zeng P; Xie M; Yue Z; Zhan D; Li Y; Wang J; Zhao Z; Zhang G (2011)"
+    Then I should see "Liu X, Quan Z, Cheng S, Xu X, Pan S, Zeng P, Xie M, Yue Z, Zhan D, Li Y, Wang J, Zhao Z, Zhang G (2011)"
     And I should not see "Wang, J; Quan, Z; Zhao, Z; Cheng, S; Liu, X; Li, Y; Pan, S; Xie, M; Xu, X; Yue, Z; Zeng, P; Zhan, D; Zhang, G (2011)"

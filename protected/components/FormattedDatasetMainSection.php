@@ -125,7 +125,7 @@ class FormattedDatasetMainSection extends yii\base\BaseObject implements Dataset
                 CHtml::link($formattedName, "/search/new?keyword=$formattedName&author_id=" . $author['id'], array('class' => 'result-sub-links'))
             );
         }
-        return implode('; ', $links);
+        return implode(', ', $links);
     }
 
     /**
