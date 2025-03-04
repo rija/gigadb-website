@@ -437,14 +437,6 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
     /**
-     * @Then I should see a meta tag which :attribute is :value and content is :content
-     */
-    public function iShouldSeeAMetaTagWhichNameAndContent($attribute, $value, $content)
-    {
-        $this->seeInPageSource('<meta ' . $attribute . '="' . $value . '" content="' . $content . '">');
-    }
-
-    /**
      * @Then I should see :type meta-tags
      */
     public function iShouldSeeMetaTags($type, \Behat\Gherkin\Node\TableNode $table)
