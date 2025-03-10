@@ -4,6 +4,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 
+- Feat #513,#2190: Create meta tags based on environments
 - Feat #2066: Wrap edit file attribute form in a modal
 - Fix #2203: Update the curation log without requiring a page refresh when minting a DOI
 - Fix #1290: Update and save project url and name
