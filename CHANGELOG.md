@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 
+- Feat security#13: Upgrade Tideways PHP extension version to `5.19.0` and Daemon version to `1.9.36`
+
 ## v4.4.7 - 2025-03-26 - 4c548f037 -
 
 - Fix #2241: Restore Sketchfab visualisations alongside 3D models files visualisations
