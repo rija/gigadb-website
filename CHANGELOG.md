@@ -4,6 +4,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 
+- Fix #561: Generate a token for account activation by email
+- Fix #561: Separate admin user page from non admin user page
+
 ## v4.4.15 - 2025-07-23 - a60aa8aa5 - live since 2025-07-24
 
 - Fix #2390: Web site fails to reconnect to DB server if connections are terminated
