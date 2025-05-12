@@ -175,7 +175,7 @@ b_gigadb:
     # Generate configuration files and vendors libraries before baking an immutable image
     - git describe --always | tee VERSION
     - time docker-compose run --rm config
-    - time docker-compose run --rm application composer install -a --no-dev
+    - time docker-compose run --rm application composer install -o --no-dev
     - docker-compose run --rm less
 #    - docker-compose run --rm fuw-config
 #    - docker-compose run --rm console bash -c "cd /app && composer install -a --no-dev"
