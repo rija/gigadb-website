@@ -20,6 +20,16 @@ services:
         - FIX_SITE_CONFIGS=true
         - CONN_LIMIT_STATE=${PHP_CONN_LIMIT}
 
+  produciton_vite:
+    build:
+      context: ../..
+      dockerfile: ops/packaging/Production-Vite-Dockerfile
+      cache_from:
+        - "registry.gitlab.com/$CI_PROJECT_PATH/production_vite:${GIGADB_ENV}"
+      args:
+        - NODE_VERSION=${NODE_VERSION}
+
+
   production_app:
     environment:
       PHP_VERSION: ${PHP_VERSION}
