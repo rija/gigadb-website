@@ -20,7 +20,7 @@ services:
         - FIX_SITE_CONFIGS=true
         - CONN_LIMIT_STATE=${PHP_CONN_LIMIT}
 
-  produciton_vite:
+  production_vite:
     build:
       context: ../..
       dockerfile: ops/packaging/Production-Vite-Dockerfile
