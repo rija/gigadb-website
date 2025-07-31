@@ -1,3 +1,5 @@
-FROM node:$NODE_VERSION-bullseye-slim
+ARG NODE_VERSION=latest
+
+FROM node:${NODE_VERSION}-bullseye-slim
 
 COPY vite /var/www/vite
