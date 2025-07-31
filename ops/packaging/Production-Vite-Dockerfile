@@ -1,5 +1,19 @@
 ARG NODE_VERSION=latest
-
 FROM node:${NODE_VERSION}-bullseye-slim
 
+# Set Environment Variables
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && \
+	# Get the basics for safe building of packaged debian libraries
+	apt-get install -y --no-install-recommends \
+	    apt-transport-https \
+	    build-essential \
+	     apt-utils \
+	    wget && \
+	# Remove all temporary files to reduce bloat on that layer
+	apt-get clean && \
+	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 COPY vite /var/www/vite
+COPY js /var/www/js
