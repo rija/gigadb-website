@@ -338,3 +338,5 @@ volumes:
   le_webrootpath:
   feeds:
   portainer_data:
+  vite:
+  js:
