@@ -16,4 +16,5 @@ RUN apt-get update && \
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY vite /var/www/vite
+COPY less /var/www/less
 COPY js /var/www/js

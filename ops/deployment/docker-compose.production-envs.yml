@@ -42,6 +42,7 @@ services:
     image: registry.gitlab.com/$CI_PROJECT_PATH/production_vite:$GIGADB_ENV
     volumes:
       - vite:/var/www/vite
+      - less:/var/www/less
       - js:/var/www/js
     working_dir: /var/www/vite
     environment:
@@ -339,4 +340,5 @@ volumes:
   feeds:
   portainer_data:
   vite:
+  less:
   js:
