@@ -54,7 +54,7 @@
     - docker --tlsverify -H=$REMOTE_WEBAPP_DOCKER rm socat || true
     # verify config renders correctly after variables interpolation
     - docker-compose --tlsverify -H=$REMOTE_WEBAPP_DOCKER -f ops/deployment/docker-compose.production-envs.yml config
-    - # deploy the vite container
+    # deploy the vite container
     - docker-compose --tlsverify -H=$REMOTE_WEBAPP_DOCKER -f ops/deployment/docker-compose.production-envs.yml run --rm vite bash -c "npm install"
     - docker-compose --tlsverify -H=$REMOTE_WEBAPP_DOCKER -f ops/deployment/docker-compose.production-envs.yml run --rm vite
     # Redeploy all containers but the web container
